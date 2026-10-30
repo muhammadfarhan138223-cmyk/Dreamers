@@ -1,0 +1,354 @@
+{
+  "id": "cells-starter",
+  "version": 1,
+  "title": "Cells & membranes",
+  "subject": "biology",
+  "class": "XI–XII foundations",
+  "board": "Punjab mapping pending",
+  "edition": "DREAMERS original 1.0 — not an official textbook edition",
+  "academicYear": "Unmapped",
+  "verification": "Original content — awaiting educator review",
+  "license": "Original DREAMERS educational content",
+  "description": "Explore the smallest building blocks of life, meet their organelles and discover how membranes work.",
+  "lessons": [
+    {
+      "id": "cell-basics",
+      "title": "A tiny world inside you",
+      "subtitle": "Cells, the basic units of life",
+      "minutes": 4,
+      "objective": "Explain why a cell is the basic structural and functional unit of life.",
+      "paragraphs": [
+        "A cell is the smallest unit that can carry out the basic processes of life. Your body contains many kinds of cells. Some carry oxygen, some transmit signals and others contract to produce movement. Their shapes differ because their jobs differ.",
+        "A tissue is a group of cells working together. Tissues form organs; organs cooperate in organ systems. A heart is an organ, while a heart muscle cell is one of its living building blocks. In a single-celled organism, one cell performs the processes needed by the whole organism.",
+        "The cell membrane encloses the cell. Inside it, cytoplasm provides an environment for many reactions. Eukaryotic cells contain membrane-bound organelles, including a nucleus that contains most of their DNA. Prokaryotic cells lack a membrane-bound nucleus."
+      ],
+      "example": "Think of a city: the boundary controls entry, workshops carry out tasks, and instructions coordinate activities. The comparison helps you remember functions, but cells are chemical systems, not conscious cities.",
+      "simple": "Tumhara jism chhotay living units — cells — se bana hai. Har cell apna kaam karta hai. Bohat se miltay-jultay cells mil kar tissue banatay hain.",
+      "takeaways": [
+        "A cell is a living structural and functional unit.",
+        "Cells form tissues, which form organs.",
+        "Prokaryotes have no membrane-bound nucleus."
+      ],
+      "check": "How is a heart muscle cell different from the whole heart?"
+    },
+    {
+      "id": "organelles",
+      "title": "Meet the cell’s team",
+      "subtitle": "Organelles and their functions",
+      "minutes": 5,
+      "objective": "Relate the roles of nucleus, ribosomes, mitochondria and chloroplasts to cell activity.",
+      "paragraphs": [
+        "The nucleus contains most of a eukaryotic cell’s DNA. DNA carries information used in making proteins. Ribosomes assemble proteins. Ribosomes occur in both prokaryotic and eukaryotic cells.",
+        "Mitochondria are major sites of aerobic respiration and ATP production in eukaryotic cells. ATP transfers energy for cellular processes. Mitochondria do not create energy from nothing: they help transfer energy from food molecules into usable forms.",
+        "Chloroplasts carry out photosynthesis in plants and algae that contain them. A plant cell can have both chloroplasts and mitochondria. Plant cells also typically have a cellulose cell wall and a large central vacuole. A cell wall supports the cell; the membrane controls exchange. Not every plant cell contains chloroplasts: most root cells do not."
+      ],
+      "example": "A leaf cell can use sunlight to build sugars in chloroplasts and release usable energy from food through respiration. Photosynthesis and respiration are different processes that can occur in the same organism.",
+      "simple": "Nucleus mein instructions hoti hain. Ribosomes proteins banatay hain. Mitochondria food ki energy ko ATP ki form mein transfer kartay hain. Chloroplasts photosynthesis kartay hain.",
+      "takeaways": [
+        "Ribosomes make proteins.",
+        "Plant cells also use mitochondria.",
+        "A cell wall and a cell membrane have different functions."
+      ],
+      "check": "Why can a green leaf cell need both chloroplasts and mitochondria?"
+    },
+    {
+      "id": "membranes",
+      "title": "The smartest little boundary",
+      "subtitle": "Membranes and diffusion",
+      "minutes": 5,
+      "objective": "Describe selective permeability and predict the net direction of diffusion.",
+      "paragraphs": [
+        "A cell membrane is a selectively permeable boundary. It is formed mainly from a phospholipid bilayer with associated proteins. Different substances cross it in different ways. A membrane is not simply a wall with equal-sized holes.",
+        "Diffusion is the net movement of particles from a region of higher concentration to a region of lower concentration because of random motion. It does not require the cell to spend ATP. Oxygen can diffuse across a membrane when a concentration difference exists.",
+        "At dynamic equilibrium, particles still move in both directions, but there is no net movement. Diffusion is useful over short distances. Increasing temperature generally speeds diffusion by increasing particle motion, while a longer diffusion distance slows exchange."
+      ],
+      "example": "Perfume spreads through a room because its particles move randomly. That is diffusion without a cell membrane. Membranes add selective control to movement into and out of cells.",
+      "simple": "Particles random move kartay hain. Overall zyada concentration se kam concentration ki taraf movement diffusion kehlati hai. Equilibrium par movement rukti nahi; dono taraf ka net effect barabar hota hai.",
+      "takeaways": [
+        "Diffusion follows a concentration gradient.",
+        "Diffusion does not directly require ATP.",
+        "Equilibrium does not mean particles stop moving."
+      ],
+      "check": "At equilibrium, why does particle movement continue?"
+    },
+    {
+      "id": "osmosis",
+      "title": "Follow the water",
+      "subtitle": "Osmosis and active transport",
+      "minutes": 6,
+      "objective": "Predict water movement and distinguish osmosis from active transport.",
+      "paragraphs": [
+        "Osmosis is the net movement of water through a selectively permeable membrane from higher water potential to lower water potential. In simple dilute solutions at equal pressure, this is usually from the less concentrated solute solution toward the more concentrated one. The membrane must allow water to cross.",
+        "A plant cell placed in a dilute solution usually gains water. Its vacuole expands and the contents press against the cell wall, making the cell turgid. The wall resists expansion. An animal cell has no cell wall and can burst if too much water enters.",
+        "Active transport moves substances against their concentration or electrochemical gradient using energy and membrane proteins. Unlike simple diffusion, it can maintain a concentration difference. Root cells can take up certain mineral ions using active transport. Osmosis concerns water; it is not the movement of dissolved salt."
+      ],
+      "example": "Imagine two compartments separated by a membrane that lets water through but not sugar. If one side has more dissolved sugar and pressure is equal, water tends to move toward that side.",
+      "simple": "Osmosis mein water move karta hai, salt nahi. Equal pressure par water aam tor par dilute side se concentrated side ki taraf jata hai. Active transport gradient ke khilaf ja sakta hai aur energy use karta hai.",
+      "takeaways": [
+        "Osmosis is water movement through a selective membrane.",
+        "A cell wall helps prevent plant cells from bursting.",
+        "Active transport requires energy."
+      ],
+      "check": "Why can active transport keep ions more concentrated inside a cell?"
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "topic": "cell-basics",
+      "prompt": "Which is a basic structural and functional unit of life?",
+      "options": [
+        "Organ",
+        "Tissue",
+        "Cell",
+        "Organ system"
+      ],
+      "answer": 2,
+      "explanation": "Cells perform life processes; tissues and organs are made of cells.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    },
+    {
+      "id": "q2",
+      "topic": "cell-basics",
+      "prompt": "Which feature distinguishes prokaryotes from eukaryotes?",
+      "options": [
+        "They never contain DNA",
+        "They lack a membrane-bound nucleus",
+        "They have no ribosomes",
+        "They cannot use energy"
+      ],
+      "answer": 1,
+      "explanation": "Prokaryotes contain DNA and ribosomes, but their DNA is not enclosed in a membrane-bound nucleus.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    },
+    {
+      "id": "q3",
+      "topic": "organelles",
+      "prompt": "Which structure assembles proteins?",
+      "options": [
+        "Ribosome",
+        "Vacuole",
+        "Cell wall",
+        "Chloroplast"
+      ],
+      "answer": 0,
+      "explanation": "Ribosomes assemble amino acids into proteins using genetic instructions.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    },
+    {
+      "id": "q4",
+      "topic": "organelles",
+      "prompt": "A typical green leaf cell contains…",
+      "options": [
+        "Only chloroplasts",
+        "Only mitochondria",
+        "Both chloroplasts and mitochondria",
+        "Neither"
+      ],
+      "answer": 2,
+      "explanation": "Leaf cells can carry out photosynthesis and aerobic respiration.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    },
+    {
+      "id": "q5",
+      "topic": "membranes",
+      "prompt": "The net movement in diffusion is…",
+      "options": [
+        "Low to high concentration",
+        "High to low concentration",
+        "Only into cells",
+        "Always toward water"
+      ],
+      "answer": 1,
+      "explanation": "Random particle motion produces a net movement down a concentration gradient.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    },
+    {
+      "id": "q6",
+      "topic": "membranes",
+      "prompt": "At dynamic equilibrium, particles…",
+      "options": [
+        "Stop moving",
+        "Move only one way",
+        "Continue moving both ways with no net movement",
+        "Need ATP to move"
+      ],
+      "answer": 2,
+      "explanation": "Equilibrium is dynamic: movement continues, but the opposing movements balance overall.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    },
+    {
+      "id": "q7",
+      "topic": "osmosis",
+      "prompt": "In osmosis, what moves through the membrane?",
+      "options": [
+        "Dissolved salt only",
+        "Water",
+        "Proteins only",
+        "The membrane itself"
+      ],
+      "answer": 1,
+      "explanation": "Osmosis is the net movement of water through a selectively permeable membrane.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    },
+    {
+      "id": "q8",
+      "topic": "osmosis",
+      "prompt": "A plant cell in a dilute solution usually becomes…",
+      "options": [
+        "Turgid",
+        "Plasmolysed",
+        "Empty",
+        "A prokaryote"
+      ],
+      "answer": 0,
+      "explanation": "Water enters by osmosis; the wall resists expansion and the cell becomes turgid.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    },
+    {
+      "id": "q9",
+      "topic": "osmosis",
+      "prompt": "Which process can move ions against their gradient?",
+      "options": [
+        "Simple diffusion",
+        "Osmosis",
+        "Active transport",
+        "Dynamic equilibrium"
+      ],
+      "answer": 2,
+      "explanation": "Active transport uses energy and membrane proteins to move substances against a gradient.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    },
+    {
+      "id": "q10",
+      "topic": "organelles",
+      "prompt": "Most root cells lack chloroplasts because…",
+      "options": [
+        "All roots are dead",
+        "They generally do not receive light for photosynthesis",
+        "They lack DNA",
+        "They cannot respire"
+      ],
+      "answer": 1,
+      "explanation": "Most root cells are not photosynthetic; they still carry out respiration.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    },
+    {
+      "id": "q11",
+      "topic": "membranes",
+      "prompt": "Which change generally speeds diffusion?",
+      "options": [
+        "A longer distance",
+        "A lower temperature",
+        "A higher temperature",
+        "Removing all particles"
+      ],
+      "answer": 2,
+      "explanation": "Higher temperature generally increases random particle motion.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    },
+    {
+      "id": "q12",
+      "topic": "osmosis",
+      "prompt": "Which comparison is correct?",
+      "options": [
+        "Osmosis moves salt; diffusion moves water only",
+        "Both always need ATP",
+        "Osmosis involves water; active transport uses energy",
+        "Both require a cell wall"
+      ],
+      "answer": 2,
+      "explanation": "Osmosis concerns water movement down water potential; active transport uses energy to move substances against a gradient.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not a past-paper question"
+    }
+  ],
+  "written": [
+    {
+      "id": "s1",
+      "topic": "membranes",
+      "type": "short",
+      "marks": 2,
+      "prompt": "Define diffusion and give one biological example.",
+      "answer": "Diffusion is the net movement of particles from higher to lower concentration due to random motion. For example, oxygen diffuses across a cell membrane down its concentration gradient.",
+      "keyPoints": [
+        "Net movement down a concentration gradient",
+        "One appropriate example"
+      ]
+    },
+    {
+      "id": "s2",
+      "topic": "osmosis",
+      "type": "short",
+      "marks": 2,
+      "prompt": "How does osmosis differ from active transport?",
+      "answer": "Osmosis is the net movement of water through a selectively permeable membrane from higher to lower water potential. Active transport uses energy and membrane proteins to move substances against their concentration or electrochemical gradient.",
+      "keyPoints": [
+        "Osmosis concerns water and water potential",
+        "Active transport uses energy against a gradient"
+      ]
+    },
+    {
+      "id": "l1",
+      "topic": "organelles",
+      "type": "long",
+      "marks": 5,
+      "prompt": "Explain how the nucleus, ribosomes, mitochondria, cell membrane and cell wall contribute to the functioning of a plant cell.",
+      "answer": "The nucleus contains most of the cell’s DNA, which provides instructions for cell activities and protein production. Ribosomes assemble proteins needed for growth and function. Mitochondria are major sites of aerobic respiration and ATP production. The selectively permeable cell membrane controls exchange with the surroundings. The cellulose cell wall provides support and resists expansion when water enters. These structures work together to maintain the living cell.",
+      "keyPoints": [
+        "Nucleus: DNA and instructions",
+        "Ribosomes: protein synthesis",
+        "Mitochondria: respiration and ATP",
+        "Membrane: selective exchange",
+        "Wall: support and resistance to expansion"
+      ]
+    }
+  ]
+}
