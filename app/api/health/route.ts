@@ -2,7 +2,7 @@ export function GET() {
   return Response.json(
     {
       status: "ok",
-      version: "0.3.1",
+      version: "0.3.2",
       storage: "device-local",
       aiConfigured: !!(
         process.env.AI_API_KEY &&

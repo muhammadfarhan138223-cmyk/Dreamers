@@ -16,7 +16,7 @@ The Git project helper initially returned a schema error after creating the proj
 Use the Vercel environment variable UI; never paste keys into chat or public source. Configure once per environment:
 
 - AI_PROVIDER: `groq` or `openai-compatible`
-- AI_MODEL: selected model ID
+- AI_MODEL: selected model ID; current free-pilot candidate `openai/gpt-oss-120b` (Groq)
 - AI_API_KEY: encrypted secret
 - AI_BASE_URL: optional HTTPS chat-completions base URL, default Groq
 - UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN: durable quota/cache service. The API must fail closed without it.
@@ -56,3 +56,7 @@ Deploy code/catalogue metadata only. Never include the uploaded textbook binarie
 ## Final 0.3.1 deployment checkpoint
 
 Main application commit e5fd7d69999b029a9f2589b0196d1edd43fb1c51 deployed READY as dpl_6CYtJtGmuwDkqWsCJTKduknEACpA. Stable alias remains https://dreamers-sooty.vercel.app. The server returned version 0.3.1; shell v8 is served. Pending-map sources reject requests without a readable page context; valid context returns honest 503 while owner setup is absent. Native preview protection and all project security settings remain unchanged. Documentation-only follow-up commits may trigger an identical-code production build.
+
+## 0.3.2 AI pilot and source intake
+
+See [docs/AI_SETUP.md](docs/AI_SETUP.md) for current official provider links, one-time secure owner setup, privacy/age constraints and the teacher evaluation gate. No keys, new paid resources, owner configuration or real provider output are implied by deploying this release. Shell v9 refreshes the UI while preserving the PDF engine cache and IndexedDB v3. Default textbook evidence requests without text return 422, valid inputs without owner setup return 503; explicit general-explanation requests remain labelled not textbook-verified. Restricted PDF bytes remain local imports only.

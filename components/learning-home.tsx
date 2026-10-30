@@ -48,7 +48,9 @@ export default function LearningHome({
   const books = TEXTBOOKS.filter(
     (b) =>
       (filter === "all" || b.subject === filter) &&
-      b.classes.includes(gradeFilter) &&
+      (gradeFilter === "Unconfirmed"
+        ? !b.classes.length
+        : b.classes.includes(gradeFilter)) &&
       b.kind === kindFilter,
   );
   return (
@@ -78,7 +80,7 @@ export default function LearningHome({
           </p>
         </div>
         <span className="class-chip">
-          <GraduationCap size={17} /> FSc / ICS · XI & XII{" "}
+          <GraduationCap size={17} /> Intermediate · XI & XII{" "}
           <span>Supplied books</span>
         </span>
       </div>
@@ -213,6 +215,7 @@ export default function LearningHome({
             >
               <option>XI</option>
               <option>XII</option>
+              <option>Unconfirmed</option>
             </select>
           </label>
           <label>
@@ -227,18 +230,30 @@ export default function LearningHome({
               <option value="textbook">Textbooks</option>
               <option value="grammar">Grammar & composition</option>
               <option value="legacy">Older reference</option>
+              <option value="reference">Workbook / class unconfirmed</option>
             </select>
           </label>
         </div>
         <div className="subject-filters" aria-label="Filter textbooks">
           {[
             ["all", "All books"],
-            ["biology", "Biology"],
-            ["chemistry", "Chemistry"],
-            ["english", "English"],
-            ["urdu", "Urdu"],
-            ["physics", "Physics"],
-            ["computer-science", "Computer science"],
+            ...Array.from(
+              new Map(
+                TEXTBOOKS.filter(
+                  (b) =>
+                    (gradeFilter === "Unconfirmed"
+                      ? !b.classes.length
+                      : b.classes.includes(gradeFilter)) &&
+                    b.kind === kindFilter,
+                ).map((b) => [
+                  b.subject,
+                  b.subject
+                    .split("-")
+                    .map((w) => w[0].toUpperCase() + w.slice(1))
+                    .join(" "),
+                ]),
+              ).entries(),
+            ),
           ].map(([id, label]) => (
             <button
               key={id}

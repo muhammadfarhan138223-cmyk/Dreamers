@@ -312,7 +312,8 @@ export default function DreamersApp() {
     [aiChapter, setAiChapter] = useState(
       textbook(DEFAULT_TEXTBOOK)!.chapters[0].id,
     ),
-    [allowEnrichment, setAllowEnrichment] = useState(false);
+    [allowEnrichment, setAllowEnrichment] = useState(false),
+    [referenceOnly, setReferenceOnly] = useState(true);
   const [bookContext, setBookContext] = useState<BookContext | null>(null),
     [aiPack, setAiPack] = useState("cells-starter"),
     [aiTopic, setAiTopic] = useState("cell-basics"),
@@ -398,6 +399,7 @@ export default function DreamersApp() {
     setAiTextbook(id);
     setAiChapter(topic);
     setAllowEnrichment(extra);
+    setReferenceOnly(true);
     setBookContext(null);
     setAiInput(
       extra
@@ -658,6 +660,12 @@ export default function DreamersApp() {
       );
       return;
     }
+    if (aiContextKind === "textbook" && referenceOnly && !bookContext) {
+      say(
+        "Open the selected PDF and choose a readable passage first, or explicitly turn off book evidence mode for a general explanation.",
+      );
+      return;
+    }
     setChat((c) => [...c, { role: "user", text: input }]);
     setAiInput("");
     setAiBusy(true);
@@ -673,6 +681,7 @@ export default function DreamersApp() {
           packId: aiPack,
           textbookId: aiContextKind === "textbook" ? aiTextbook : undefined,
           allowEnrichment,
+          referenceOnly,
           topic: aiContextKind === "textbook" ? aiChapter : aiTopic,
           previous:
             chat
@@ -1529,6 +1538,7 @@ export default function DreamersApp() {
             );
           } else setAiContextKind("foundation");
           setAllowEnrichment(false);
+          setReferenceOnly(true);
           setChat([]);
           setBookContext(context);
           const meta = packForSubject(subject) || packMeta("cells-starter")!;
@@ -1562,7 +1572,11 @@ export default function DreamersApp() {
                 accompanies your next AI question.
               </small>
             </div>
-            <button className="secondary" onClick={() => setBookContext(null)}>
+            <button
+              className="secondary"
+              disabled={aiBusy}
+              onClick={() => setBookContext(null)}
+            >
               Clear PDF reference
             </button>
           </div>
@@ -1673,7 +1687,7 @@ export default function DreamersApp() {
                   !online ||
                   !aiInput.trim() ||
                   (aiContextKind === "textbook" &&
-                    !textbook(aiTextbook)!.chapters.length &&
+                    (referenceOnly || !textbook(aiTextbook)!.chapters.length) &&
                     !bookContext)
                 }
               >
@@ -1699,6 +1713,7 @@ export default function DreamersApp() {
             <label className="field">
               Language
               <select
+                disabled={aiBusy}
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
               >
@@ -1719,10 +1734,13 @@ export default function DreamersApp() {
             <label className="field">
               Source type
               <select
+                disabled={aiBusy}
                 value={aiContextKind}
                 onChange={(e) => {
                   setAiContextKind(e.target.value);
+                  setReferenceOnly(true);
                   setBookContext(null);
+                  setChat([]);
                 }}
               >
                 <option value="textbook">Supplied textbooks / resources</option>
@@ -1736,10 +1754,13 @@ export default function DreamersApp() {
                 <label className="field">
                   Textbook
                   <select
+                    disabled={aiBusy}
                     value={aiTextbook}
                     onChange={(e) => {
                       const id = e.target.value;
                       setAiTextbook(id);
+                      setReferenceOnly(true);
+                      setChat([]);
                       setAiChapter(textbook(id)!.chapters[0]?.id || "pdf-page");
                       setBookContext(null);
                     }}
@@ -1755,6 +1776,7 @@ export default function DreamersApp() {
                 <label className="field">
                   Chapter
                   <select
+                    disabled={aiBusy}
                     value={aiChapter}
                     onChange={(e) => {
                       setAiChapter(e.target.value);
@@ -1779,7 +1801,7 @@ export default function DreamersApp() {
                   maps contribute no suggested topics. Official current exam
                   exclusions remain unverified.{" "}
                   {textbook(aiTextbook)!.chapters.length
-                    ? "Without a selected page excerpt, AI uses the chapter title and its own knowledge."
+                    ? "Book evidence mode needs a readable PDF passage. A chapter title is not evidence for an answer."
                     : "This source has no checked chapter map. Attach readable PDF text to ask a question. Image-only pages require OCR, which is not enabled."}
                 </p>
               </>
@@ -1788,6 +1810,7 @@ export default function DreamersApp() {
                 <label className="field">
                   Subject pack
                   <select
+                    disabled={aiBusy}
                     value={aiPack}
                     onChange={(e) => {
                       setAiPack(e.target.value);
@@ -1804,6 +1827,7 @@ export default function DreamersApp() {
                 <label className="field">
                   Topic
                   <select
+                    disabled={aiBusy}
                     value={aiTopic}
                     onChange={(e) => setAiTopic(e.target.value)}
                   >
@@ -1823,10 +1847,57 @@ export default function DreamersApp() {
               </>
             )}
             <label
+              className={`enrichment-control ${referenceOnly ? "enabled" : ""}`}
+            >
+              <input
+                type="checkbox"
+                disabled={aiBusy}
+                checked={referenceOnly}
+                onChange={(e) => {
+                  setReferenceOnly(e.target.checked);
+                  setChat([]);
+                }}
+              />
+              <span>
+                <b>Answer from provided text only</b>
+                <small>
+                  Default: require source text and a matching quotation. Turning
+                  this off allows a general AI explanation, not a verified
+                  textbook answer.
+                </small>
+              </span>
+            </label>
+            {aiContextKind === "textbook" && referenceOnly && !bookContext && (
+              <div className="notice">
+                <div>
+                  <p>
+                    Choose a readable passage before asking. Scanned pages
+                    cannot supply text until OCR is available.
+                  </p>
+                  <button
+                    className="secondary"
+                    onClick={() =>
+                      navigate(
+                        `/books/${aiTextbook}/${textbookTopic(aiTextbook, aiChapter)?.page || 1}`,
+                      )
+                    }
+                  >
+                    Open selected book <BookOpen size={15} />
+                  </button>
+                </div>
+              </div>
+            )}
+            <p className="fineprint">
+              A matching quotation checks the reference, not every claim. AI
+              explanations can still be wrong. No whole-book retrieval or
+              teacher verification is implied.
+            </p>
+            <label
               className={`enrichment-control ${allowEnrichment ? "enabled" : ""}`}
             >
               <input
                 type="checkbox"
+                disabled={aiBusy}
                 checked={allowEnrichment}
                 onChange={(e) => setAllowEnrichment(e.target.checked)}
               />
@@ -2978,7 +3049,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.3.1 · Your textbook studio</span>
+              <span>v0.3.2 · Your textbook studio</span>
             </div>
           </footer>
         </main>

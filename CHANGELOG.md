@@ -41,3 +41,10 @@ Registered eight additional unique file identities (11 total), XI/XII and gramma
 Final 0.3.1 clarity pass: show class on PDF selection/export/removal/reader controls, keep manual import fields optional, and explain why a pending-map source requires readable PDF text for tutoring.
 
 0.3.1 verified live at commit e5fd7d69999b029a9f2589b0196d1edd43fb1c51: 42 tests/typecheck/clean build, source-specific UI/scope controls, private 11-file intake, duplicate skip, reload preservation, Biology/Chemistry page rendering and current HTTP/API checks passed. Publisher-restricted PDFs are not publicly redistributed.
+
+## 0.3.2 — Evidence-aware tutor and additional books
+
+- Added five unique PDF identities (Computer XI, Practical Geography workbook, older Psychology XII, Tarjuma-tul-Quran XII, Pakistan Studies XII); skipped a byte-identical Urdu Grammar attachment. Registered 16 total identities and 86 checked headings, with nine chapter maps still pending.
+- Added explicit class-unconfirmed workbook classification and dynamic subject filters; retained separate grammar/legacy categories.
+- Defaulted tutor to provided-text evidence, refused heading-only textbook answers before provider calls, validated page bounds, checked returned source quotations and withheld malformed/incomplete/mismatched answers. General model knowledge requires an explicit control and is labelled not textbook-verified. A quotation check is not semantic fact verification.
+- Updated free-pilot model example and owner guide from current official documentation. No real provider/key/account/service configuration is claimed. Added deterministic quality and route regression tests. Shell v9 preserves all device storage.

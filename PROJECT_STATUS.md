@@ -1,6 +1,6 @@
 # DREAMERS project status
 
-Updated: 2026-10-30. Current release/milestone: 0.3.1 textbook-first learning studio and private supplied-PDF intake.
+Updated: 2026-10-30. Current release/milestone: 0.3.2 provided-text AI safeguards and additional private PDF intake (local checks passed; release verification pending).
 
 ## Verified release
 
@@ -14,19 +14,19 @@ Documentation-only checkpoint commits may deploy identical application code.
 ## Completed
 
 - Colorful responsive home/learn, original brand, light/dark/system themes, subtle decorative motion and reduced-motion CSS; clear book→chapter→read/ask flow and class/resource filters.
-- Eleven unique supplied PDF identities registered by SHA-256/byte size: eight textbooks, two XI/XII grammar resources, one older Ilm-ul-Taleem reference. Six checked maps contain 77 chapter/unit headings (Biology, Physics, Computer, Chemistry XI/XII and English XII). No exact duplicate attachments were present.
+- Sixteen unique supplied PDF identities registered by SHA-256/byte size. The additional six-file intake added five identities and skipped one exact Urdu Grammar duplicate. Seven checked maps contain 86 headings, including nine Computer XI chapter starts checked visually. Practical Geography is a class-unconfirmed workbook; older Psychology remains a legacy elective reference.
 - Private multi-file PDF import, automatic source/class matching, exact duplicate skipping, full local Blob storage, canvas reader, selected text, local search/indexing, page resume, separate export/removal. Recognized files bypass optional manual fields. Actual Biology/Chemistry pages and all 11-file intake were browser-verified.
-- Source-specific tutor/search suggestions. Suggestion selection updates its topic ID and clears stale PDF context. Textbook focus is default; related stories/history require explicit enrichment opt-in and separate labelling. Pending-map sources need a readable selected PDF excerpt. Watermark-only scans are not treated as OCR.
+- Default provided-text AI mode rejects heading-only textbook requests, requires a matching quotation, withholds malformed/truncated output and labels explicit general explanations not textbook-verified. Quotation matching does not establish factual correctness; real model evaluation remains pending. Current free-pilot candidate and owner steps are in docs/AI_SETUP.md. Source-specific tutor/search suggestions. Suggestion selection updates its topic ID and clears stale PDF context. Textbook focus is default; related stories/history require explicit enrichment opt-in and separate labelling. Pending-map sources need a readable selected PDF excerpt. Watermark-only scans are not treated as OCR.
 - Three original foundation packs, 12 lessons, 36 MCQs, nine written self-checks, diagrams/osmosis lab, atom/motion tools, saved attempts/drafts, resumable scored challenges, deduplicated XP/levels/achievements, flashcards/review schedules, notes/bookmarks, progress evidence and JSON backup/restore/deletion.
-- PWA manifest/icons, HTTPS, versioned shell v8, separately preserved PDF.js engine cache, IndexedDB v3, atomic pending queue and storage recovery. Optional packs require explicit download and SHA-256/schema checks. No progress is described as cloud-synced.
+- PWA manifest/icons, HTTPS, versioned shell v9, separately preserved PDF.js engine cache, IndexedDB v3, atomic pending queue and storage recovery. Optional packs require explicit download and SHA-256/schema checks. No progress is described as cloud-synced.
 
 ## Verification
 
-42 tests, TypeScript and a clean production build passed. Live HTTP/API regression passed, including origin/input checks, source/topic validation, pending-map context rules, manifest/icons and engine assets. Final health reports 0.3.1 and serves shell v8. Browser checks covered themes, source/class selection, exact duplicate skip, all eleven private imports, reload/app-update preservation, actual PDF rendering/extraction and explicit enrichment controls. See docs/VERIFICATION.md for coverage and limits.
+48 tests, TypeScript and a clean production build passed locally for 0.3.2. Live release verification is pending; the following browser evidence is from the prior 0.3.1 release. Live HTTP/API regression passed, including origin/input checks, source/topic validation, pending-map context rules, manifest/icons and engine assets. Final health reports 0.3.1 and serves shell v8. Browser checks covered themes, source/class selection, exact duplicate skip, all eleven private imports, reload/app-update preservation, actual PDF rendering/extraction and explicit enrichment controls. See docs/VERIFICATION.md for coverage and limits.
 
 ## Partial / pending
 
-- Five scan/support/legacy maps remain unreviewed and excluded from topic suggestions. No on-device OCR or whole-book semantic retrieval is implemented.
+- Nine scan/support/legacy maps remain unreviewed and excluded from topic suggestions. No on-device OCR or whole-book semantic retrieval is implemented.
 - Exact publisher editions and current board exam inclusion/exclusion notices remain unverified. Biology starts at chapter 13 without a cover/edition page. Grammar and legacy references are not promoted into current FSc syllabus.
 - AI adapter, server-only credentials, durable Redis network quotas, validation, bounded references and caching are implemented. Owner credentials/quota service are absent; real provider output/compliance remains unverified. Valid requests return honest 503, never fake answers.
 - Accounts, authenticated cloud sync, dedicated Supabase/RLS migrations, administration, full syllabus question banks/readiness and advanced media remain pending. Physical Android installation/airplane-mode verification remains pending.

@@ -732,5 +732,178 @@
     "examStatus": "Current board syllabus / exclusions not verified",
     "access": "local-import",
     "chapters": []
+  },
+  {
+    "id": "computer-xi-supplied",
+    "subject": "computer-science",
+    "title": "Computer Science & Entrepreneurship",
+    "subtitle": "Software, Python & digital problem solving",
+    "class": "XI",
+    "classes": [
+      "XI"
+    ],
+    "kind": "textbook",
+    "pages": 144,
+    "bytes": 17823455,
+    "sha256": "f933e48f183141654b90c92d3dce39be480575fc9c6d8791d5f7ecbda26afc05",
+    "color": "violet",
+    "icon": "code",
+    "edition": "PECTAA cover · revised curriculum 2023 stated; print edition unverified",
+    "text": "scanned",
+    "source": "Owner-supplied PDF · cover/front matter inspected · chapter headings/pages checked",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "filename": "01-11th-Class-Computer-Science-Punjab-Board-New-Syllabus-Full-Book-PDF.pdf",
+    "chapters": [
+      {
+        "id": "cs11-1",
+        "title": "Introduction to Software Development",
+        "page": 4,
+        "printedPage": 1
+      },
+      {
+        "id": "cs11-2",
+        "title": "Python Programming",
+        "page": 23,
+        "printedPage": 20
+      },
+      {
+        "id": "cs11-3",
+        "title": "Algorithms and Problem Solving",
+        "page": 44,
+        "printedPage": 41
+      },
+      {
+        "id": "cs11-4",
+        "title": "Computational Structures",
+        "page": 59,
+        "printedPage": 56
+      },
+      {
+        "id": "cs11-5",
+        "title": "Data Analytics",
+        "page": 70,
+        "printedPage": 67
+      },
+      {
+        "id": "cs11-6",
+        "title": "Emerging Technologies",
+        "page": 89,
+        "printedPage": 86
+      },
+      {
+        "id": "cs11-7",
+        "title": "Legal and Ethical Aspects of Computing System",
+        "page": 104,
+        "printedPage": 101
+      },
+      {
+        "id": "cs11-8",
+        "title": "Online Research and Digital Literacy",
+        "page": 118,
+        "printedPage": 115
+      },
+      {
+        "id": "cs11-9",
+        "title": "Entrepreneurship in Digital Age",
+        "page": 128,
+        "printedPage": 125
+      }
+    ]
+  },
+  {
+    "id": "geography-workbook-supplied",
+    "subject": "geography",
+    "title": "Practical Geography",
+    "subtitle": "Geography workbook · class not established by supplied front matter",
+    "class": "Unconfirmed",
+    "classes": [],
+    "kind": "reference",
+    "pages": 112,
+    "bytes": 12941742,
+    "sha256": "555049623f9e262974c9c823e00fa629b8a20b055f3a3906f8b54ef7cbe049f5",
+    "color": "mint",
+    "icon": "book",
+    "edition": "PCTB cover · class/edition unconfirmed; metadata 2022/2023",
+    "text": "scanned",
+    "source": "Owner-supplied PDF · cover/front matter inspected · chapter map pending",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "filename": "03-GEOGRAPHY-workbook-Watermark.pdf",
+    "chapters": []
+  },
+  {
+    "id": "psychology-xii-legacy",
+    "subject": "psychology",
+    "title": "Psychology / Nafsiyat",
+    "subtitle": "Older Urdu-medium elective reference",
+    "class": "XII",
+    "classes": [
+      "XII"
+    ],
+    "kind": "legacy",
+    "pages": 98,
+    "bytes": 8544212,
+    "sha256": "78f2e577ea4525066ca0e8047d2b533b686b762c18c14968c39bc4acad1b9e93",
+    "color": "peach",
+    "icon": "book",
+    "edition": "PCTB cover Class 12 · 2018 printing shown in front matter",
+    "text": "scanned",
+    "source": "Owner-supplied PDF · cover/front matter inspected · chapter map pending",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "filename": "04-Nafsiyat-12.pdf",
+    "chapters": []
+  },
+  {
+    "id": "quran-xii-supplied",
+    "subject": "tarjuma-tul-quran",
+    "title": "Tarjuma-tul-Quran",
+    "subtitle": "Grade 12 Urdu translation textbook",
+    "class": "XII",
+    "classes": [
+      "XII"
+    ],
+    "kind": "textbook",
+    "pages": 188,
+    "bytes": 34245946,
+    "sha256": "7535dd7be26f5a60bc14d285dd907f5d4a8270ea35381a26697ccc8779c51dca",
+    "color": "mint",
+    "icon": "book",
+    "edition": "PCTB cover Class 12 · filename 2023, PDF metadata 2025; exact edition unverified",
+    "text": "scanned",
+    "source": "Owner-supplied PDF · cover/front matter inspected · chapter map pending",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "filename": "05-Tarjama-Tul-Quran-12-02-06-23-Grade-12.pdf",
+    "chapters": []
+  },
+  {
+    "id": "pakistan-studies-xii-supplied",
+    "subject": "pakistan-studies",
+    "title": "Pakistan Studies / Mutalla Pakistan",
+    "subtitle": "Grade 12 Urdu-medium supplied textbook",
+    "class": "XII",
+    "classes": [
+      "XII"
+    ],
+    "kind": "textbook",
+    "pages": 88,
+    "bytes": 10595576,
+    "sha256": "6b68a37c18114976130f2392c0965c031726e8f722d6e74e2c1c900cbb2b9b87",
+    "color": "violet",
+    "icon": "book",
+    "edition": "PCTB cover Class 12 · PDF metadata September 2022; current edition unverified",
+    "text": "scanned",
+    "source": "Owner-supplied PDF · cover/front matter inspected · chapter map pending",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "filename": "01-Mutalla-Pakistan-12-06-09-22-watermark.pdf",
+    "chapters": []
   }
 ]

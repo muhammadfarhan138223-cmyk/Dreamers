@@ -69,6 +69,7 @@ const textbookRequest = {
   textbookId: "biology-xii-supplied",
   topic: "bio12-1",
   allowEnrichment: false,
+  referenceOnly: false,
 };
 assert.equal(
   (await post({ ...textbookRequest, topic: "phy12-1" })).status,
@@ -82,7 +83,29 @@ assert.equal(
   (await post({ ...textbookRequest, textbookId: "invented" })).status,
   400,
 );
+assert.equal(
+  (await post({ ...textbookRequest, referenceOnly: true })).status,
+  422,
+);
+assert.equal(
+  (await post({ ...textbookRequest, referenceOnly: "true" })).status,
+  400,
+);
 if (!health.aiConfigured) {
+  assert.equal(
+    (
+      await post({
+        ...textbookRequest,
+        referenceOnly: true,
+        bookContext: {
+          title: "QA source",
+          page: 1,
+          text: "Diffusion is the net movement of particles.",
+        },
+      })
+    ).status,
+    503,
+  );
   assert.equal((await post(textbookRequest)).status, 503);
   assert.equal(
     (await post({ ...textbookRequest, allowEnrichment: true })).status,
