@@ -1,11 +1,11 @@
 # DREAMERS project status
 
-Updated: 2026-10-30. Current release/milestone: 0.3.3 profile navigation and global book search — local checks passed, release QA pending.
+Updated: 2026-10-30. Current release/milestone: 0.3.3 profile navigation and global book search — live and verified.
 
 ## Verified release
 
-Latest verified application commit: 921e24958614d5c6169547d23ed6485e9c142a2d.
-Production deployment: dpl_2c2Jtx7EYwxMNgCMr2unRVTQTBay — READY.
+Latest verified application commit: 3f6ef8c088d33e30ad0a2339310ca8eda71d03d7.
+Production deployment: dpl_HoViS5YKXXBqXsNDh3NmyC9YoTna — READY.
 Live: https://dreamers-sooty.vercel.app
 Repository: https://github.com/muhammadfarhan138223-cmyk/Dreamers
 Vercel: dreamers / prj_ol5nVtQ2DprVqMgNY140bM86Lsvu / team_jwuAswY9vD3bNmcKQM2LqjoF.
@@ -25,7 +25,7 @@ Documentation-only checkpoint commits may deploy identical application code.
 
 ## Verification
 
-53 tests, TypeScript and production build passed locally for 0.3.3. Prior 0.3.2 live evidence follows; 0.3.3 release QA is pending. Preview dpl_GjoGdmqsStRrNwffqfw9wKLsXube and production dpl_2c2Jtx7EYwxMNgCMr2unRVTQTBay reached READY at the exact application commit above. Stable production health reports 0.3.2; expanded anonymous live route/API/PWA checks passed. Browser verified default evidence checkbox on, stories off, heading-only Send disabled, explicit general explanation enabling Send, honest missing-owner service status, six-file private batch classification, actual scanned Computer XI page 4 rendering, and all six saved copies surviving reload. The 11-file intake and duplicate re-import evidence in the previous release is historical; this fresh QA browser imported the latest six files only. All 16 canonical metadata hashes/byte sizes were rechecked against unchanged source files. No real provider output was evaluated. See docs/VERIFICATION.md for limits.
+53 tests, TypeScript and production build passed for 0.3.3. Preview dpl_88VpqTxwwYYeqFphGZbrysygr1v1 and production dpl_HoViS5YKXXBqXsNDh3NmyC9YoTna reached READY at the exact application commit above; stable alias assigned. Expanded anonymous live regression passed, including search/profile routes and search origin/input/configuration boundaries. Browser verified header DP→profile, header Python search returning XI and XII chapters, class filter narrowing to XI, combined subject/book/result-type filters, Clear filters, new keyword resetting to all books, and light/dark layouts. A 949-byte original QA PDF was imported/indexed privately; global electron search returned page 2 and its encoded local-book link opened that exact passage. This is QA-only local data, not a seventeenth public source. Canonical catalogue remains 16 identities/86 checked headings. No real provider result, mobile device install or OCR evaluation is claimed. Earlier PDF/source evidence remains in docs/VERIFICATION.md.
 
 ## Partial / pending
 
@@ -46,4 +46,4 @@ Required environment: none for guest learning. Owner AI: AI_PROVIDER, AI_MODEL, 
 
 ## Exact next task
 
-Inspect further PDFs by hash/cover/edition before adding source metadata. Complete the nine pending maps without inventing headings or syllabus; verify current board notices/exclusions. Obtain publisher permission/permitted official URLs before shared full-PDF distribution. Configure owner AI/quota service and verify a real response. Then select/create a dedicated Dreamers Supabase project with confirmed organization/cost for accounts/RLS/sync. Preserve all local work and queues; read these checkpoint documents before editing.
+Configure owner provider/model/key and the dedicated quota service securely in Vercel, redeploy and verify real AI tutor/search responses with teacher-reviewed cases. Inspect further PDFs by hash/cover/edition before adding source metadata. Complete the nine pending maps without inventing headings or syllabus; verify current board notices/exclusions. Obtain publisher permission/permitted official URLs before shared full-PDF distribution. Configure owner AI/quota service and verify a real response. Then select/create a dedicated Dreamers Supabase project with confirmed organization/cost for accounts/RLS/sync. Preserve all local work and queues; read these checkpoint documents before editing.
