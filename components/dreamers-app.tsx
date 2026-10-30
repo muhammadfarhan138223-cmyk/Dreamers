@@ -1777,8 +1777,10 @@ export default function DreamersApp() {
                 <p className="fineprint">
                   Suggestions use checked textbook headings. Files with pending
                   maps contribute no suggested topics. Official current exam
-                  exclusions remain unverified. Without a selected page excerpt,
-                  AI uses the chapter title and its own knowledge.
+                  exclusions remain unverified.{" "}
+                  {textbook(aiTextbook)!.chapters.length
+                    ? "Without a selected page excerpt, AI uses the chapter title and its own knowledge."
+                    : "This source has no checked chapter map. Attach readable PDF text to ask a question. Image-only pages require OCR, which is not enabled."}
                 </p>
               </>
             ) : (
@@ -2878,9 +2880,11 @@ export default function DreamersApp() {
                   ? "Learning"
                   : path.startsWith("/practice/")
                     ? "Practice"
-                    : path === "/ai-tutor"
-                      ? "AI teacher"
-                      : "Explore")}
+                    : path.startsWith("/books/")
+                      ? "PDF reader"
+                      : path === "/ai-tutor"
+                        ? "AI teacher"
+                        : "Explore")}
             </b>
           </div>
           <form
@@ -2893,10 +2897,10 @@ export default function DreamersApp() {
           >
             <Search size={17} />
             <input
-              aria-label="Search topics, questions and more"
+              aria-label="Search textbook chapters"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search topics, questions and more…"
+              placeholder="Search textbook chapters…"
             />
             <span>↵</span>
           </form>

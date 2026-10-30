@@ -244,7 +244,8 @@ export default function BookLibrary({
               <span>
                 <b>{b.title}</b>
                 <small>
-                  {b.pages} pages · {(b.bytes / 1024 / 1024).toFixed(1)} MB
+                  Class {b.class} · {b.pages} pages ·{" "}
+                  {(b.bytes / 1024 / 1024).toFixed(1)} MB
                 </small>
               </span>
               <span className={`book-local-status ${saved ? "ready" : ""}`}>
@@ -352,47 +353,57 @@ export default function BookLibrary({
           Select several PDFs at once. Matching supplied files are named and
           classified automatically; identical files are saved only once.
         </p>
-        <div className="book-fields">
-          <label className="field">
-            Subject
-            <select
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            >
-              {[
-                "biology",
-                "chemistry",
-                "physics",
-                "english",
-                "urdu",
-                "islamiat",
-                "pakistan-studies",
-                "tarjuma-tul-quran",
-                "other",
-              ].map((s) => (
-                <option key={s} value={s}>
-                  {s.replaceAll("-", " ")}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="field">
-            Class
-            <select value={grade} onChange={(e) => setGrade(e.target.value)}>
-              <option>XI</option>
-              <option>XII</option>
-            </select>
-          </label>
-          <label className="field">
-            Edition label (optional)
-            <input
-              value={edition}
-              maxLength={80}
-              onChange={(e) => setEdition(e.target.value)}
-              placeholder="As printed on your book"
-            />
-          </label>
-        </div>
+        <details className="import-details">
+          <summary>Details for other PDF copies (optional)</summary>
+          <p className="fineprint">
+            Recognised catalogue files are classified automatically. These
+            fields apply to other files.
+          </p>
+          <div className="book-fields">
+            <label className="field">
+              Subject
+              <select
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              >
+                {[
+                  "biology",
+                  "chemistry",
+                  "physics",
+                  "mathematics",
+                  "computer-science",
+                  "education",
+                  "english",
+                  "urdu",
+                  "islamiat",
+                  "pakistan-studies",
+                  "tarjuma-tul-quran",
+                  "other",
+                ].map((s) => (
+                  <option key={s} value={s}>
+                    {s.replaceAll("-", " ")}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              Class
+              <select value={grade} onChange={(e) => setGrade(e.target.value)}>
+                <option>XI</option>
+                <option>XII</option>
+              </select>
+            </label>
+            <label className="field">
+              Edition label (optional)
+              <input
+                value={edition}
+                maxLength={80}
+                onChange={(e) => setEdition(e.target.value)}
+                placeholder="As printed on your book"
+              />
+            </label>
+          </div>
+        </details>
         <input
           className="sr-only"
           type="file"
@@ -507,14 +518,14 @@ export default function BookLibrary({
                   a.click();
                   setTimeout(() => URL.revokeObjectURL(url), 1000);
                 }}
-                aria-label={`Export ${b.title}`}
+                aria-label={`Export ${b.title}, Class ${b.class}`}
               >
                 <Download size={16} />
               </button>
               <button
                 className="secondary"
                 onClick={() => setRemoveId(b.id)}
-                aria-label={`Remove ${b.title}`}
+                aria-label={`Remove ${b.title}, Class ${b.class}`}
               >
                 <Trash2 size={16} />
               </button>

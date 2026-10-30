@@ -5211,3 +5211,4 @@ hr {
 .textbook-tile-copy h3 {
   line-height: 1.4;
 }
+.import-details {border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin:20px 0;color:var(--muted);}.import-details summary{cursor:pointer;font-size:12px;}.pdf-header h2 small{font-size:13px;color:var(--muted);font-weight:400;white-space:nowrap;}

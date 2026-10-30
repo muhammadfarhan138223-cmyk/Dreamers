@@ -37,3 +37,5 @@ Added optional original Chemistry and Physics packs: 12 lessons, 36 MCQs and 9 w
 ## 0.3.1 — Expanded supplied-book intake
 
 Registered eight additional unique file identities (11 total), XI/XII and grammar/reference filters, 77 checked headings, and honest pending-map states. Added detection of watermark-only scans. Fixed a tutor suggestion to select its corresponding chapter and clear stale PDF reference text. Preserved private PDF storage and original learning data.
+
+Final 0.3.1 clarity pass: show class on PDF selection/export/removal/reader controls, keep manual import fields optional, and explain why a pending-map source requires readable PDF text for tutoring.

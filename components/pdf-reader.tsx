@@ -235,7 +235,9 @@ export default function PdfReader({
             <span className="eyebrow">
               LOCAL FULL-PDF READER · EDITION NOT VERIFIED
             </span>
-            <h2 id="pdf-title">{book.title}</h2>
+            <h2 id="pdf-title">
+              {book.title} <small>· Class {book.class}</small>
+            </h2>
           </div>
           <button
             className="circle-button"
