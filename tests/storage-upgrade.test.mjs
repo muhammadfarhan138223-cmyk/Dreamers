@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import "fake-indexeddb/auto";
 import * as db from "../lib/db.ts";
-test("v1 device storage upgrades with saved notes and queued work intact", async () => {
+test("v1 device storage upgrades to v3 with saved notes and queued work intact", async () => {
   await new Promise((resolve, reject) => {
     const r = indexedDB.open("dreamers-local", 1);
     r.onupgradeneeded = () => {
@@ -39,4 +39,6 @@ test("v1 device storage upgrades with saved notes and queued work intact", async
   assert.equal((await db.list("notes"))[0].text, "keep this");
   assert.equal((await db.list("queue")).length, 1);
   assert.deepEqual(await db.list("assessments"), []);
+  assert.deepEqual(await db.list("books"), []);
+  assert.deepEqual(await db.bookPages("missing-book"), []);
 });

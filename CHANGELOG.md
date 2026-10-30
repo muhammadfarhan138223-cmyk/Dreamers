@@ -15,3 +15,11 @@ Added a distinct chapter challenge unlocked after four lessons: shuffled questio
 ## 0.2.0 — 2026-10-30
 
 Added optional original Chemistry and Physics packs: 12 lessons, 36 MCQs and 9 written self-check questions across three sciences. Added a catalog with SHA-256 download validation, subject workspaces, saved practice/drafts/bookmarks, per-pack challenges and local search across downloaded packs. Preserved legacy Biology IDs and progress. AI context supports all three packs but still requires owner configuration.
+
+## 0.2.1 — Personal offline full-PDF shelf
+
+- Added full local PDF import, SHA-256 deduplication, page rendering/resume, selectable-text indexing/search and separate export/removal. No official book bytes are redistributed; imported editions remain unverified.
+- Added lazy pinned PDF.js engine with complete versioned offline asset preparation, preserved across shell upgrades.
+- Added bounded selected-page AI references with request validation and source limitations; real provider setup remains pending.
+- Upgraded IndexedDB to v3 without deleting saved work; JSON backups explicitly exclude PDFs/text indexes.
+- Added actual PDF parsing, Blob storage/deletion, multilingual search, backup and offline-engine tests.

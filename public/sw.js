@@ -1,5 +1,5 @@
 /* Only public app assets are cached. AI, auth and account APIs never enter Cache Storage. */
-const VERSION = "dreamers-shell-v4";
+const VERSION = "dreamers-shell-v5";
 const CORE = [
   "/",
   "/manifest.webmanifest",
@@ -64,13 +64,18 @@ self.addEventListener("fetch", (event) => {
   if (
     u.pathname.startsWith("/_next/static/") ||
     u.pathname.startsWith("/brand/") ||
+    u.pathname.startsWith("/pdf-worker/") ||
     u.pathname === "/manifest.webmanifest" ||
     u.pathname.startsWith("/packs/")
   )
     event.respondWith(
       (async () => {
         const cache = await caches.open(VERSION);
-        const cached = await cache.match(req);
+        const engine = u.pathname.startsWith("/pdf-worker/")
+          ? await caches.open("dreamers-pdf-engine-6.4.299")
+          : null;
+        const cached =
+          (engine && (await engine.match(req))) || (await cache.match(req));
         if (cached) return cached;
         const response = await fetch(req);
         if (response.ok) await cache.put(req, response.clone());

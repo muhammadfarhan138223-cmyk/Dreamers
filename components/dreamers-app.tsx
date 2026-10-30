@@ -1,4 +1,14 @@
 "use client";
+import dynamic from "next/dynamic";
+import type { BookContext } from "./book-library";
+const BookLibrary = dynamic(() => import("./book-library"), {
+  ssr: false,
+  loading: () => (
+    <div className="panel empty">
+      <p>Opening your textbook shelf…</p>
+    </div>
+  ),
+});
 import PackDownloads from "@/components/pack-downloads";
 import PackWorkspace from "@/components/pack-workspace";
 import {
@@ -85,6 +95,7 @@ const nav = [
   ["/revision", "Revision", CalendarDays],
   ["/flashcards", "Flashcards", Layers],
   ["/downloads", "Downloads", Download],
+  ["/books", "Textbook PDFs", BookOpen],
 ] as const;
 const subjects = [
   {
@@ -286,7 +297,8 @@ export default function DreamersApp() {
     [reveal, setReveal] = useState(false),
     [shortAnswers, setShortAnswers] = useState<Record<string, string>>({}),
     [quizDone, setQuizDone] = useState(false);
-  const [aiPack, setAiPack] = useState("cells-starter"),
+  const [bookContext, setBookContext] = useState<BookContext | null>(null),
+    [aiPack, setAiPack] = useState("cells-starter"),
     [aiTopic, setAiTopic] = useState("cell-basics"),
     [language, setLanguage] = useState("English"),
     [mode, setMode] = useState(modes[0]),
@@ -607,6 +619,7 @@ export default function DreamersApp() {
           question: input,
           language,
           mode: selectedMode,
+          bookContext: bookContext || undefined,
           packId: aiPack,
           topic: aiTopic,
           previous:
@@ -1700,12 +1713,27 @@ export default function DreamersApp() {
               <FileDown size={16} /> Export a backup
             </button>
             <p className="fineprint">
-              Browser storage may be cleared by your browser or device. Export
+              Browser storage may be cleared by your browser or device. PDF files are excluded from JSON backups; export them separately from Textbook PDFs. Export
               important work.
             </p>
           </div>
         </div>
       </>
+    );
+  else if (path === "/books")
+    content = (
+      <BookLibrary
+        onAsk={(context, subject) => {
+          setBookContext(context);
+          const meta = packForSubject(subject) || packMeta("cells-starter")!;
+          setAiPack(meta.id);
+          setAiTopic(meta.lessonIds[0]);
+          setAiInput(
+            "Explain the selected PDF page in simple words. Tell me if the excerpt is incomplete.",
+          );
+          navigate("/ai-tutor");
+        }}
+      />
     );
   else if (path === "/ai-tutor")
     content = (
@@ -1714,6 +1742,24 @@ export default function DreamersApp() {
           "YOUR PERSONAL LEARNING COMPANION",
           "Big questions are welcome here.",
           "Ask in your own words. Explore a concept from another angle.",
+        )}
+        {bookContext && (
+          <div className="panel pdf-context">
+            <div>
+              <span className="eyebrow">SELECTED LOCAL PDF REFERENCE</span>
+              <h3>
+                {bookContext.title} · PDF page {bookContext.page}
+              </h3>
+              <p dir="auto">{bookContext.text.slice(0, 350)}…</p>
+              <small>
+                Imported copy; source/edition not verified. A bounded excerpt
+                accompanies your next AI question.
+              </small>
+            </div>
+            <button className="secondary" onClick={() => setBookContext(null)}>
+              Clear PDF reference
+            </button>
+          </div>
         )}
         <div className="ai-layout">
           <section className="panel ai-workspace">
@@ -2581,7 +2627,7 @@ export default function DreamersApp() {
                 })
               }
             >
-              <FileDown size={16} /> Export all local learning data
+              <FileDown size={16} /> Export learning progress (PDFs separate)
             </button>
             <label className="field">
               Restore a Dreamers backup (merge with this device)
@@ -2731,7 +2777,7 @@ export default function DreamersApp() {
         <div className="panel prose">
           <h2>A small, working beginning.</h2>
           <p>
-            This first release includes an original Biology foundation chapter,
+            This release includes original Biology, Chemistry and Physics foundation chapters,
             question practice, offline storage, flashcards, notes and learning
             evidence. Read a lesson, recall what you understood, practice, then
             revisit mistakes.
@@ -2740,12 +2786,12 @@ export default function DreamersApp() {
           <p>
             Guest learning, offline starter pack, first-completion XP, local
             search, self-checked written answers, revision scheduling and
-            lightweight interactive science illustrations.
+            lightweight interactive science illustrations. Full PDFs imported from your device support local reading, text indexing, search and selected-page AI references.
           </p>
           <h3>What needs further setup?</h3>
           <p>
             Online AI needs owner credentials and a durable quota service. Cloud
-            accounts, verified Punjab textbook mapping, additional subjects,
+            accounts, verified Punjab textbook mapping, compulsory-subject lessons,
             administration and semantic search are not yet active.
           </p>
           <h3>Learning responsibly</h3>
@@ -3007,7 +3053,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.2.0 · Science foundations</span>
+              <span>v0.2.1 · Offline textbook shelf</span>
             </div>
           </footer>
         </main>

@@ -27,12 +27,23 @@ for (const path of [
   "/learn/biology/cells/osmosis",
   "/practice/biology",
   "/downloads",
+  "/books",
+  "/learn/chemistry",
+  "/practice/physics",
   "/ai-tutor",
   "/settings",
   "/progress",
   "/challenge/biology/cells",
 ])
   assert.match(await (await get(path)).text(), /DREAMERS/);
+for (const name of ["cells", "atoms", "motion"]) {
+  const pack = await (await get(`/packs/${name}-v1.json`)).json();
+  assert.equal(pack.questions.length, 12);
+}
+const pdfAssets = await (await get("/pdf-worker/6.4.299/assets.json")).json();
+assert.ok(pdfAssets.files.includes("pdf.worker.min.mjs"));
+const pdfWorker = await get("/pdf-worker/6.4.299/pdf.worker.min.mjs");
+assert.match(pdfWorker.headers.get("content-type"), /javascript/);
 const valid = {
   question: "Explain diffusion",
   language: "English",
@@ -53,7 +64,28 @@ assert.equal((await post(valid, "https://unrelated.test")).status, 403);
 assert.equal((await post({ ...valid, question: "" })).status, 400);
 assert.equal((await post("not json")).status, 400);
 assert.equal((await post(valid, base, "text/plain")).status, 415);
-if (!health.aiConfigured) assert.equal((await post(valid)).status, 503);
+const reference = {
+  title: "QA original",
+  page: 1,
+  text: "Diffusion moves particles.",
+};
+assert.equal(
+  (await post({ ...valid, bookContext: { ...reference, page: -1 } })).status,
+  400,
+);
+assert.equal(
+  (
+    await post({
+      ...valid,
+      bookContext: { ...reference, text: "x".repeat(2001) },
+    })
+  ).status,
+  400,
+);
+if (!health.aiConfigured) {
+  assert.equal((await post(valid)).status, 503);
+  assert.equal((await post({ ...valid, bookContext: reference })).status, 503);
+}
 console.log(
   "PASS: HTTPS routes, health, manifest, icon dimensions, worker headers, AI origin/input checks and missing-configuration handling.",
 );

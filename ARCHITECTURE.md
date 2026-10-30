@@ -4,7 +4,7 @@ Next.js 16 App Router, React 19 and TypeScript; Tailwind 4 with a compact origin
 
 ## Local-first boundary
 
-`dreamers-local` IndexedDB version 2 has `packs`, `events`, `queue`, `notes`, `cards`, `settings`, `assessments` stores. Activity and pending queue entries are committed in the same transaction. Lesson IDs are stable and first-correct rewards are derived from unique question IDs: repeating activities cannot generate additional XP. Attempts keep full local history; latest answers identify unresolved mistakes. Atomic transaction completion is awaited before success UI.
+`dreamers-local` IndexedDB version 3 has `packs`, `events`, `queue`, `notes`, `cards`, `settings`, `assessments`, `books`, `bookPages` stores. Activity and pending queue entries are committed in the same transaction. Lesson IDs are stable and first-correct rewards are derived from unique question IDs: repeating activities cannot generate additional XP. Attempts keep full local history; latest answers identify unresolved mistakes. Atomic transaction completion is awaited before success UI.
 
 The public shell cache stores the HTML root and its referenced Next.js static chunks. Navigations use the network when available and the cached public shell when offline. AI, account and admin endpoints are never cached. The initial compact original pack is included in shell preparation and materialized to IndexedDB on first use. Optional packs will require explicit download. Pack removal preserves progress.
 
@@ -29,3 +29,15 @@ JSON backups are schema/size checked and merged in one IndexedDB transaction. Ne
 ## Chapter assessment checkpoint
 
 Version 2 adds the assessments store without modifying existing stores. Chapter runs persist shuffled question IDs, answers, navigation index and an optional absolute deadline. Finalization writes the completed run and idempotent per-question event/queue records in a single transaction. A pending answer write is awaited before scoring to avoid timer/selection races. An unfinished run resumes after reload. Test scores describe the starter chapter, never full-syllabus readiness.
+
+## Optional science catalog
+
+`scripts/build-catalog.mjs` validates the three explicit original packs and creates shared metadata (IDs, subject/chapter paths, bytes and SHA-256). Only Biology is in the compact starter shell. Chemistry and Physics need explicit download. The installer checks the exact raw digest and schema before committing; content removal keeps historical evidence. Lesson/question IDs are globally unique and legacy IDs remain unchanged. The server AI selects among the same three original packs.
+
+## Personal textbook PDF boundary
+
+PDF.js 6.4.299 is pinned and lazily loaded only when the local reader opens. Build preparation copies the local worker, fonts, character maps and wasm resources from the package; generated resources are not committed. On first opening, a complete engine manifest is fetched and its resources cached in `dreamers-pdf-engine-6.4.299`, independently of shell-cache updates. The manifest is marked ready only after all resources succeed. A failed preparation retains partial resources for retry and never removes the book Blob. The service worker serves engine resources from this versioned cache offline. No PDF scripting viewer, annotation actions or external document links are enabled.
+
+`books` holds full Blobs, digest, user-labelled class/subject/edition and reading/index progress. `bookPages` holds extracted text keyed by book/page with a bookId index. Metadata patches use a single read/write transaction to avoid index/reading-position lost updates. Removal deletes the chosen book and its page index atomically. JSON backups exclude books/pages and include only a book manifest/notice; file export is separate. Whole-device deletion clears PDF stores too.
+
+Imported content is never labelled officially verified. Local search uses selectable text, with no OCR. Explicit selected-page AI context is bounded and validated server-side, included in the cache key, and sent as untrusted user reference data. No whole-book upload, embedding service, public book hosting or copyrighted book redistribution is implemented.

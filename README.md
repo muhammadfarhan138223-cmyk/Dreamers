@@ -2,7 +2,7 @@
 
 **Learn. Play. Understand. Achieve.**
 
-An incremental, mobile-first learning platform for FSc students. The first release is a real guest learning app with an original Biology foundation chapter and offline PWA support. It is not a complete Punjab syllabus or a board-approved resource.
+An incremental, mobile-first learning platform for FSc students. The first release is a real guest learning app with three original science foundation chapters and offline PWA support. It is not a complete Punjab syllabus or a board-approved resource.
 
 Live application: https://dreamers-sooty.vercel.app
 
@@ -21,8 +21,8 @@ Open the development URL printed by Next.js. Node 24 is recommended.
 ## Working features
 
 - Responsive dashboard and dark/light/system themes; original SVG brand and PWA icons.
-- 4 original cell biology lessons, cell diagram and qualitative osmosis lab.
-- 12 MCQs with answer explanations, attempt history, mistake review; 2 short and 1 long self-check answer.
+- 12 original Biology/Chemistry/Physics lessons, cell/osmosis diagrams, atom counter and motion calculator.
+- 36 MCQs with explanations, subject practice/history and 9 written self-check answers.
 - IndexedDB learning pack, progress events, notes, bookmarks, written drafts and review schedules.
 - Versioned public app-shell caching; offline navigation and practice after preparation.
 - First-completion XP, meaningful lesson map, 3 achievements, evidence-based progress summaries.
@@ -30,9 +30,12 @@ Open the development URL printed by Next.js. Node 24 is recommended.
 - Local text search, 12 self-rated flashcards, chapter study plan, data export/restore and device deletion.
 - Read-aloud using available browser voices, with text always available.
 
+- Optional science packs use explicit downloads, content validation and SHA-256 integrity checks.
+- Personal full-PDF import/reader, resumable selectable-text index/search, reading-position resume, separate PDF export and selected-page AI references. First opening caches about 5 MB of engine resources. Scans have no OCR; imported editions stay unverified.
+
 ## Explicit limitations
 
-Content is original, educator review is pending, and official edition/chapter mapping is not yet verified. Chemistry, Physics and compulsory-subject content are planned. Accounts, cloud synchronization, administrative operations and semantic AI search are not enabled. Guest events remain queued for a future authenticated migration; they are never silently discarded or described as synced. No exam outcome is guaranteed.
+Content is original, educator review is pending, and official edition/chapter mapping is not yet verified. Compulsory-subject lessons and complete syllabus coverage are planned. Accounts, cloud synchronization, administrative operations and semantic AI search are not enabled. Guest events remain queued for a future authenticated migration; they are never silently discarded or described as synced. No exam outcome is guaranteed.
 
 AI requires owner-only environment configuration. Never commit `.env` files. Students never supply API keys. See DEPLOYMENT.md for setup and current verification status.
 

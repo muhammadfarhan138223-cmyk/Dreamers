@@ -1,34 +1,35 @@
 # DREAMERS project status
 
-Updated: 2026-10-30 (Pakistan)
+Updated: 2026-10-30
 
-Current milestone: first usable guest learning release, followed by offline recovery and security hardening. Milestones 1–4 have a working starter scope; milestone 5 has a real server integration awaiting owner configuration.
+Current milestone: 0.2.1 guest offline science library and personal full-PDF reader. Milestones 1–4 have working foundation scope. Milestone 5 has a real server integration awaiting owner configuration.
 
 ## Completed
 
-Responsive dashboard, original SVG identity and PWA icons, themes/navigation, 4 original Biology lessons, 12 MCQs and 3 written self-check questions, diagrams/osmosis lab, IndexedDB content and activity records, atomic pending queue, versioned offline shell, download/removal, deduplicated XP/levels/3 achievements, local search, notes/bookmarks, flashcards with recall schedules, chapter plan, read-aloud, JSON data export/restore/deletion. Recovery fixes preserve newer notes and prevent removed packs from reappearing. Source import validation and official curriculum resource register are included.
+Responsive dashboard, original SVG identity and PWA icons, themes/navigation; three original science chapters (Biology cells, Chemistry atoms/ions, Physics motion), 12 lessons, 36 MCQs and 9 written self-check questions. Interactive diagrams, qualitative osmosis lab, atom charge counter and motion calculator. Optional Chemistry/Physics packs download only at student request, with SHA-256/schema validation. Pack removal preserves progress. Global evidence and subject-specific practice, written drafts, flashcards, bookmarked lessons and resumable chapter challenges are supported.
 
-Server AI route supports Groq or OpenAI-compatible chat completions, server-only secrets, origin/body validation, token limits, timeouts, durable Redis network quotas and per-network caching. It returns honest 503 responses until configured; it never generates a fake explanation.
+IndexedDB learning/activity records, atomic pending queue, versioned offline shell, deduplicated XP/levels/achievements, local content search, notes, revision schedules, read-aloud and JSON progress export/restore/deletion are implemented. JSON backups preserve legacy Biology IDs and the newer science IDs.
+
+Personal textbook library (/books): full local PDF Blob import (100 MB/file), SHA-256 deduplication, page rendering, selectable text extraction, resumable index (up to 1,500 pages/book), English/Urdu local text search, last-page resume, PDF export and local deletion. The complete versioned PDF.js engine is cached separately on first opening (about 5 MB); books remain in IndexedDB. Image-only scanned PDFs render but have no OCR. JSON progress backups exclude PDF bytes/text; export books separately. Official catalogue links are provided; no full official textbook PDF has been downloaded, verified or redistributed.
+
+A selected page excerpt (up to 2,000 characters) can be attached to an AI question. It is sent only on explicit question submission and is treated as untrusted reference text. The assistant is instructed to cite the PDF page and disclose missing information. This is selected-page context, not whole-book retrieval or verified curriculum grounding.
 
 ## Verification and commits
 
-25 automated tests, TypeScript and production build pass for hardening code. First release live HTTP checks passed, including PWA assets and AI authorization/validation. Live desktop lesson, bookmarking, completion, feedback, XP and reload persistence passed. See docs/VERIFICATION.md for exact coverage and limits.
-Latest verified deployed application commit: d2fcfd83845500dd19c397f7c118eb09472bf254.
-Chapter challenge deployment: dpl_DabfgwQVqSWSPqfpTBZQ5zY6H1Nw — READY; live resume, scoring, history and XP deduplication verified.
-Production: https://dreamers-sooty.vercel.app — READY; Git-linked Vercel project dreamers, prj_ol5nVtQ2DprVqMgNY140bM86Lsvu.
-Local storage: IndexedDB v2 adds persistent assessments, with upgrade preservation tests.
-Cloud database migrations: none applied. Existing unrelated Supabase project left unchanged.
+Latest verified deployed application commit before PDF release: 9447e33e0cec0cd124f7a6ee788a8624f2658ddd (0.2.0).
+Science production deployment: dpl_HugnhbmuUCppHqtQPNAy8JJ8kmQo — READY. Live Chemistry download, question answer/feedback and storage flow passed.
+PDF release checks: 36 automated tests include actual PDF.js parsing, Blob persistence, metadata merge, scoped deletion, backup exclusions, English/Urdu search, v1→v3 storage preservation and offline worker/engine-cache serving. Production build and live browser verification recorded in docs/VERIFICATION.md as they complete.
+Production: https://dreamers-sooty.vercel.app — Git-linked project dreamers, prj_ol5nVtQ2DprVqMgNY140bM86Lsvu.
+Local storage: IndexedDB v3 adds books/bookPages and a bookId index without deleting learning data. Cloud database migrations: none applied. Existing unrelated Supabase project left unchanged.
 
-## Remaining / setup-dependent
+## Partially implemented / pending
 
-Owner AI credentials and durable quota service, followed by live provider verification; dedicated Supabase selection and RLS/auth migrations; guest-to-account migration and synchronization; physical Android installation/offline check; educator review and current XI/XII textbook mapping; further subjects; full-syllabus exam planning; secure administration; semantic search/image questions/microphone interaction.
+AI adapter supports Groq/OpenAI-compatible completions, server-only secrets, input/origin/size limits, timeouts, token limits, durable Redis network quotas and scoped caching. Real AI/provider responses remain unverified until owner setup. No fake responses are used. Accounts, authenticated cloud sync, RLS migrations, administration and semantic/whole-book AI retrieval remain pending. Queued guest work is local and is not described as synchronized.
 
 ## Known limits
 
-Original content awaits educator review; no official chapter or past-paper coverage is claimed. Guest records are local and remain queued, not cloud-synchronized. No exam outcome/readiness percentage is fabricated. Desktop production browser works; local dev preview hydration remains an environment-specific issue. Existing deployment protection remains enabled. No runtime monitoring drain is configured.
+Original science content awaits educator review and official XI/XII mapping. Official PECTAA catalogue direct fetch encountered Bot Verification; eLearn Grade 11 fetch returned an error. No full official PDF/edition or redistribution permission has been verified. Physical Android installation/offline and large/scanned/Urdu PDF device testing remain pending. Budget-device storage can be evicted by the browser; students should retain/export PDFs. No exam-readiness percentage is invented. No runtime monitoring drain is configured.
 
-Required environment: none for guest learning. AI: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN; AI_BASE_URL optional. Configure secrets through Vercel, never in chat or GitHub.
+Required environment: none for guest learning. AI: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN; AI_BASE_URL optional. Configure secrets in Vercel, never chat or GitHub. Students never supply keys.
 
-Exact next task: configure owner AI credentials and a durable quota service through the dreamers Vercel project, verify a real generated response, then select/create a dedicated Dreamers Supabase project with confirmed organization/cost before implementing authenticated cloud progress. Do not reuse an unrelated project or ask students for keys. Read these checkpoint documents before resuming; preserve working code and student storage.
-
-Chapter challenge: separate unlocked assessment with optional timer, saved session, resume, atomic finalization and score history implemented. No claim of long-term mastery is made from one attempt.
+Exact next task: finish live PDF import/render/index/search/resume/AI-context verification and record the release commit/deployment. Then verify permitted full textbook download/edition URLs, or accept publisher/user-provided PDFs; configure owner AI and durable quota service, then verify a real response. Select/create a dedicated Dreamers Supabase project only with confirmed organization/cost; do not reuse another project's database. Read checkpoint documents before further edits.

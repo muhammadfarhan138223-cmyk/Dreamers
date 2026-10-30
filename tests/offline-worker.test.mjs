@@ -74,7 +74,7 @@ function worker() {
 test("worker precaches root and referenced application JavaScript and CSS", async () => {
   const w = worker();
   await w.run("install");
-  const cache = await w.caches.open("dreamers-shell-v4");
+  const cache = await w.caches.open("dreamers-shell-v5");
   assert.ok(await cache.match("/_next/static/app.js"));
   assert.ok(await cache.match("/_next/static/app.css"));
 });
@@ -116,4 +116,17 @@ test("cache upgrades preserve unrelated application caches", async () => {
   await w.run("activate");
   assert.ok(w.stores.has("other-app-cache"));
   assert.ok(!w.stores.has("dreamers-shell-old"));
+});
+
+test("prepared PDF engine resources survive shell upgrades and serve without a network", async () => {
+  const w = worker();
+  const engine = await w.caches.open("dreamers-pdf-engine-6.4.299");
+  await engine.put("/pdf-worker/6.4.299/pdf.worker.min.mjs", new Response("saved worker"));
+  await w.run("install");
+  await w.run("activate");
+  w.offline();
+  const response = await w.fetch("/pdf-worker/6.4.299/pdf.worker.min.mjs");
+  assert.equal(await response.text(), "saved worker");
+  const shell = await w.fetch("/books", "navigate");
+  assert.equal(shell.status, 200);
 });

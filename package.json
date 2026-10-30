@@ -1,17 +1,19 @@
 {
   "name": "dreamers-learning",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "prebuild": "node scripts/build-catalog.mjs && node scripts/prepare-pdf.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",
     "next": "^16.4.3",
+    "pdfjs-dist": "6.4.299",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },

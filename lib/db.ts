@@ -9,17 +9,22 @@ const STORES = [
   "settings",
   "queue",
   "assessments",
+  "books",
+  "bookPages",
 ] as const;
 type Store = (typeof STORES)[number];
 let connection: Promise<IDBDatabase> | undefined;
 function db() {
   if (!connection)
     connection = new Promise((resolve, reject) => {
-      const r = indexedDB.open("dreamers-local", 2);
+      const r = indexedDB.open("dreamers-local", 3);
       r.onupgradeneeded = () => {
         for (const store of STORES)
           if (!r.result.objectStoreNames.contains(store))
             r.result.createObjectStore(store, { keyPath: "id" });
+        const pages = r.transaction!.objectStore("bookPages");
+        if (!pages.indexNames.contains("bookId"))
+          pages.createIndex("bookId", "bookId");
       };
       r.onsuccess = () => {
         r.result.onversionchange = () => {
@@ -86,7 +91,13 @@ export async function exportData() {
     schemaVersion: 1,
     exportedAt: new Date().toISOString(),
   };
-  for (const s of STORES) result[s] = await list(s);
+  for (const s of STORES)
+    if (s !== "books" && s !== "bookPages") result[s] = await list(s);
+  result.bookManifest = (await list<RecordValue>("books")).map(
+    ({ blob, ...metadata }) => metadata,
+  );
+  result.bookBackupNotice =
+    "PDF bytes and text indexes are not included. Export PDFs separately from the book library.";
   return result;
 }
 export async function clearData() {
@@ -139,7 +150,8 @@ export async function restoreData(records: Record<string, RecordValue[]>) {
   return new Promise<void>((resolve, reject) => {
     const tx = d.transaction([...STORES], "readwrite");
     for (const store of STORES) {
-      if (store === "packs") continue;
+      if (store === "packs" || store === "books" || store === "bookPages")
+        continue;
       for (const row of records[store] || []) {
         const objectStore = tx.objectStore(store);
         const request = objectStore.get(row.id);
@@ -174,6 +186,67 @@ export async function finishAssessment(
       tx.objectStore("events").put(event);
       tx.objectStore("queue").put({ ...event, sync: "awaiting-account" });
     }
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+}
+
+export async function get<T>(store: Store, id: string): Promise<T | undefined> {
+  const d = await db();
+  return new Promise((resolve, reject) => {
+    const tx = d.transaction(store);
+    const r = tx.objectStore(store).get(id);
+    tx.oncomplete = () => resolve(r.result);
+    tx.onerror = () => reject(tx.error);
+  });
+}
+export async function bookPages<T>(bookId: string): Promise<T[]> {
+  const d = await db();
+  return new Promise((resolve, reject) => {
+    const tx = d.transaction("bookPages");
+    const r = tx
+      .objectStore("bookPages")
+      .index("bookId")
+      .getAll(IDBKeyRange.only(bookId));
+    tx.oncomplete = () => resolve(r.result);
+    tx.onerror = () => reject(tx.error);
+  });
+}
+export async function deleteBook(id: string) {
+  const d = await db();
+  return new Promise<void>((resolve, reject) => {
+    const tx = d.transaction(["books", "bookPages"], "readwrite");
+    tx.objectStore("books").delete(id);
+    const r = tx
+      .objectStore("bookPages")
+      .index("bookId")
+      .openCursor(IDBKeyRange.only(id));
+    r.onsuccess = () => {
+      const cursor = r.result;
+      if (cursor) {
+        cursor.delete();
+        cursor.continue();
+      }
+    };
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+}
+export async function patch(
+  store: Store,
+  id: string,
+  fields: Record<string, unknown>,
+) {
+  const d = await db();
+  return new Promise<void>((resolve, reject) => {
+    const tx = d.transaction(store, "readwrite"),
+      os = tx.objectStore(store),
+      r = os.get(id);
+    r.onsuccess = () => {
+      if (r.result) os.put({ ...r.result, ...fields, id });
+    };
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
     tx.onabort = () => reject(tx.error);
