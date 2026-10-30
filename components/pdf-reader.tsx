@@ -10,7 +10,11 @@ import {
   X,
 } from "lucide-react";
 import { openLocalPdf, type LocalPdf } from "@/lib/pdf-client";
-import { MAX_BOOK_PAGES, MAX_PAGE_TEXT } from "@/lib/books.mjs";
+import {
+  MAX_BOOK_PAGES,
+  MAX_PAGE_TEXT,
+  meaningfulPdfText,
+} from "@/lib/books.mjs";
 import * as db from "@/lib/db";
 import type { LocalBook, BookPage, BookContext } from "./book-library";
 export default function PdfReader({
@@ -140,10 +144,7 @@ export default function PdfReader({
         render = task;
         await task.promise;
         const content = await view.getTextContent();
-        const text = content.items
-          .map((item) => ("str" in item ? item.str : ""))
-          .join(" ")
-          .slice(0, MAX_PAGE_TEXT);
+        const text = meaningfulPdfText(content.items);
         if (cancelled) return;
         setPageText(text);
         await db.put("bookPages", {
@@ -188,10 +189,7 @@ export default function PdfReader({
         if (!saved) {
           const current = await pdf.getPage(n);
           const content = await current.getTextContent();
-          const text = content.items
-            .map((item) => ("str" in item ? item.str : ""))
-            .join(" ")
-            .slice(0, MAX_PAGE_TEXT);
+          const text = meaningfulPdfText(content.items);
           await db.put("bookPages", {
             id: `${book.id}:p:${n}`,
             bookId: book.id,

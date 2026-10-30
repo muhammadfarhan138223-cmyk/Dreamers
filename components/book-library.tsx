@@ -7,6 +7,7 @@ import {
   ExternalLink,
   FileText,
   Search,
+  Sparkles,
   Trash2,
   Upload,
   ArrowRight,
@@ -71,7 +72,7 @@ export default function BookLibrary({
   const [books, setBooks] = useState<LocalBook[]>([]),
     [selected, setSelected] = useState<LocalBook | null>(null),
     [subject, setSubject] = useState("biology"),
-    [grade, setGrade] = useState("XI"),
+    [grade, setGrade] = useState("XII"),
     [edition, setEdition] = useState(""),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -222,8 +223,8 @@ export default function BookLibrary({
         <span className="eyebrow">YOUR OFFLINE TEXTBOOK SHELF</span>
         <h1>Your books. Your quiet corner.</h1>
         <p>
-          Three supplied textbooks, one clear shelf. Add your files once, then
-          read your saved copies offline.
+          Your supplied books, one clear shelf. Add your files once, then read
+          your saved copies offline.
         </p>
       </div>
       <div
@@ -256,19 +257,50 @@ export default function BookLibrary({
       <section className={`panel textbook-chapters ${activeBook.color}`}>
         <div className="between">
           <div>
-            <span className="eyebrow">CLASS XII / SUPPLIED COPY</span>
+            <span className="eyebrow">
+              CLASS {activeBook.class} /{" "}
+              {activeBook.kind === "legacy"
+                ? "LEGACY REFERENCE"
+                : activeBook.kind === "grammar"
+                  ? "GRAMMAR SUPPORT"
+                  : "SUPPLIED COPY"}
+            </span>
             <h2>{activeBook.title}: find your chapter.</h2>
             <p>{activeBook.edition}</p>
           </div>
-          <span className="pill">{activeBook.chapters.length} chapters</span>
+          <span className="pill">
+            {activeBook.chapters.length} checked chapters
+          </span>
         </div>
         <p className="fineprint">
-          Headings checked in the supplied file. Current board exam exclusions
-          are not yet verified.{" "}
-          {activeBook.text === "scanned"
+          {activeBook.chapters.length
+            ? "Headings checked in the supplied file."
+            : "Chapter map pending review; no suggested topics are generated from this file yet."}{" "}
+          Current board exam exclusions are not yet verified.{" "}
+          {activeBook.text !== "selectable"
             ? "This copy is scanned: image reading works; OCR text search is not available."
             : ""}
         </p>
+        {!activeBook.chapters.length && (
+          <div className="chapter-map-pending">
+            <BookOpen size={28} />
+            <h3>Read your PDF copy</h3>
+            <p>
+              This file can be saved and read now. Chapter suggestions will
+              appear after its contents are checked.
+            </p>
+            <button
+              className="primary"
+              onClick={() => {
+                const saved = books.find((b) => b.sha256 === activeBook.sha256);
+                if (saved) openBook(saved, 1);
+                else input.current?.click();
+              }}
+            >
+              Open / add PDF <Upload size={16} />
+            </button>
+          </div>
+        )}
         <div className="textbook-chapter-list">
           {activeBook.chapters.map((t, i) => (
             <div className="textbook-chapter" key={t.id}>
@@ -302,7 +334,7 @@ export default function BookLibrary({
                 aria-label={`Ask AI about ${t.title}`}
                 onClick={() => onAskTopic(activeBook.id, t.id)}
               >
-                <Search size={16} />
+                <Sparkles size={16} />
               </button>
             </div>
           ))}
@@ -317,7 +349,7 @@ export default function BookLibrary({
           <Upload size={26} />
         </div>
         <p className="fineprint">
-          Select all three at once. Matching supplied files are named and
+          Select several PDFs at once. Matching supplied files are named and
           classified automatically; identical files are saved only once.
         </p>
         <div className="book-fields">

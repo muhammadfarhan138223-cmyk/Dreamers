@@ -50,3 +50,5 @@ Anonymous live HTTP regression checks passed for science/book routes, all three 
 ## 0.3.0 source and hosting boundary
 
 Deploy code/catalogue metadata only. Never include the uploaded textbook binaries in Git or Vercel output without appropriate publisher permission. No new paid service, credentials or Supabase changes are needed. Service-worker shell version 6 refreshes the new interface; the versioned PDF engine and IndexedDB v3 data remain intact. Existing preview protection is preserved.
+
+0.3.0 release: commit 7b2fbacf8b32d7d04d5bbf958ca45d07316a0034, preview dpl_51MT352pBHJvjgRzn9fsVGpxkDeZ and production dpl_TNJi1Wqfjrd8S9YarzG9ZHAr5MWa both READY. Live supplied-book import/deduplication/rendering and source-specific tutor UI passed. 0.3.1 updates the shell to v7 while preserving the independent PDF engine cache and IndexedDB data. Raw textbook binaries remain outside deployment/Git.

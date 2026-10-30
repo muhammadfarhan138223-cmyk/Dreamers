@@ -33,3 +33,7 @@ Added optional original Chemistry and Physics packs: 12 lessons, 36 MCQs and 9 w
 - Added private batch PDF import, automatic matching/classification and duplicate skipping, with deep chapter/page navigation. No restricted textbook binaries are publicly redistributed.
 - Replaced generic tutor/search suggestions with selected-book headings, added explicit extra-context/story opt-in and source/scope validation. Live AI setup is still pending.
 - Added catalogue identity, cross-book topic and default/opt-in scope tests; 40 automated tests pass.
+
+## 0.3.1 — Expanded supplied-book intake
+
+Registered eight additional unique file identities (11 total), XI/XII and grammar/reference filters, 77 checked headings, and honest pending-map states. Added detection of watermark-only scans. Fixed a tutor suggestion to select its corresponding chapter and clear stale PDF reference text. Preserved private PDF storage and original learning data.

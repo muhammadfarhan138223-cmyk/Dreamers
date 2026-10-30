@@ -1,0 +1,736 @@
+[
+  {
+    "id": "biology-xii-supplied",
+    "subject": "biology",
+    "title": "Biology",
+    "subtitle": "Systems, inheritance & the living world",
+    "class": "XII",
+    "pages": 252,
+    "bytes": 8335252,
+    "sha256": "881c89fd323f7e95fe741358cb41b91fcc5d81758a55dba21bdc6f5add926829",
+    "color": "mint",
+    "icon": "dna",
+    "edition": "Supplied XII chapter collection · cover/edition page absent",
+    "text": "selectable",
+    "source": "Owner-supplied PDF · chapter headings checked",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "filename": "02-12th-Biology-New-Book-By-Pecktaa.pdf",
+    "chapters": [
+      {
+        "id": "bio12-1",
+        "title": "Thermoregulation and Osmoregulation",
+        "page": 1,
+        "printedPage": 1
+      },
+      {
+        "id": "bio12-2",
+        "title": "Human Urinary System",
+        "page": 12,
+        "printedPage": 12
+      },
+      {
+        "id": "bio12-3",
+        "title": "Human Nervous System",
+        "page": 25,
+        "printedPage": 25
+      },
+      {
+        "id": "bio12-4",
+        "title": "Human Endocrine System",
+        "page": 57,
+        "printedPage": 57
+      },
+      {
+        "id": "bio12-5",
+        "title": "Human Reproductive Systems",
+        "page": 73,
+        "printedPage": 73
+      },
+      {
+        "id": "bio12-6",
+        "title": "Inheritance",
+        "page": 83,
+        "printedPage": 83
+      },
+      {
+        "id": "bio12-7",
+        "title": "Chromosome and DNA",
+        "page": 115,
+        "printedPage": 115
+      },
+      {
+        "id": "bio12-8",
+        "title": "Biotechnology",
+        "page": 155,
+        "printedPage": 155
+      },
+      {
+        "id": "bio12-9",
+        "title": "Immunity",
+        "page": 169,
+        "printedPage": 169
+      },
+      {
+        "id": "bio12-10",
+        "title": "Biostatistics",
+        "page": 186,
+        "printedPage": 186
+      },
+      {
+        "id": "bio12-11",
+        "title": "Pharmacology",
+        "page": 208,
+        "printedPage": 208
+      },
+      {
+        "id": "bio12-12",
+        "title": "Evolution",
+        "page": 215,
+        "printedPage": 215
+      },
+      {
+        "id": "bio12-13",
+        "title": "Ecology",
+        "page": 228,
+        "printedPage": 228
+      }
+    ],
+    "kind": "textbook",
+    "classes": [
+      "XII"
+    ]
+  },
+  {
+    "id": "physics-xii-supplied",
+    "subject": "physics",
+    "title": "Physics",
+    "subtitle": "From thermal motion to distant galaxies",
+    "class": "XII",
+    "pages": 186,
+    "bytes": 24135553,
+    "sha256": "559b765f9dc07e3f8a4c0d6b415d9cca64b7e901a3edac2b34e0010f8a185237",
+    "color": "violet",
+    "icon": "atom",
+    "edition": "PECTAA-branded supplied copy · exact edition unverified",
+    "text": "selectable",
+    "source": "Owner-supplied PDF · contents page checked",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "filename": "03-2nd-Year-Physics-New-Book-By-Pecktaa-1-.pdf",
+    "chapters": [
+      {
+        "id": "phy12-1",
+        "title": "Thermal Physics",
+        "page": 4,
+        "printedPage": 1
+      },
+      {
+        "id": "phy12-2",
+        "title": "Simple Harmonic Motion",
+        "page": 18,
+        "printedPage": 15
+      },
+      {
+        "id": "phy12-3",
+        "title": "Physical Optics",
+        "page": 45,
+        "printedPage": 42
+      },
+      {
+        "id": "phy12-4",
+        "title": "Electrostatics",
+        "page": 61,
+        "printedPage": 57
+      },
+      {
+        "id": "phy12-5",
+        "title": "Alternating Current",
+        "page": 85,
+        "printedPage": 81
+      },
+      {
+        "id": "phy12-6",
+        "title": "Quantum Physics",
+        "page": 118,
+        "printedPage": 114
+      },
+      {
+        "id": "phy12-7",
+        "title": "Nuclear and Particle Physics",
+        "page": 137,
+        "printedPage": 133
+      },
+      {
+        "id": "phy12-8",
+        "title": "Medical Physics",
+        "page": 156,
+        "printedPage": 152
+      },
+      {
+        "id": "phy12-9",
+        "title": "Space and Environment",
+        "page": 169,
+        "printedPage": 165
+      }
+    ],
+    "kind": "textbook",
+    "classes": [
+      "XII"
+    ]
+  },
+  {
+    "id": "computer-xii-supplied",
+    "subject": "computer-science",
+    "title": "Computer Science",
+    "subtitle": "Code, create & solve something new",
+    "class": "XII",
+    "pages": 147,
+    "bytes": 23054650,
+    "sha256": "23939a80686d006035385453267cae834031b613a73be7e5701580f9ccc91bc9",
+    "color": "peach",
+    "icon": "code",
+    "edition": "Computer Science and Entrepreneurship · July 2026 printing",
+    "text": "scanned",
+    "source": "Owner-supplied scan · contents page checked",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "filename": "01-2nd-Year-Computer-New-Book-By-Pecktaa.pdf",
+    "chapters": [
+      {
+        "id": "cs12-1",
+        "title": "Computer Networks",
+        "page": 6,
+        "printedPage": 1
+      },
+      {
+        "id": "cs12-2",
+        "title": "Computational Thinking & Algorithms",
+        "page": 25,
+        "printedPage": 20
+      },
+      {
+        "id": "cs12-3",
+        "title": "Object Oriented Programming Using Python",
+        "page": 38,
+        "printedPage": 33
+      },
+      {
+        "id": "cs12-4",
+        "title": "Development of Graphical User Interface (GUI)",
+        "page": 50,
+        "printedPage": 45
+      },
+      {
+        "id": "cs12-5",
+        "title": "Code Testing and Debugging",
+        "page": 65,
+        "printedPage": 60
+      },
+      {
+        "id": "cs12-6",
+        "title": "Data and Analysis",
+        "page": 77,
+        "printedPage": 72
+      },
+      {
+        "id": "cs12-7",
+        "title": "Hypothesis Testing",
+        "page": 94,
+        "printedPage": 89
+      },
+      {
+        "id": "cs12-8",
+        "title": "Applications of Computer Science",
+        "page": 108,
+        "printedPage": 103
+      },
+      {
+        "id": "cs12-9",
+        "title": "Cybersecurity and Safe Digital Collaboration",
+        "page": 123,
+        "printedPage": 118
+      }
+    ],
+    "kind": "textbook",
+    "classes": [
+      "XII"
+    ]
+  },
+  {
+    "id": "chemistry-xi-supplied",
+    "filename": "01-11th-Class-Chemistry-Punjab-Board-Full-Book-PDF.pdf",
+    "subject": "chemistry",
+    "title": "Chemistry",
+    "subtitle": "Periodic ideas, reactions & matter",
+    "class": "XI",
+    "classes": [
+      "XI"
+    ],
+    "kind": "textbook",
+    "text": "selectable",
+    "color": "mint",
+    "icon": "book",
+    "pages": 344,
+    "bytes": 13771741,
+    "sha256": "88d4e3e8ce3d4dc4c987d0c27a2d3ba97b64848e2b936a4153c0090b4047ed35",
+    "edition": "PECTAA-branded web copy · 2025 file metadata",
+    "source": "Owner-supplied PDF · cover inspected · contents checked",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "chapters": [
+      {
+        "id": "chem11-1",
+        "title": "Periodic Table and Periodic Properties",
+        "page": 5,
+        "printedPage": 1
+      },
+      {
+        "id": "chem11-2",
+        "title": "Atomic Structure",
+        "page": 24,
+        "printedPage": 20
+      },
+      {
+        "id": "chem11-3",
+        "title": "Chemical Bonding",
+        "page": 47,
+        "printedPage": 43
+      },
+      {
+        "id": "chem11-4",
+        "title": "Stoichiometry",
+        "page": 74,
+        "printedPage": 70
+      },
+      {
+        "id": "chem11-5",
+        "title": "States and Phases of Matter",
+        "page": 95,
+        "printedPage": 91
+      },
+      {
+        "id": "chem11-6",
+        "title": "Chemical Energetics",
+        "page": 116,
+        "printedPage": 112
+      },
+      {
+        "id": "chem11-7",
+        "title": "Reaction Kinetics",
+        "page": 144,
+        "printedPage": 140
+      },
+      {
+        "id": "chem11-8",
+        "title": "Chemical Equilibrium",
+        "page": 167,
+        "printedPage": 163
+      },
+      {
+        "id": "chem11-9",
+        "title": "Acid-Base Chemistry",
+        "page": 189,
+        "printedPage": 185
+      },
+      {
+        "id": "chem11-10",
+        "title": "Electrochemistry",
+        "page": 211,
+        "printedPage": 207
+      },
+      {
+        "id": "chem11-11",
+        "title": "Hydrocarbons",
+        "page": 240,
+        "printedPage": 236
+      },
+      {
+        "id": "chem11-12",
+        "title": "Nitrogen and Sulfur",
+        "page": 269,
+        "printedPage": 265
+      },
+      {
+        "id": "chem11-13",
+        "title": "Halogens",
+        "page": 287,
+        "printedPage": 283
+      },
+      {
+        "id": "chem11-14",
+        "title": "Atmosphere",
+        "page": 301,
+        "printedPage": 297
+      },
+      {
+        "id": "chem11-15",
+        "title": "Basic Separation Techniques",
+        "page": 318,
+        "printedPage": 314
+      },
+      {
+        "id": "chem11-16",
+        "title": "Lab Safety and Practical Skills",
+        "page": 330,
+        "printedPage": 326
+      }
+    ]
+  },
+  {
+    "id": "urdu-grammar-supplied",
+    "filename": "02-11th-Class-Urdu-Grammar-Punjab-Board-Full-Book-PDF-compressed.pdf",
+    "subject": "urdu",
+    "title": "Urdu Grammar & Composition",
+    "subtitle": "Language support for intermediate study",
+    "class": "XI–XII",
+    "classes": [
+      "XI",
+      "XII"
+    ],
+    "kind": "grammar",
+    "text": "scanned",
+    "color": "peach",
+    "icon": "book",
+    "pages": 192,
+    "bytes": 26080741,
+    "sha256": "131e5ac4c579df5147652aa9c723104f0aa4493ac862523816b033b889d42eca",
+    "edition": "Intermediate XI/XII support resource · exact edition unverified",
+    "source": "Owner-supplied PDF · cover inspected · chapter map pending review",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "chapters": []
+  },
+  {
+    "id": "english-grammar-supplied",
+    "filename": "03-12th-English-Grammar-Punjab-Board.pdf",
+    "subject": "english",
+    "title": "English Grammar & Composition",
+    "subtitle": "Grammar and writing support",
+    "class": "XI–XII",
+    "classes": [
+      "XI",
+      "XII"
+    ],
+    "kind": "grammar",
+    "text": "scanned",
+    "color": "violet",
+    "icon": "book",
+    "pages": 156,
+    "bytes": 21550237,
+    "sha256": "e0f73c2fad6528d319328501b502d3d70333f85776f765578482ce43660d0a2a",
+    "edition": "Intermediate support resource · 2023 PDF metadata",
+    "source": "Owner-supplied PDF · cover inspected · chapter map pending review",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "chapters": []
+  },
+  {
+    "id": "english-xii-supplied",
+    "filename": "04-12th-English-New-Syllabus-Book-By-Pecktaa.pdf",
+    "subject": "english",
+    "title": "English",
+    "subtitle": "Literature, language & fresh perspectives",
+    "class": "XII",
+    "classes": [
+      "XII"
+    ],
+    "kind": "textbook",
+    "text": "mixed",
+    "color": "peach",
+    "icon": "book",
+    "pages": 165,
+    "bytes": 4539087,
+    "sha256": "9b52e3be040966b9347d6bf71e48e5ffca9717f5d9f6cd649afe8cd5eca2d952",
+    "edition": "PECTAA-branded supplied copy · exact edition unverified",
+    "source": "Owner-supplied PDF · cover inspected · contents checked",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "chapters": [
+      {
+        "id": "eng12-1",
+        "title": "Journey to Taif",
+        "page": 5,
+        "printedPage": 1
+      },
+      {
+        "id": "eng12-2",
+        "title": "The Last Lesson",
+        "page": 12,
+        "printedPage": 8
+      },
+      {
+        "id": "eng12-3",
+        "title": "On His Blindness",
+        "page": 21,
+        "printedPage": 17
+      },
+      {
+        "id": "eng12-4",
+        "title": "The Power of Digital Learning",
+        "page": 26,
+        "printedPage": 22
+      },
+      {
+        "id": "eng12-5",
+        "title": "The Giving Tree",
+        "page": 36,
+        "printedPage": 32
+      },
+      {
+        "id": "eng12-6",
+        "title": "The Fun They Had",
+        "page": 42,
+        "printedPage": 38
+      },
+      {
+        "id": "eng12-7",
+        "title": "Because I Could Not Stop for Death",
+        "page": 48,
+        "printedPage": 44
+      },
+      {
+        "id": "eng12-8",
+        "title": "The Devoted Friend",
+        "page": 53,
+        "printedPage": 49
+      },
+      {
+        "id": "eng12-9",
+        "title": "The Doll’s House",
+        "page": 64,
+        "printedPage": 60
+      },
+      {
+        "id": "eng12-10",
+        "title": "All the World’s a Stage",
+        "page": 75,
+        "printedPage": 71
+      },
+      {
+        "id": "eng12-11",
+        "title": "A Letter to God",
+        "page": 82,
+        "printedPage": 78
+      },
+      {
+        "id": "eng12-12",
+        "title": "A Visit to the Swat Valley",
+        "page": 88,
+        "printedPage": 84
+      },
+      {
+        "id": "eng12-13",
+        "title": "The Pearl",
+        "page": 96,
+        "printedPage": 92
+      }
+    ]
+  },
+  {
+    "id": "mathematics-xii-supplied",
+    "filename": "05-12th-Mathematics-New-Book-By-Pecktaa.pdf",
+    "subject": "mathematics",
+    "title": "Mathematics",
+    "subtitle": "Patterns, reasoning & problem solving",
+    "class": "XII",
+    "classes": [
+      "XII"
+    ],
+    "kind": "textbook",
+    "text": "scanned",
+    "color": "violet",
+    "icon": "book",
+    "pages": 309,
+    "bytes": 21806573,
+    "sha256": "a9b111172d0e13c03fe7a71ecb4b894da6b2212489e19542041309e188e2dd9d",
+    "edition": "PECTAA-branded supplied scan · exact edition unverified",
+    "source": "Owner-supplied PDF · cover inspected · chapter map pending review",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "chapters": []
+  },
+  {
+    "id": "education-xii-legacy",
+    "filename": "06-2018-G12-ILM-UL-TALEEM-UM.pdf",
+    "subject": "education",
+    "title": "Ilm-ul-Taleem",
+    "subtitle": "Older education reference · not FSc core",
+    "class": "XII",
+    "classes": [
+      "XII"
+    ],
+    "kind": "legacy",
+    "text": "scanned",
+    "color": "mint",
+    "icon": "book",
+    "pages": 111,
+    "bytes": 9516250,
+    "sha256": "09c5e08d684a91c4c2b58a91ecd68cd4ed3e9bf84e8d37b749b011669e93fb09",
+    "edition": "2018 filename / 2019 PDF metadata · legacy reference",
+    "source": "Owner-supplied PDF · cover inspected · chapter map pending review",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "chapters": []
+  },
+  {
+    "id": "chemistry-xii-supplied",
+    "filename": "07-2870-2nd-year-chemistry-pectaa-text-book-2026-pdf-taleem360.com-hoELw.pdf",
+    "subject": "chemistry",
+    "title": "Chemistry",
+    "subtitle": "Organic chemistry, materials & analysis",
+    "class": "XII",
+    "classes": [
+      "XII"
+    ],
+    "kind": "textbook",
+    "text": "selectable",
+    "color": "mint",
+    "icon": "book",
+    "pages": 266,
+    "bytes": 25623632,
+    "sha256": "417f953f988305ab4fbd7580dd13d5b634c9f935bcd260a3eb078ece609f82b0",
+    "edition": "Owner-supplied mirror copy · exact publisher edition unverified",
+    "source": "Owner-supplied PDF · cover inspected · contents checked",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "chapters": [
+      {
+        "id": "chem12-1",
+        "title": "Group 2 Elements",
+        "page": 4,
+        "printedPage": 1
+      },
+      {
+        "id": "chem12-2",
+        "title": "Transition Metals",
+        "page": 17,
+        "printedPage": 14
+      },
+      {
+        "id": "chem12-3",
+        "title": "Basics of Organic Chemistry",
+        "page": 38,
+        "printedPage": 35
+      },
+      {
+        "id": "chem12-4",
+        "title": "Aromatic Hydrocarbons",
+        "page": 59,
+        "printedPage": 56
+      },
+      {
+        "id": "chem12-5",
+        "title": "Halogenoalkanes",
+        "page": 75,
+        "printedPage": 72
+      },
+      {
+        "id": "chem12-6",
+        "title": "Hydroxy Compounds",
+        "page": 88,
+        "printedPage": 85
+      },
+      {
+        "id": "chem12-7",
+        "title": "Carbonyl Compounds and Carboxylic Acids",
+        "page": 101,
+        "printedPage": 98
+      },
+      {
+        "id": "chem12-8",
+        "title": "Organic Nitrogen Compounds",
+        "page": 118,
+        "printedPage": 115
+      },
+      {
+        "id": "chem12-9",
+        "title": "Organic Synthesis",
+        "page": 134,
+        "printedPage": 131
+      },
+      {
+        "id": "chem12-10",
+        "title": "Polymers",
+        "page": 145,
+        "printedPage": 142
+      },
+      {
+        "id": "chem12-11",
+        "title": "Biochemistry",
+        "page": 160,
+        "printedPage": 157
+      },
+      {
+        "id": "chem12-12",
+        "title": "Chromatography",
+        "page": 178,
+        "printedPage": 175
+      },
+      {
+        "id": "chem12-13",
+        "title": "Spectroscopy–1",
+        "page": 186,
+        "printedPage": 183
+      },
+      {
+        "id": "chem12-14",
+        "title": "Spectroscopy–2 NMR",
+        "page": 202,
+        "printedPage": 199
+      },
+      {
+        "id": "chem12-15",
+        "title": "Materials and Energy",
+        "page": 217,
+        "printedPage": 214
+      },
+      {
+        "id": "chem12-16",
+        "title": "Medicine, Agriculture and Industry",
+        "page": 232,
+        "printedPage": 229
+      },
+      {
+        "id": "chem12-17",
+        "title": "Water",
+        "page": 247,
+        "printedPage": 244
+      }
+    ]
+  },
+  {
+    "id": "urdu-xii-supplied",
+    "filename": "08-12th-Urdu-New-Syllabus-Full-Book.pdf",
+    "subject": "urdu",
+    "title": "Urdu",
+    "subtitle": "Read, reflect & find your words",
+    "class": "XII",
+    "classes": [
+      "XII"
+    ],
+    "kind": "textbook",
+    "text": "scanned",
+    "color": "peach",
+    "icon": "book",
+    "pages": 156,
+    "bytes": 9092146,
+    "sha256": "46b8a64c0723a3b4c00de0bb5b35c955da81b2f40c80ab700e49b45d9555e2bb",
+    "edition": "Owner-supplied watermarked copy · edition unverified",
+    "source": "Owner-supplied PDF · cover inspected · chapter map pending review",
+    "sourceStatus": "file-inspected",
+    "examStatus": "Current board syllabus / exclusions not verified",
+    "access": "local-import",
+    "chapters": []
+  }
+]

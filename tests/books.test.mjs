@@ -7,6 +7,7 @@ import {
   validatePdfHeader,
   MAX_PDF_BYTES,
   searchBookPages,
+  meaningfulPdfText,
 } from "../lib/books.mjs";
 import { samplePdf } from "./helpers/pdf-fixture.mjs";
 test("PDF import rejects non-PDF and oversize files without inventing edition verification", () => {
@@ -88,4 +89,18 @@ test("pinned PDF.js parses a real two-page PDF and extracts page-specific text",
   } finally {
     await task.destroy();
   }
+});
+
+test("watermark-only scanned pages are not presented as readable lesson text", () => {
+  assert.equal(
+    meaningfulPdfText([{ str: "Web version of PCTB textbook" }, { str: "1" }]),
+    "",
+  );
+  assert.equal(meaningfulPdfText([{ str: "www.ilmkidunya.com" }]), "");
+  const sentence =
+    "Osmoregulation maintains water and solute balance in body fluids.";
+  assert.equal(
+    meaningfulPdfText([{ str: "www.taleem360.com" }, { str: sentence }]),
+    sentence,
+  );
 });

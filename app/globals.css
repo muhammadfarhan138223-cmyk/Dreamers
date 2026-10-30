@@ -5161,3 +5161,53 @@ hr {
     transform: none;
   }
 }
+.resource-filters {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.resource-filters label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.resource-filters select {
+  padding: 8px 12px;
+  border-radius: 9px;
+  min-height: 38px;
+}
+.chapter-map-pending {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  background: var(--card2);
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  padding: 22px;
+  margin: 18px 0;
+}
+.chapter-map-pending p {
+  font-size: 12px;
+}
+.book-import .fineprint {
+  max-width: 850px;
+}
+.supplied-book-tabs {
+  max-height: 290px;
+  overflow: auto;
+  padding: 2px;
+  scrollbar-width: thin;
+}
+.studio-books .choose-book:disabled {
+  opacity: 0.65;
+}
+.textbook-cover > b {
+  line-height: 1.15;
+}
+.textbook-tile-copy h3 {
+  line-height: 1.4;
+}

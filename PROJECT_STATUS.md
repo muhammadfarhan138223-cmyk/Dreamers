@@ -2,7 +2,7 @@
 
 Updated: 2026-10-30
 
-Current milestone: 0.3.0 textbook-first navigation, supplied-book catalogue and visual refresh. Milestones 1–4 have working foundation scope. Milestone 5 has a real server integration awaiting owner configuration.
+Current milestone: 0.3.1 expanded source catalogue, private multi-book import and textbook-first UI. Milestones 1–4 have working foundation scope. Milestone 5 has a real server integration awaiting owner configuration.
 
 ## Completed
 
@@ -43,3 +43,11 @@ Full public PDF distribution is deliberately not enabled: Computer PDF page 5 an
 Home/learn now use colorful subject covers, a clear book→chapter→read/ask path, gentle decorative motion, reduced-motion support and distinct original foundation practice. Chapter search and tutor suggestions use only selected supplied-book headings. AI defaults to textbook focus, offers explicit story/extra-context opt-in, labels extra content as outside textbook scope, and includes scope in validation/cache identity. This policy is implemented; real model compliance remains unverified until owner AI setup.
 
 40 tests, TypeScript and production build passed before release. Local preview again stopped at its non-hydrated shell without an application console error; live browser QA is required after deployment. Latest previously verified production application is 0.2.1; this section is updated with the new release evidence after deployment. Exact next step: deploy 0.3.0 preview/production, verify textbook/topic navigation and scope controls, then import the supplied PDFs privately in the test browser and verify duplicate recognition/read access.
+
+## 0.3.0 live verification and subsequent intake
+
+Commit 7b2fbacf8b32d7d04d5bbf958ca45d07316a0034 deployed as production dpl_TNJi1Wqfjrd8S9YarzG9ZHAr5MWa (READY). Browser home hydrated successfully, Physics selection changed the AI suggestions to the Physics book, and all first three supplied PDFs imported privately with correct classification. Re-importing Biology showed 0 added / 1 duplicate skipped. The actual Biology PDF rendered correctly and its selected page excerpt attached to Biology/chapter 13 context. Live HTTP/API regression passed.
+
+Eight additional files were received during this task. Total: 11 distinct SHA-256 hashes, no exact duplicate attachments. Catalogue now includes 8 textbooks, 2 shared XI/XII grammar resources and 1 legacy Ilm-ul-Taleem reference. Chemistry XI, Chemistry XII and English XII contents were inspected, bringing the checked heading count to 77 across 6 books. Mathematics, Urdu, grammar and legacy chapter maps remain pending and are excluded from suggestions. Watermark-only text layers are not treated as readable lesson text or OCR.
+
+0.3.1 adds class/resource filters, pending-map reading access, page-excerpt-only tutoring for a source with no checked chapter map, and fixes suggestion selection to update its chapter ID and clear a stale PDF excerpt. Supplied files remain device-local; there is no public book download distribution. Next: verify all checks, release 0.3.1, then import the eight new files on the QA device and verify scope/theme/persistence.

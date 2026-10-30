@@ -1523,7 +1523,9 @@ export default function DreamersApp() {
             const book = textbook(catalogId)!;
             setAiChapter(
               [...book.chapters].reverse().find((t) => t.page <= context.page)
-                ?.id || book.chapters[0].id,
+                ?.id ||
+                book.chapters[0]?.id ||
+                "pdf-page",
             );
           } else setAiContextKind("foundation");
           setAllowEnrichment(false);
@@ -1587,17 +1589,31 @@ export default function DreamersApp() {
                   <p>What would you like to figure out today?</p>
                   <div className="suggestions">
                     {(aiContextKind === "textbook"
-                      ? topicSuggestions(aiTextbook)
+                      ? (textbook(aiTextbook)?.chapters || [])
+                          .slice(0, 3)
+                          .map((t) => ({
+                            topic: t.id,
+                            question: `Explain ${t.title.toLowerCase()} in simple words.`,
+                          }))
                       : installedPacks
                           .find((p) => p.id === aiPack)
                           ?.lessons.slice(0, 3)
-                          .map(
-                            (l) =>
-                              `Explain ${l.subtitle.toLowerCase()} simply.`,
-                          ) || []
+                          .map((l) => ({
+                            topic: l.id,
+                            question: `Explain ${l.subtitle.toLowerCase()} simply.`,
+                          })) || []
                     ).map((s) => (
-                      <button onClick={() => setAiInput(s)} key={s}>
-                        {s}
+                      <button
+                        key={s.topic}
+                        onClick={() => {
+                          setAiInput(s.question);
+                          setBookContext(null);
+                          if (aiContextKind === "textbook")
+                            setAiChapter(s.topic);
+                          else setAiTopic(s.topic);
+                        }}
+                      >
+                        {s.question}
                         <ArrowRight size={15} />
                       </button>
                     ))}
@@ -1652,7 +1668,14 @@ export default function DreamersApp() {
               <button
                 className="primary"
                 aria-label="Send question"
-                disabled={aiBusy || !online || !aiInput.trim()}
+                disabled={
+                  aiBusy ||
+                  !online ||
+                  !aiInput.trim() ||
+                  (aiContextKind === "textbook" &&
+                    !textbook(aiTextbook)!.chapters.length &&
+                    !bookContext)
+                }
               >
                 <Send size={19} />
               </button>
@@ -1702,7 +1725,7 @@ export default function DreamersApp() {
                   setBookContext(null);
                 }}
               >
-                <option value="textbook">Supplied Class XII textbooks</option>
+                <option value="textbook">Supplied textbooks / resources</option>
                 <option value="foundation">
                   Original foundation practice (unmapped)
                 </option>
@@ -1717,13 +1740,14 @@ export default function DreamersApp() {
                     onChange={(e) => {
                       const id = e.target.value;
                       setAiTextbook(id);
-                      setAiChapter(textbook(id)!.chapters[0].id);
+                      setAiChapter(textbook(id)!.chapters[0]?.id || "pdf-page");
                       setBookContext(null);
                     }}
                   >
                     {TEXTBOOKS.map((b) => (
                       <option key={b.id} value={b.id}>
-                        {b.title} · XII
+                        {b.title} · {b.class}
+                        {b.kind !== "textbook" ? ` · ${b.kind}` : ""}
                       </option>
                     ))}
                   </select>
@@ -1738,6 +1762,11 @@ export default function DreamersApp() {
                       setChat([]);
                     }}
                   >
+                    {!textbook(aiTextbook)!.chapters.length && (
+                      <option value="pdf-page">
+                        Selected PDF excerpt only (map pending)
+                      </option>
+                    )}
                     {textbook(aiTextbook)!.chapters.map((t) => (
                       <option key={t.id} value={t.id}>
                         {t.title}
@@ -1746,10 +1775,10 @@ export default function DreamersApp() {
                   </select>
                 </label>
                 <p className="fineprint">
-                  Suggestions use headings checked in your supplied PDF.
-                  Official current exam exclusions remain unverified. Without a
-                  selected page excerpt, AI uses the chapter title and its own
-                  knowledge.
+                  Suggestions use checked textbook headings. Files with pending
+                  maps contribute no suggested topics. Official current exam
+                  exclusions remain unverified. Without a selected page excerpt,
+                  AI uses the chapter title and its own knowledge.
                 </p>
               </>
             ) : (
@@ -1843,8 +1872,8 @@ export default function DreamersApp() {
           <span className="eyebrow">YOUR TEXTBOOK MAP</span>
           <h1>Find the chapter. Follow the idea.</h1>
           <p>
-            Search headings checked in the supplied Class XII books. For full
-            PDF text, use your indexed local bookshelf.
+            Search checked headings in the supplied XI/XII books. For full PDF
+            text, use your indexed local bookshelf.
           </p>
         </div>
         <form
@@ -1881,7 +1910,8 @@ export default function DreamersApp() {
             <div className="panel search-result" key={t.id}>
               <div>
                 <span className="eyebrow">
-                  {t.bookTitle} · CLASS XII · PDF PAGE {t.page}
+                  {t.bookTitle} · CLASS {textbook(t.bookId)?.class} · PDF PAGE{" "}
+                  {t.page}
                 </span>
                 <h3>{t.title}</h3>
               </div>
@@ -2944,7 +2974,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.3.0 · Textbook-first learning</span>
+              <span>v0.3.1 · Your textbook studio</span>
             </div>
           </footer>
         </main>

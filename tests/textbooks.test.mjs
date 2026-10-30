@@ -9,15 +9,15 @@ import {
 } from "../lib/textbooks.mjs";
 import { tutorScopePolicy } from "../lib/tutor-policy.mjs";
 test("supplied textbook catalog has unique file fingerprints and valid source page pointers", () => {
-  assert.equal(TEXTBOOKS.length, 3);
-  assert.equal(new Set(TEXTBOOKS.map((b) => b.sha256)).size, 3);
+  assert.equal(TEXTBOOKS.length, 11);
+  assert.equal(new Set(TEXTBOOKS.map((b) => b.sha256)).size, 11);
   const ids = TEXTBOOKS.flatMap((b) => b.chapters.map((t) => t.id));
   assert.equal(new Set(ids).size, ids.length);
-  assert.equal(ids.length, 31);
+  assert.equal(ids.length, 77);
   for (const b of TEXTBOOKS) {
     assert.match(b.sha256, /^[a-f0-9]{64}$/);
     assert.equal(b.access, "local-import");
-    assert.equal(b.class, "XII");
+    assert.ok(["XI", "XII", "XI–XII"].includes(b.class));
     assert.ok(!b.downloadUrl);
     for (const t of b.chapters)
       assert.ok(Number.isInteger(t.page) && t.page >= 1 && t.page <= b.pages);
@@ -54,4 +54,16 @@ test("extra teaching material requires explicit opt-in and is kept separate from
     /fictional teaching story must be labelled fictional/,
   );
   assert.equal(tutorScopePolicy("true"), tutorScopePolicy(false));
+});
+
+test("unreviewed grammar and legacy resources do not leak into curriculum suggestions", () => {
+  for (const book of TEXTBOOKS.filter((b) => !b.chapters.length)) {
+    assert.deepEqual(topicSuggestions(book.id), []);
+    assert.ok(!textbookSearch(book.title).some((t) => t.bookId === book.id));
+  }
+  const xi = TEXTBOOKS.find((b) => b.id === "chemistry-xi-supplied");
+  assert.equal(xi.class, "XI");
+  assert.equal(xi.chapters.length, 16);
+  const older = TEXTBOOKS.find((b) => b.id === "education-xii-legacy");
+  assert.equal(older.kind, "legacy");
 });

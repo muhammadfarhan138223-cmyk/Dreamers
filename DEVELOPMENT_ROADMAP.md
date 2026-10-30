@@ -19,3 +19,5 @@ Verify PECTAA official curriculum editions and current examination notifications
 ## 0.3.0 source-led experience
 
 Three supplied XII PDF identities and their chapter maps are registered; batch private import/deduplication and source-specific tutor suggestions are implemented. Home/learn have a colorful responsive refresh with optional related-story teaching. Official examination notice matching, OCR for Computer, permitted public PDF distribution and real model behavior verification remain pending.
+
+Additional intake: 11 unique supplied resources registered; 77 headings in six checked maps. Remaining scan maps, on-device OCR, current board exclusion verification and publisher-authorized public downloads are pending. Never promote filenames or old editions into verified exam syllabus.

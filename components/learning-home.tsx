@@ -7,6 +7,9 @@ import {
   Dna,
   Atom,
   Code2,
+  FlaskConical,
+  Languages,
+  Sigma,
   Sparkles,
   Check,
   ChevronRight,
@@ -36,10 +39,17 @@ export default function LearningHome({
   bookId: string;
   onBookChange: (id: string) => void;
 }) {
-  const [filter, setFilter] = useState("all");
-  const current = textbook(bookId) || textbook(DEFAULT_TEXTBOOK)!;
+  const [filter, setFilter] = useState("all"),
+    [gradeFilter, setGradeFilter] = useState("XII"),
+    [kindFilter, setKindFilter] = useState("textbook");
+  const current = textbook(bookId)?.chapters.length
+    ? textbook(bookId)!
+    : textbook(DEFAULT_TEXTBOOK)!;
   const books = TEXTBOOKS.filter(
-    (b) => filter === "all" || b.subject === filter,
+    (b) =>
+      (filter === "all" || b.subject === filter) &&
+      b.classes.includes(gradeFilter) &&
+      b.kind === kindFilter,
   );
   return (
     <div className="studio-home">
@@ -68,7 +78,7 @@ export default function LearningHome({
           </p>
         </div>
         <span className="class-chip">
-          <GraduationCap size={17} /> FSc / ICS · Class XII{" "}
+          <GraduationCap size={17} /> FSc / ICS · XI & XII{" "}
           <span>Supplied books</span>
         </span>
       </div>
@@ -93,13 +103,15 @@ export default function LearningHome({
               <button
                 className="primary"
                 onClick={() =>
-                  onNavigate(`/books/${current.id}/${current.chapters[0].page}`)
+                  onNavigate(
+                    `/books/${current.id}/${current.chapters[0]?.page || 1}`,
+                  )
                 }
               >
                 Open my textbook <ArrowRight size={17} />
               </button>
               <small>
-                <BookOpen size={14} /> {current.title} · Class XII
+                <BookOpen size={14} /> {current.title} · Class {current.class}
               </small>
             </div>
             <div className="discovery-art" aria-hidden="true">
@@ -192,10 +204,39 @@ export default function LearningHome({
             Your PDF shelf <ArrowRight size={16} />
           </button>
         </div>
+        <div className="resource-filters">
+          <label>
+            Class
+            <select
+              value={gradeFilter}
+              onChange={(e) => setGradeFilter(e.target.value)}
+            >
+              <option>XI</option>
+              <option>XII</option>
+            </select>
+          </label>
+          <label>
+            Resource type
+            <select
+              value={kindFilter}
+              onChange={(e) => {
+                setKindFilter(e.target.value);
+                setFilter("all");
+              }}
+            >
+              <option value="textbook">Textbooks</option>
+              <option value="grammar">Grammar & composition</option>
+              <option value="legacy">Older reference</option>
+            </select>
+          </label>
+        </div>
         <div className="subject-filters" aria-label="Filter textbooks">
           {[
             ["all", "All books"],
             ["biology", "Biology"],
+            ["chemistry", "Chemistry"],
+            ["english", "English"],
+            ["urdu", "Urdu"],
             ["physics", "Physics"],
             ["computer-science", "Computer science"],
           ].map(([id, label]) => (
@@ -209,6 +250,13 @@ export default function LearningHome({
             </button>
           ))}
         </div>
+        {!books.length && (
+          <div className="panel empty">
+            <Library size={28} />
+            <h3>No supplied copy matches these filters.</h3>
+            <p>Choose another subject or resource type.</p>
+          </div>
+        )}
         <div className="studio-books">
           {books.map((book) => {
             const Icon =
@@ -216,23 +264,40 @@ export default function LearningHome({
                 ? Dna
                 : book.subject === "physics"
                   ? Atom
-                  : Code2;
+                  : book.subject === "chemistry"
+                    ? FlaskConical
+                    : book.subject === "mathematics"
+                      ? Sigma
+                      : book.subject === "computer-science"
+                        ? Code2
+                        : Languages;
             return (
               <article className={`textbook-tile ${book.color}`} key={book.id}>
                 <div className="textbook-cover">
-                  <span>CLASS XII</span>
+                  <span>CLASS {book.class}</span>
                   <Icon size={75} strokeWidth={1} />
                   <span className="cover-orbit" />
-                  <b>{book.title}</b>
+                  <b>
+                    {book.kind === "grammar"
+                      ? `${book.subject === "urdu" ? "Urdu" : "English"} Grammar`
+                      : book.title}
+                  </b>
                   <small>DREAMERS / READING SHELF</small>
                 </div>
                 <div className="textbook-tile-copy">
                   <div className="between">
                     <span className="subject-mini">
-                      {book.chapters.length} chapters
+                      {book.chapters.length
+                        ? `${book.chapters.length} checked chapters`
+                        : book.kind === "grammar"
+                          ? "Grammar support"
+                          : book.kind === "legacy"
+                            ? "Older reference"
+                            : "Chapter map pending"}
                     </span>
                     <button
                       className={`choose-book ${book.id === current.id ? "chosen" : ""}`}
+                      disabled={!book.chapters.length}
                       onClick={() => onBookChange(book.id)}
                       aria-label={`Use ${book.title} for suggestions`}
                     >
@@ -282,7 +347,7 @@ export default function LearningHome({
               <div>
                 <h3>{topic.title}</h3>
                 <small>
-                  PDF page {topic.page} · {current.title} XII
+                  PDF page {topic.page} · {current.title} {current.class}
                 </small>
               </div>
               <button
