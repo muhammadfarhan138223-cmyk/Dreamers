@@ -1,5 +1,8 @@
 import { createHmac, createHash } from "node:crypto";
-import pack from "@/public/packs/cells-v1.json";
+import biology from "@/public/packs/cells-v1.json";
+import chemistry from "@/public/packs/atoms-v1.json";
+import physics from "@/public/packs/motion-v1.json";
+const contentPacks = [biology, chemistry, physics];
 export const runtime = "nodejs";
 export const maxDuration = 30;
 const LANGUAGES = new Set([
@@ -81,8 +84,12 @@ export async function POST(request: Request) {
       400,
     );
   }
+  const pack = contentPacks.find(
+    (p) => p.id === (input?.packId || "cells-starter"),
+  );
   if (
     !input ||
+    !pack ||
     typeof input.question !== "string" ||
     !input.question.trim() ||
     input.question.length > 1500 ||
@@ -146,6 +153,7 @@ export async function POST(request: Request) {
       .update(
         JSON.stringify([
           model,
+          pack.id,
           input.question,
           input.language,
           input.mode,

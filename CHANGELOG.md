@@ -11,3 +11,7 @@ Hardened backup restoration, persisted pack-removal choice, stable mistake-revie
 ## 0.1.2 — 2026-10-30
 
 Added a distinct chapter challenge unlocked after four lessons: shuffled questions, optional timer, per-answer local persistence, resume after reload, atomic scoring/evidence save, explanations and assessment history. Added v1→v2 IndexedDB upgrade coverage and assessment backup validation. Improved light-theme contrast.
+
+## 0.2.0 — 2026-10-30
+
+Added optional original Chemistry and Physics packs: 12 lessons, 36 MCQs and 9 written self-check questions across three sciences. Added a catalog with SHA-256 download validation, subject workspaces, saved practice/drafts/bookmarks, per-pack challenges and local search across downloaded packs. Preserved legacy Biology IDs and progress. AI context supports all three packs but still requires owner configuration.

@@ -1,0 +1,362 @@
+{
+  "id": "motion-foundation",
+  "version": 1,
+  "title": "Motion in one dimension",
+  "subject": "physics",
+  "chapterSlug": "motion",
+  "class": "XI–XII foundations",
+  "board": "Punjab mapping pending",
+  "edition": "DREAMERS original 1.0 — not an official textbook edition",
+  "academicYear": "Unmapped",
+  "verification": "Original content — awaiting educator review",
+  "license": "Original DREAMERS educational content",
+  "description": "Build understanding through original explanations, worked examples and practice. Official textbook edition mapping and educator review are pending.",
+  "referenceSources": [
+    {
+      "url": "https://openstax.org/books/university-physics-volume-1/pages/3-4-motion-with-constant-acceleration",
+      "purpose": "Scientific reference check; original explanations and questions are not copied from this source.",
+      "checkedAt": "2026-10-30"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "phys-position",
+      "title": "Where are you, really?",
+      "subtitle": "Position, distance and displacement",
+      "objective": "Distinguish distance travelled from signed displacement in one dimension.",
+      "paragraphs": [
+        "Position describes an object’s location relative to a chosen origin. On a straight line we can choose east as positive and west as negative. The choice of sign is a convention; it must be used consistently. A position of −3 m means 3 m on the negative side of that origin.",
+        "Distance is the total length of the path travelled. It is a scalar and is not negative. Displacement is the change in position, Δx = final position − initial position. In one dimension its sign indicates direction. Distance and displacement need not have the same magnitude.",
+        "If you walk 3 m east and then 3 m west back to the starting point, your distance is 6 m and your displacement is zero. Zero displacement does not mean no journey occurred. It means the final and initial positions coincide."
+      ],
+      "example": "Starting at x = 2 m and ending at x = 9 m gives displacement +7 m. A detour could make the distance travelled larger than 7 m.",
+      "simple": "Distance poora raasta hai. Displacement final position minus initial position hai, aur direction bhi batata hai. Wapas start par anay se displacement zero ho sakti hai.",
+      "takeaways": [
+        "Displacement equals final position minus initial position.",
+        "Distance counts the total path length.",
+        "A round trip can have zero displacement."
+      ],
+      "check": "You move 5 m east and 2 m west. What are your distance and displacement?",
+      "minutes": 5
+    },
+    {
+      "id": "phys-velocity",
+      "title": "Fast is only half the story",
+      "subtitle": "Average speed and average velocity",
+      "objective": "Calculate average speed and signed average velocity from a complete journey.",
+      "paragraphs": [
+        "Average speed = total distance ÷ elapsed time. Average velocity = displacement ÷ elapsed time. Speed is a scalar; velocity includes direction. Use the whole elapsed time for a whole-journey average, including stops within that interval.",
+        "The SI unit of both speed and velocity is metres per second, m/s. Moving 20 m east in 4 s gives average velocity +5 m/s if east is positive. The word “average” matters: the instantaneous velocity can change during that time.",
+        "On an out-and-back trip, average velocity can be zero while average speed is positive. You must not usually find a journey’s average speed by simply taking the arithmetic mean of two speeds; distances or times may be unequal. Use total distance divided by total time."
+      ],
+      "example": "A student travels 12 m in 6 s. Average speed is 12/6 = 2 m/s. If the student returns to the starting point within those 6 s, average velocity is zero.",
+      "simple": "Average speed = total distance / total time. Average velocity = displacement / total time. Direction aur poori journey ka time dekhna zaroori hai.",
+      "takeaways": [
+        "Average speed uses distance; average velocity uses displacement.",
+        "The SI unit is m/s.",
+        "A round trip can have zero average velocity and positive average speed."
+      ],
+      "check": "Why can average speed differ from the magnitude of average velocity?",
+      "minutes": 5
+    },
+    {
+      "id": "phys-acceleration",
+      "title": "A change in motion",
+      "subtitle": "Average acceleration and signs",
+      "objective": "Calculate average acceleration and explain why negative acceleration need not mean slowing down.",
+      "paragraphs": [
+        "Average acceleration is change in velocity divided by elapsed time: a = (v − u)/t. Its SI unit is m/s². A velocity that changes by 2 m/s each second has acceleration 2 m/s² during uniform acceleration. Acceleration is a change in velocity, not merely a large speed.",
+        "Acceleration can occur when speed changes, direction changes, or both. An object moving around a circle at constant speed still accelerates because its velocity direction changes. Straight-line constant velocity has zero acceleration.",
+        "A negative acceleration points in the chosen negative direction. It does not automatically mean slowing down. In one dimension, an object slows when its velocity and acceleration have opposite signs. If both are negative, its speed increases in the negative direction."
+      ],
+      "example": "A car’s velocity changes from +2 m/s to +10 m/s in 4 s. Its average acceleration is (10 − 2)/4 = +2 m/s².",
+      "simple": "Acceleration velocity ki tabdeeli per second hai. Minus sign direction batata hai. Negative velocity ke saath negative acceleration ho to speed barh sakti hai.",
+      "takeaways": [
+        "Average acceleration is (v − u)/t.",
+        "Acceleration has unit m/s².",
+        "Negative acceleration does not always mean slowing."
+      ],
+      "check": "If velocity is −4 m/s and acceleration is −2 m/s², is the object speeding up or slowing down?",
+      "minutes": 5
+    },
+    {
+      "id": "phys-equations",
+      "title": "Make the journey predictable",
+      "subtitle": "Constant-acceleration equations",
+      "objective": "Use constant-acceleration equations with consistent signs and SI units.",
+      "paragraphs": [
+        "For straight-line motion with constant acceleration, useful equations include v = u + at, displacement s = ut + ½at², and v² = u² + 2as. Here u is initial velocity, v is final velocity, a is acceleration and t is elapsed time. In these equations s is signed displacement, not automatically total distance.",
+        "Choose an origin and positive direction before substituting numbers. Convert units consistently and check the result’s unit. The equation s = (u + v)t/2 also applies when acceleration is constant because velocity changes linearly with time.",
+        "These equations should not be used across an interval with changing acceleration as though a were constant. A journey that accelerates and then brakes may need to be split into separate intervals. A numerical answer without a stated assumption can hide a wrong model."
+      ],
+      "example": "Starting from rest, u = 0, with a = 2 m/s² for t = 3 s gives v = 6 m/s and s = 0 + ½ × 2 × 3² = 9 m. Acceleration is assumed constant.",
+      "simple": "In formulas ko constant acceleration aur straight-line motion ke liye use karo. Pehle positive direction choose karo, phir units check karke values lagao.",
+      "takeaways": [
+        "v = u + at when acceleration is constant.",
+        "s = ut + ½at² gives signed displacement.",
+        "State assumptions and keep units consistent."
+      ],
+      "check": "From rest at constant 3 m/s² for 2 s, find final velocity and displacement.",
+      "minutes": 5
+    }
+  ],
+  "questions": [
+    {
+      "id": "phys-q1",
+      "topic": "phys-position",
+      "prompt": "You walk 3 m east and 3 m west. Your displacement is…",
+      "options": [
+        "0 m",
+        "3 m east",
+        "6 m",
+        "6 m west"
+      ],
+      "answer": 0,
+      "explanation": "You end where you started, so displacement is zero.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    },
+    {
+      "id": "phys-q2",
+      "topic": "phys-position",
+      "prompt": "For that same 3 m out-and-back journey, distance is…",
+      "options": [
+        "0 m",
+        "3 m",
+        "6 m",
+        "−6 m"
+      ],
+      "answer": 2,
+      "explanation": "Distance adds the path lengths: 3 + 3 = 6 m.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    },
+    {
+      "id": "phys-q3",
+      "topic": "phys-position",
+      "prompt": "Starting at x = 2 m and ending at x = 9 m gives displacement…",
+      "options": [
+        "−7 m",
+        "+7 m",
+        "11 m",
+        "18 m"
+      ],
+      "answer": 1,
+      "explanation": "Displacement = 9 − 2 = +7 m.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    },
+    {
+      "id": "phys-q4",
+      "topic": "phys-velocity",
+      "prompt": "A runner covers 100 m in 20 s. Average speed is…",
+      "options": [
+        "0.2 m/s",
+        "5 m/s",
+        "20 m/s",
+        "2000 m/s"
+      ],
+      "answer": 1,
+      "explanation": "Average speed = distance/time = 100/20 = 5 m/s.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    },
+    {
+      "id": "phys-q5",
+      "topic": "phys-velocity",
+      "prompt": "A complete round trip has…",
+      "options": [
+        "Always zero distance",
+        "Zero average velocity",
+        "Always zero average speed",
+        "No elapsed time"
+      ],
+      "answer": 1,
+      "explanation": "A complete round trip has zero displacement, so its average velocity is zero.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    },
+    {
+      "id": "phys-q6",
+      "topic": "phys-velocity",
+      "prompt": "Which quantity uses total path length divided by time?",
+      "options": [
+        "Average speed",
+        "Average acceleration",
+        "Average velocity",
+        "Displacement"
+      ],
+      "answer": 0,
+      "explanation": "Average speed uses distance, not signed displacement.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "foundation",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    },
+    {
+      "id": "phys-q7",
+      "topic": "phys-acceleration",
+      "prompt": "Velocity changes from 2 m/s to 10 m/s in 4 s. Average acceleration is…",
+      "options": [
+        "2 m/s²",
+        "3 m/s²",
+        "8 m/s²",
+        "32 m/s²"
+      ],
+      "answer": 0,
+      "explanation": "a = (10 − 2)/4 = 2 m/s².",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    },
+    {
+      "id": "phys-q8",
+      "topic": "phys-acceleration",
+      "prompt": "If velocity and acceleration are both negative, the object is…",
+      "options": [
+        "Always slowing",
+        "Speeding up in the negative direction",
+        "Stationary",
+        "Moving at constant velocity"
+      ],
+      "answer": 1,
+      "explanation": "Velocity and acceleration have the same sign, so speed increases.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    },
+    {
+      "id": "phys-q9",
+      "topic": "phys-acceleration",
+      "prompt": "At constant speed around a circle, acceleration…",
+      "options": [
+        "Is necessarily zero",
+        "Exists because velocity direction changes",
+        "Has no direction",
+        "Always equals the speed"
+      ],
+      "answer": 1,
+      "explanation": "Velocity changes when its direction changes, even if speed stays constant.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    },
+    {
+      "id": "phys-q10",
+      "topic": "phys-equations",
+      "prompt": "From rest, constant acceleration 2 m/s² for 3 s gives final velocity…",
+      "options": [
+        "3 m/s",
+        "5 m/s",
+        "6 m/s",
+        "9 m/s"
+      ],
+      "answer": 2,
+      "explanation": "v = u + at = 0 + 2 × 3 = 6 m/s.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    },
+    {
+      "id": "phys-q11",
+      "topic": "phys-equations",
+      "prompt": "The displacement in that same motion is…",
+      "options": [
+        "3 m",
+        "6 m",
+        "9 m",
+        "18 m"
+      ],
+      "answer": 2,
+      "explanation": "s = ut + ½at² = 0 + ½ × 2 × 9 = 9 m.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    },
+    {
+      "id": "phys-q12",
+      "topic": "phys-equations",
+      "prompt": "When may s = ut + ½at² be applied directly over an interval?",
+      "options": [
+        "Whenever speed is large",
+        "For straight-line constant-acceleration motion",
+        "Only if acceleration is zero",
+        "For any changing acceleration"
+      ],
+      "answer": 1,
+      "explanation": "The equation assumes constant acceleration over the interval.",
+      "type": "mcq",
+      "marks": 1,
+      "difficulty": "standard",
+      "verification": "original-unreviewed",
+      "source": "DREAMERS original practice; not an official past-paper item"
+    }
+  ],
+  "written": [
+    {
+      "id": "phys-s1",
+      "topic": "phys-position",
+      "type": "short",
+      "marks": 2,
+      "prompt": "Distinguish distance from displacement.",
+      "answer": "Distance is the total length of the path travelled and is a scalar. Displacement is the change in position and includes direction. An out-and-back trip can have positive distance but zero displacement.",
+      "keyPoints": [
+        "Distance is total path length",
+        "Displacement is directed change in position"
+      ]
+    },
+    {
+      "id": "phys-s2",
+      "topic": "phys-acceleration",
+      "type": "short",
+      "marks": 2,
+      "prompt": "Does negative acceleration always mean slowing down?",
+      "answer": "No. A negative sign specifies direction relative to the chosen positive direction. If velocity is also negative, acceleration is in the same direction as motion and the speed increases.",
+      "keyPoints": [
+        "Sign indicates direction",
+        "Same-sign velocity and acceleration increase speed"
+      ]
+    },
+    {
+      "id": "phys-l1",
+      "topic": "phys-equations",
+      "type": "long",
+      "marks": 5,
+      "prompt": "From rest, an object accelerates uniformly at 3 m/s² for 2 s. Calculate its final velocity and displacement, stating assumptions.",
+      "answer": "Assume one-dimensional motion with constant acceleration. Choose the acceleration direction as positive: u = 0 m/s, a = +3 m/s², t = 2 s. Then v = u + at = 0 + 3 × 2 = +6 m/s. Displacement s = ut + ½at² = 0 + ½ × 3 × 2² = +6 m. The positive signs indicate the chosen direction.",
+      "keyPoints": [
+        "Constant acceleration assumption",
+        "Consistent direction and units",
+        "v = u + at",
+        "s = ut + ½at²",
+        "Final velocity +6 m/s and displacement +6 m"
+      ]
+    }
+  ]
+}

@@ -189,11 +189,12 @@ export default function ChapterChallenge({
     return (
       <div className="panel empty challenge-intro">
         <Trophy size={55} />
-        <span className="eyebrow">THE CELL CHALLENGE</span>
+        <span className="eyebrow">CHAPTER CHALLENGE</span>
         <h2>Bring your discoveries together.</h2>
         <p>
-          12 original questions, shuffled for this session. Answers are saved on
-          this device as you go. You’ll see explanations after finishing.
+          {pack.questions.length} original questions, shuffled for this session.
+          Answers are saved on this device as you go. You’ll see explanations
+          after finishing.
         </p>
         <label className="timer-choice">
           <input
@@ -204,8 +205,8 @@ export default function ChapterChallenge({
           Optional 12-minute timer
         </label>
         <p className="fineprint">
-          This is a foundation chapter assessment, not an official board paper.
-          There is no penalty for choosing an untimed challenge.
+          This is an original foundation assessment, not an official board
+          paper. There is no penalty for choosing an untimed challenge.
         </p>
         {error && (
           <p role="alert" className="danger-text">
@@ -303,7 +304,9 @@ export default function ChapterChallenge({
   return (
     <section className="panel quiz">
       <div className="between">
-        <span className="eyebrow">CHAPTER BOSS / CELLS & MEMBRANES</span>
+        <span className="eyebrow">
+          CHAPTER BOSS / {pack.title.toUpperCase()}
+        </span>
         <span className="pill">
           <Clock size={13} />
           {remaining === null

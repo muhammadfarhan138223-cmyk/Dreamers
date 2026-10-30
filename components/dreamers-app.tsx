@@ -1,4 +1,14 @@
 "use client";
+import PackDownloads from "@/components/pack-downloads";
+import PackWorkspace from "@/components/pack-workspace";
+import {
+  PACKS,
+  packForRoute,
+  packForLesson,
+  packForSubject,
+  packMeta,
+  lessonPath,
+} from "@/lib/catalog.mjs";
 import {
   useState,
   useEffect,
@@ -94,8 +104,8 @@ const subjects = [
     icon: FlaskConical,
     color: "purple",
     caption: "Discover the matter around you",
-    count: "Curriculum preparation",
-    available: false,
+    count: "1 foundation chapter",
+    available: true,
   },
   {
     id: "physics",
@@ -104,8 +114,8 @@ const subjects = [
     icon: Atom,
     color: "blue",
     caption: "Explore the rules of our universe",
-    count: "Curriculum preparation",
-    available: false,
+    count: "1 foundation chapter",
+    available: true,
   },
 ];
 const languages = ["English", "Roman Urdu", "Urdu", "Hinglish", "Hindi"];
@@ -243,6 +253,7 @@ function CellDiagram() {
 export default function DreamersApp() {
   const [path, setPath] = useState("/dashboard"),
     [pack, setPack] = useState<Pack | null>(null),
+    [installedPacks, setInstalledPacks] = useState<Pack[]>([]),
     [events, setEvents] = useState<LearningEvent[]>([]),
     [assessments, setAssessments] = useState<RecordValue[]>([]),
     [notes, setNotes] = useState<RecordValue[]>([]),
@@ -275,7 +286,8 @@ export default function DreamersApp() {
     [reveal, setReveal] = useState(false),
     [shortAnswers, setShortAnswers] = useState<Record<string, string>>({}),
     [quizDone, setQuizDone] = useState(false);
-  const [aiTopic, setAiTopic] = useState("cell-basics"),
+  const [aiPack, setAiPack] = useState("cells-starter"),
+    [aiTopic, setAiTopic] = useState("cell-basics"),
     [language, setLanguage] = useState("English"),
     [mode, setMode] = useState(modes[0]),
     [aiInput, setAiInput] = useState(""),
@@ -294,7 +306,15 @@ export default function DreamersApp() {
     [voiceName, setVoiceName] = useState(""),
     [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const state = summarize(events);
+  const totalState = summarize(events);
+  const bio = packMeta("cells-starter")!;
+  const state = {
+    ...totalState,
+    completed: totalState.completed.filter((id) => bio.lessonIds.includes(id)),
+    correct: totalState.correct.filter((id) => bio.questionIds.includes(id)),
+    mistakes: totalState.mistakes.filter((id) => bio.questionIds.includes(id)),
+  };
+  const routeMeta = packForRoute(path);
   const say = useCallback((s: string) => {
     setToast(s);
     if (toastTimer.current) clearTimeout(toastTimer.current);
@@ -308,6 +328,7 @@ export default function DreamersApp() {
       db.list<RecordValue>("cards"),
       db.list<RecordValue>("settings"),
     ]);
+    setInstalledPacks(p);
     setPack(p.find((p) => p.id === "cells-starter") || null);
     setEvents(e);
     setNotes(n);
@@ -522,7 +543,7 @@ export default function DreamersApp() {
   const continueLesson =
     pack?.lessons.find((l) => !state.completed.includes(l.id)) ||
     pack?.lessons[0];
-  const lessonUrl = (l: Lesson) => `/learn/biology/cells/${l.id}`;
+  const lessonUrl = (l: Lesson) => lessonPath(packForLesson(l.id)!, l.id);
   const heading = (eyebrow: string, title: string, description?: string) => (
     <div className="page-heading">
       <span className="eyebrow">{eyebrow}</span>
@@ -586,6 +607,7 @@ export default function DreamersApp() {
           question: input,
           language,
           mode: selectedMode,
+          packId: aiPack,
           topic: aiTopic,
           previous:
             chat
@@ -766,8 +788,11 @@ export default function DreamersApp() {
             </span>
             <div>
               <strong>
-                {state.completed.length}
-                <small> / 4</small>
+                {totalState.completed.length}
+                <small>
+                  {" "}
+                  / {PACKS.reduce((n, p) => n + p.lessonIds.length, 0)}
+                </small>
               </strong>
               <span>Lessons discovered</span>
             </div>
@@ -917,7 +942,7 @@ export default function DreamersApp() {
         {heading(
           "YOUR LEARNING LIBRARY",
           "Find your next “aha!” moment.",
-          "Begin with our original Biology foundation pack. Official Punjab editions will be added after verification.",
+          "Explore original Biology, Chemistry and Physics foundation packs. Official Punjab edition mapping remains pending.",
         )}
         <div className="subject-grid">
           {subjects.map((s) => (
@@ -947,36 +972,26 @@ export default function DreamersApp() {
         </div>
       </>
     );
-  else if (
-    path.startsWith("/learn/chemistry") ||
-    path.startsWith("/learn/physics")
-  ) {
-    const s = subjects.find((s) => path.includes(s.id))!;
+  else if (routeMeta && routeMeta.subject !== "biology")
     content = (
-      <>
-        {heading(
-          s.world.toUpperCase(),
-          `${s.name} is taking shape.`,
-          "Content for this world has not been published yet.",
-        )}
-        <div className="panel empty">
-          <s.icon size={56} />
-          <h2>Good learning starts with accurate content.</h2>
-          <p>
-            Verified edition mapping, original lessons and reviewed practice are
-            the next steps for this subject.
-          </p>
-          {link(
-            "/learn/biology/cells",
-            <>
-              Explore the available Biology chapter <ArrowRight size={16} />
-            </>,
-            "primary",
-          )}
-        </div>
-      </>
+      <PackWorkspace
+        key={routeMeta.id}
+        id={routeMeta.id}
+        path={path}
+        packs={installedPacks}
+        events={events}
+        onUpdated={refresh}
+        navigate={navigate}
+        speak={speak}
+        onAsk={(id, topic) => {
+          setAiPack(id);
+          setAiTopic(topic);
+          setAiInput("Help me understand this concept.");
+          navigate("/ai-tutor");
+        }}
+      />
     );
-  } else if (currentLesson)
+  else if (currentLesson)
     content = (
       <>
         {link(
@@ -1083,6 +1098,7 @@ export default function DreamersApp() {
               <button
                 className="secondary full"
                 onClick={() => {
+                  setAiPack("cells-starter");
                   setAiTopic(currentLesson.id);
                   setAiInput(`Help me understand ${currentLesson.subtitle}.`);
                   navigate("/ai-tutor");
@@ -1239,6 +1255,17 @@ export default function DreamersApp() {
           "A little challenge. A lot of learning.",
           "Try, reflect, try again. Every answer is a chance to understand.",
         )}
+        <div className="pack-switcher">
+          {PACKS.map((p) => (
+            <button
+              key={p.id}
+              className="secondary"
+              onClick={() => navigate(`/practice/${p.subject}`)}
+            >
+              {p.subject}
+            </button>
+          ))}
+        </div>
         <div className="tabs">
           {[
             ["mcq", "MCQs"],
@@ -1503,18 +1530,28 @@ export default function DreamersApp() {
           <IconPlanet />
           <div>
             <span className="eyebrow">LIFE WORLD</span>
-            <h2>You are a {state.level}.</h2>
+            <h2>Your rank: {state.level}.</h2>
             <p>
-              {state.xp} XP earned from {state.completed.length} lessons and{" "}
-              {state.correct.length} different questions answered correctly.
+              {state.xp} XP earned from {totalState.completed.length} lessons
+              and {totalState.correct.length} different questions answered
+              correctly.
             </p>
             <div className="progress-line">
               <span
-                style={{ width: Math.min(100, (state.xp / 270) * 100) + "%" }}
+                style={{
+                  width:
+                    Math.min(
+                      100,
+                      ((state.completed.length * 25 +
+                        state.correct.length * 10) /
+                        270) *
+                        100,
+                    ) + "%",
+                }}
               />
             </div>
             <small>
-              Starter chapter maximum: 270 XP. Repeats are welcome; rewards are
+              Biology chapter maximum: 270 XP. Repeats are welcome; rewards are
               not duplicated.
             </small>
           </div>
@@ -1618,59 +1655,11 @@ export default function DreamersApp() {
           </div>
           <span className="pill">{swReady ? "Ready" : "Preparing"}</span>
         </div>
-        <section className="panel download-pack">
-          <div className="download-cover">
-            <Dna size={54} />
-            <span>LIFE WORLD</span>
-          </div>
-          <div>
-            <span className="eyebrow">COMPACT STARTER PACK · VERSION 1</span>
-            <h2>Cells & membranes</h2>
-            <p>
-              4 original lessons · 12 MCQs · 2 short questions · 1 long question
-              · interactive cell diagram
-            </p>
-            <div className="pack-tags">
-              <span>
-                {storageBytes
-                  ? `${(storageBytes / 1024).toFixed(1)} KB`
-                  : "Under 30 KB"}
-              </span>
-              <span>English + Roman Urdu summaries</span>
-              <span>{pack ? "Downloaded on this device" : "Available"}</span>
-            </div>
-            <div className="actions">
-              <button
-                className="primary"
-                disabled={busy}
-                onClick={downloadPack}
-              >
-                {busy
-                  ? "Preparing…"
-                  : pack
-                    ? "Check / refresh pack"
-                    : "Download pack"}
-                <Download size={16} />
-              </button>
-              {pack && (
-                <button
-                  className="secondary"
-                  onClick={() =>
-                    safe(async () => {
-                      await db.remove("packs", "cells-starter");
-                      await refresh();
-                      say(
-                        "Learning pack removed. Your progress and notes were preserved.",
-                      );
-                    })
-                  }
-                >
-                  Remove content <Trash2 size={15} />
-                </button>
-              )}
-            </div>
-          </div>
-        </section>
+        <PackDownloads
+          packs={installedPacks}
+          onUpdated={refresh}
+          navigate={navigate}
+        />
         <div className="two-col">
           <div className="panel">
             <h3>Install Dreamers</h3>
@@ -1845,12 +1834,34 @@ export default function DreamersApp() {
             </label>
             <span className="eyebrow">YOUR CURRENT CONTEXT</span>
             <label className="field">
-              Biology topic
+              Subject pack
+              <select
+                value={aiPack}
+                onChange={(e) => {
+                  setAiPack(e.target.value);
+                  setAiTopic(packMeta(e.target.value)!.lessonIds[0]);
+                }}
+              >
+                {PACKS.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.subject}: {p.title}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              Topic
               <select
                 value={aiTopic}
                 onChange={(e) => setAiTopic(e.target.value)}
               >
-                {pack?.lessons.map((l) => (
+                {(
+                  installedPacks.find((p) => p.id === aiPack)?.lessons ||
+                  packMeta(aiPack)!.lessonIds.map((id) => ({
+                    id,
+                    subtitle: id,
+                  }))
+                ).map((l) => (
                   <option value={l.id} key={l.id}>
                     {l.subtitle}
                   </option>
@@ -1858,7 +1869,7 @@ export default function DreamersApp() {
               </select>
             </label>
             <p>
-              Biology · Cells & membranes
+              {packMeta(aiPack)?.title}
               <br />
               Class {String(prefs.class)} foundations
             </p>
@@ -1897,12 +1908,14 @@ export default function DreamersApp() {
       Object.entries(synonyms).find(([key]) => search.includes(key))?.[1] ||
       search;
     const results =
-      pack?.lessons.filter((l) =>
-        [l.title, l.subtitle, ...l.paragraphs, l.simple]
-          .join(" ")
-          .toLowerCase()
-          .includes(normalized),
-      ) || [];
+      installedPacks
+        .flatMap((p) => p.lessons)
+        .filter((l) =>
+          [l.title, l.subtitle, ...l.paragraphs, l.simple]
+            .join(" ")
+            .toLowerCase()
+            .includes(normalized),
+        ) || [];
     content = (
       <>
         {heading(
@@ -1934,18 +1947,21 @@ export default function DreamersApp() {
           AI search is planned
         </p>
         <div className="lesson-list">
-          {(search ? results : pack?.lessons || []).map((l) => (
-            <div className="panel search-result" key={l.id}>
-              <div>
-                <span className="eyebrow">
-                  BIOLOGY / {l.subtitle.toUpperCase()}
-                </span>
-                <h3>{l.title}</h3>
-                <p>{l.objective}</p>
+          {(search ? results : installedPacks.flatMap((p) => p.lessons)).map(
+            (l) => (
+              <div className="panel search-result" key={l.id}>
+                <div>
+                  <span className="eyebrow">
+                    {packForLesson(l.id)?.subject.toUpperCase()} /{" "}
+                    {l.subtitle.toUpperCase()}
+                  </span>
+                  <h3>{l.title}</h3>
+                  <p>{l.objective}</p>
+                </div>
+                {link(lessonUrl(l), <ArrowRight size={20} />, "circle-button")}
               </div>
-              {link(lessonUrl(l), <ArrowRight size={20} />, "circle-button")}
-            </div>
-          ))}
+            ),
+          )}
           {search && !results.length && (
             <div className="panel empty">
               <Search size={34} />
@@ -1978,7 +1994,10 @@ export default function DreamersApp() {
           <div className="stat">
             <BookOpen />
             <div>
-              <strong>{state.completed.length}/4</strong>
+              <strong>
+                {totalState.completed.length}/
+                {PACKS.reduce((n, p) => n + p.lessonIds.length, 0)}
+              </strong>
               <span>Lessons explored</span>
             </div>
           </div>
@@ -2043,7 +2062,7 @@ export default function DreamersApp() {
             assessments.map((a) => (
               <div className="history-row" key={a.id}>
                 <span>
-                  Cells & membranes ·{" "}
+                  {packMeta(String(a.packId))?.title || "Chapter"} ·{" "}
                   {String(
                     (a.score as { correct: number; total: number }).correct,
                   )}{" "}
@@ -2988,7 +3007,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.1.2 · Foundation release</span>
+              <span>v0.2.0 · Science foundations</span>
             </div>
           </footer>
         </main>
@@ -3016,7 +3035,10 @@ export default function DreamersApp() {
         <button
           className="floating-ai"
           onClick={() => {
-            if (currentLesson) setAiTopic(currentLesson.id);
+            if (currentLesson) {
+              setAiPack("cells-starter");
+              setAiTopic(currentLesson.id);
+            }
             navigate("/ai-tutor");
           }}
           aria-label="Open Dreamers AI teacher"

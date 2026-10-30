@@ -1,3 +1,5 @@
+import { packMeta, STARTER_PACK_ID } from "./catalog.mjs";
+import { validatePack } from "./pack-validation.mjs";
 import type { LearningEvent, Pack, RecordValue } from "./types";
 const STORES = [
   "packs",
@@ -96,24 +98,40 @@ export async function clearData() {
     tx.onerror = () => reject(tx.error);
   });
 }
-export async function installPack() {
-  const response = await fetch("/packs/cells-v1.json", { cache: "no-cache" });
+export async function installPack(id = STARTER_PACK_ID) {
+  const meta = packMeta(id);
+  if (!meta) throw new Error("Unknown learning pack.");
+  const response = await fetch(meta.url, { cache: "no-cache" });
   if (!response.ok)
     throw new Error(
-      "The learning pack could not be downloaded. Please try again.",
+      "The learning pack could not be downloaded. Your existing content was preserved.",
     );
-  const pack = (await response.json()) as Pack;
-  if (
-    pack.id !== "cells-starter" ||
-    pack.version !== 1 ||
-    pack.lessons.length !== 4 ||
-    pack.questions.length !== 12
-  )
+  const bytes = await response.arrayBuffer();
+  const digest = Array.from(
+    new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)),
+    (v) => v.toString(16).padStart(2, "0"),
+  ).join("");
+  if (digest !== meta.sha256)
+    throw new Error("Pack integrity check failed. Reconnect and try again.");
+  const pack = JSON.parse(new TextDecoder().decode(bytes)) as Pack;
+  const errors = validatePack(pack);
+  if (errors.length || pack.id !== meta.id || pack.version !== meta.version)
     throw new Error(
       "Pack validation failed. Your existing content was preserved.",
     );
   await put("packs", pack);
-  return { pack, bytes: new TextEncoder().encode(JSON.stringify(pack)).length };
+  return { pack, bytes: bytes.byteLength };
+}
+export async function removePack(id: string) {
+  const meta = packMeta(id);
+  if (!meta) throw new Error("Unknown learning pack.");
+  await remove("packs", id);
+  if (!meta.included && typeof caches !== "undefined")
+    for (const name of await caches.keys())
+      if (name.startsWith("dreamers-shell-")) {
+        const cache = await caches.open(name);
+        await cache.delete(meta.url);
+      }
 }
 
 export async function restoreData(records: Record<string, RecordValue[]>) {
