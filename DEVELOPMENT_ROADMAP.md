@@ -3,7 +3,7 @@
 1. Foundation — Next.js, branding, navigation, themes, dashboard, manifest and app shell: implemented; live desktop browser QA passed.
 2. Offline learning — original Biology chapter, IndexedDB, starter pack, offline progress: implemented; network-failure worker tests passed; physical offline installation pending.
 3. Question engine — MCQ feedback, history, mistake review, short/long self-check: implemented; live MCQ feedback/history QA passed; written drafts included.
-4. Dreamverse — first-completion XP, levels, chapter map and achievements: implemented for starter scope.
+4. Dreamverse — first-completion XP, levels, chapter map and achievements: implemented for starter scope. A separate unlocked chapter challenge now saves/resumes sessions and commits scores/evidence atomically.
 5. AI teacher — secure Groq/OpenAI-compatible adapter, input checks, durable network quotas and cache boundary implemented; requires owner credentials and durable rate-limit service before live AI verification.
 6. Accounts — dedicated Supabase project, migrations, RLS, sign-in and guest migration pending. Preserve queues until authenticated acknowledgements succeed.
 7. Study features — initial flashcards, notes and chapter plan implemented; delayed retention and validated subject readiness remain pending.

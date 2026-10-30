@@ -30,3 +30,7 @@ NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY are planned. N
 ## Verification checklist
 
 Run typecheck, tests, production build, browser navigation and real offline reload/practice/persistence. Verify manifest and icons over HTTPS. PWA installation depends on browser support and must not be inferred from a shortcut. Test accounts/RLS and live AI only after setup; do not mark them verified beforehand.
+
+## Latest verified release
+
+0.1.2, commit d2fcfd83845500dd19c397f7c118eb09472bf254, Git-triggered deployment dpl_DabfgwQVqSWSPqfpTBZQ5zY6H1Nw, READY. Production alias and live API/PWA asset regression checks passed. Browser testing confirmed chapter challenge unlock, interrupted-session resume, actual scoring, saved history and XP deduplication. Existing SSO configuration remains unchanged. Documentation-only checkpoint pushes may produce a newer build of identical application code.
