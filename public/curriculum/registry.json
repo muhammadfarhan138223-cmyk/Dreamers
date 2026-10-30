@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "authority": "Punjab Education, Curriculum, Training and Assessment Authority (PECTAA)",
+  "checkedAt": "2026-10-30",
+  "sourceUrl": "https://pectaa.edu.pk/curriculum-compliance/",
+  "sourceStatus": "Official listing inspected; textbook contents, rights and current exam applicability still require review",
+  "levels": [
+    {"class": "XI", "listedScienceLabels": ["Biology 11 2025-26", "Chemistry 11 2025-26", "Physics 11 2025-26"], "compulsorySubjects": ["English", "Urdu", "Islamiat", "Tarjuma-tul-Quran where applicable"], "editionMapping": "pending"},
+    {"class": "XII", "listedScienceLabels": ["Biology (27.08.2026)", "Chemistry (EM) 2020", "Physics (27.08.2026)"], "compulsorySubjects": ["English", "Urdu", "Pakistan Studies", "Tarjuma-tul-Quran where applicable"], "editionMapping": "pending"}
+  ],
+  "notice": "Listing labels are retained as observed. A newer label does not establish a textbook's examination applicability. Religious alternatives require individual curriculum selection; no student's religion is inferred or collected.",
+  "publishedPack": "cells-starter",
+  "publishedPackMapping": "Original foundation content; not officially edition-mapped",
+  "chapters": []
+}

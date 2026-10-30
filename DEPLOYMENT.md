@@ -2,10 +2,14 @@
 
 Repository: https://github.com/muhammadfarhan138223-cmyk/Dreamers
 Vercel team: PERSONAL (`team_jwuAswY9vD3bNmcKQM2LqjoF`)
-Vercel project: dreamers-learning (`prj_iBQ97PXJcJd0SVdtUeivIIYZeMZd`)
+Vercel project: dreamers (`prj_ol5nVtQ2DprVqMgNY140bM86Lsvu`)
+Live production alias: https://dreamers-sooty.vercel.app
+An initial unused unlinked dreamers-learning project also exists; do not deploy there.
 Runtime: Node 24, framework Next.js, build `npm run build`, install `npm ci`.
 
-No production deployment has been verified yet. No secrets are required for the offline guest release.
+First production deployment `dpl_6Cm7JzaPQR8VaYKFPazRQgTytHFc` is READY, from commit `63e0b9f2befaa0c884815c13ceb5add896fa2aad`. Browser flows and live HTTP checks passed. The native Git context confirms the Dreamers repository is linked to the dreamers Vercel project. No secrets are required for the offline guest release.
+
+The Git project helper initially returned a schema error after creating the project; read-only verification confirmed creation and Git linking. Do not create another project. Existing SSO protection is preserved. An automatic review rejected disabling it; no bypass or protection change was applied. The production alias is reachable in the test browser and anonymous HTTP checks.
 
 ## Owner AI configuration
 

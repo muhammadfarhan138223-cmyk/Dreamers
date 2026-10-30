@@ -1,6 +1,6 @@
 # Architecture
 
-Next.js 16 App Router, React 19 and TypeScript; Tailwind 4 with a compact original CSS design system. A catch-all app route renders one learning workspace, and client history navigation keeps downloaded learning usable without route fetches. API routes remain server-only and are excluded from service-worker caches.
+Next.js 16 App Router, React 19 and TypeScript; Tailwind 4 with a compact original CSS design system. A catch-all app route rejects unknown API paths and renders one learning workspace, and client history navigation keeps downloaded learning usable without route fetches. API routes remain server-only and are excluded from service-worker caches.
 
 ## Local-first boundary
 
@@ -12,7 +12,7 @@ Guest data is not cloud synchronized. Queue entries are retained for the account
 
 ## Content
 
-The pack schema contains stable IDs, original source attribution, edition status, objectives, topics, difficulty, marks and answer explanations. It is explicitly unmapped to official textbook editions. A publishing/import validation step must be added before external question banks are accepted. Do not claim curriculum coverage from this demo.
+The pack schema contains stable IDs, original source attribution, edition status, objectives, topics, difficulty, marks and answer explanations. It is explicitly unmapped to official textbook editions. The command-line import validator rejects broken topic references, duplicate IDs, invalid answer keys and missing rights metadata. Reviewed claims require reviewer/date provenance. UI-based reviewed publication remains an administration milestone. Do not claim curriculum coverage from this demo.
 
 ## Privacy
 
@@ -21,3 +21,7 @@ No account or personal details are required. Display names and class preferences
 ## Cloud roadmap
 
 Supabase PostgreSQL + Auth are intended for a dedicated project. Do not reuse unrelated MovieHub/SARAS tables. No database migrations have been applied. Accounts must be verified before enabling private API operations; authorization must use server-controlled roles. AI fails closed without durable quotas. Admin routes currently expose no data and no actions.
+
+## Recovery
+
+JSON backups are schema/size checked and merged in one IndexedDB transaction. Newer local notes survive older imports; events retain unique IDs and restored events are queued. Pack bytes from backups are ignored; reinstallation uses the app-owned resource. The starter seed marker prevents user-removed packs from silently reappearing on reload.

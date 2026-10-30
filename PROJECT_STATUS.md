@@ -2,27 +2,30 @@
 
 Updated: 2026-10-30 (Pakistan)
 
-Current milestone: first usable guest release — foundation, offline chapter, question engine and starter Dreamverse.
+Current milestone: first usable guest learning release, followed by offline recovery and security hardening. Milestones 1–4 have a working starter scope; milestone 5 has a real server integration awaiting owner configuration.
 
-## Completed code
+## Completed
 
-Responsive original dashboard; SVG logos and 192/512/maskable icons; theme preferences; working navigation; 4 Biology foundation lessons; 12 MCQs; 3 written self-check questions; cell diagram and osmosis illustration; IndexedDB pack/events/notes/settings/review data; atomic pending queue; versioned service worker; download/remove; first-completion XP; levels and 3 achievements; local text search; bookmarks and notes; flashcards; chapter plan; data export and deletion; browser read-aloud.
+Responsive dashboard, original SVG identity and PWA icons, themes/navigation, 4 original Biology lessons, 12 MCQs and 3 written self-check questions, diagrams/osmosis lab, IndexedDB content and activity records, atomic pending queue, versioned offline shell, download/removal, deduplicated XP/levels/3 achievements, local search, notes/bookmarks, flashcards with recall schedules, chapter plan, read-aloud, JSON data export/restore/deletion. Recovery fixes preserve newer notes and prevent removed packs from reappearing. Source import validation and official curriculum resource register are included.
 
-## Verification
+Server AI route supports Groq or OpenAI-compatible chat completions, server-only secrets, origin/body validation, token limits, timeouts, durable Redis network quotas and per-network caching. It returns honest 503 responses until configured; it never generates a fake explanation.
 
-TypeScript passed. 6 content/progress tests passed. Next.js production build passed before current checkpoint documentation changes. Browser/mobile/offline checks are next.
-Latest verified commit: pending first application commit.
-Deployment: Vercel project created; deployment not yet verified.
-Database migrations: none applied; no unrelated existing Supabase project changed.
+## Verification and commits
 
-## Partial / pending
+19 automated tests, TypeScript and production build pass for hardening code. First release live HTTP checks passed, including PWA assets and AI authorization/validation. Live desktop lesson, bookmarking, completion, feedback, XP and reload persistence passed. See docs/VERIFICATION.md for exact coverage and limits.
+Latest verified deployed application commit: 63e0b9f2befaa0c884815c13ceb5add896fa2aad.
+Current hardening commit/deployment: pending next checkpoint push.
+Production: https://dreamers-sooty.vercel.app — READY; Git-linked Vercel project dreamers, prj_ol5nVtQ2DprVqMgNY140bM86Lsvu.
+Database migrations: none applied. Existing unrelated Supabase project left unchanged.
 
-AI service route and live provider verification; dedicated Supabase accounts and RLS; authenticated progress synchronization; educator review and official textbook mapping; further subjects; admin publishing; semantic AI search; full syllabus exam planning; image questions and microphone interaction.
+## Remaining / setup-dependent
+
+Owner AI credentials and durable quota service, followed by live provider verification; dedicated Supabase selection and RLS/auth migrations; guest-to-account migration and synchronization; physical Android installation/offline check; educator review and current XI/XII textbook mapping; further subjects; full-syllabus exam planning; secure administration; semantic search/image questions/microphone interaction.
 
 ## Known limits
 
-Learning content awaits educator review. Guest data remains on the device; backup export is available. Queue records are preserved but not uploaded. No exam readiness score is fabricated. Next.js development preview initially received Vite-style arguments; a development wrapper now normalizes them.
+Original content awaits educator review; no official chapter or past-paper coverage is claimed. Guest records are local and remain queued, not cloud-synchronized. No exam outcome/readiness percentage is fabricated. Desktop production browser works; local dev preview hydration remains an environment-specific issue. Existing deployment protection remains enabled. No runtime monitoring drain is configured.
 
-Required environment: none for guest learning. Online AI requires AI_PROVIDER, AI_MODEL, AI_API_KEY and durable quota credentials; AI_BASE_URL optional. See DEPLOYMENT.md.
+Required environment: none for guest learning. AI: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN; AI_BASE_URL optional. Configure secrets through Vercel, never in chat or GitHub.
 
-Next task: browser-test the offline guest flow, correct observed issues, commit to the owner-provided Dreamers repository, deploy and verify Vercel, then implement the secure AI boundary.
+Exact next task: push verified hardening, verify its Git-triggered deployment and live regression script, then configure owner AI and select a dedicated Dreamers Supabase project before implementing accounts. Read these checkpoint documents before resuming; preserve working code and student storage.
