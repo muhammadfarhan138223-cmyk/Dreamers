@@ -23,3 +23,5 @@ Added optional original Chemistry and Physics packs: 12 lessons, 36 MCQs and 9 w
 - Added bounded selected-page AI references with request validation and source limitations; real provider setup remains pending.
 - Upgraded IndexedDB to v3 without deleting saved work; JSON backups explicitly exclude PDFs/text indexes.
 - Added actual PDF parsing, Blob storage/deletion, multilingual search, backup and offline-engine tests.
+
+0.2.1 release verification: production READY, 36 tests/typecheck/build and live HTTP regression passed. Browser import/render/index/search/resume/AI-context and byte-identical PDF export passed; no official PDF book file or live provider response is claimed.

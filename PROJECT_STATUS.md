@@ -16,10 +16,10 @@ A selected page excerpt (up to 2,000 characters) can be attached to an AI questi
 
 ## Verification and commits
 
-Latest verified deployed application commit before PDF release: 9447e33e0cec0cd124f7a6ee788a8624f2658ddd (0.2.0).
+Latest verified deployed application commit: 2902e3efdf76f4795593deee7bbba7963592ed44 (0.2.1).
 Science production deployment: dpl_HugnhbmuUCppHqtQPNAy8JJ8kmQo — READY. Live Chemistry download, question answer/feedback and storage flow passed.
-PDF release checks: 36 automated tests include actual PDF.js parsing, Blob persistence, metadata merge, scoped deletion, backup exclusions, English/Urdu search, v1→v3 storage preservation and offline worker/engine-cache serving. Production build and live browser verification recorded in docs/VERIFICATION.md as they complete.
-Production: https://dreamers-sooty.vercel.app — Git-linked project dreamers, prj_ol5nVtQ2DprVqMgNY140bM86Lsvu.
+PDF release checks: 36 automated tests include actual PDF.js parsing, Blob persistence, metadata merge, scoped deletion, backup exclusions, English/Urdu search, v1→v3 storage preservation and offline worker/engine-cache serving. TypeScript, all 36 tests and production build passed. Live PDF import, two-page rendering, indexing, keyword search, page-2 resume after full navigation, AI reference attachment and honest 503 setup handling passed. Exported PDF matched the original file byte for byte. See docs/VERIFICATION.md for coverage/limits.
+PDF production deployment: dpl_HKXbLyx2SkUiLcakPPuBgUCuqYSM — READY. Production: https://dreamers-sooty.vercel.app — Git-linked project dreamers, prj_ol5nVtQ2DprVqMgNY140bM86Lsvu.
 Local storage: IndexedDB v3 adds books/bookPages and a bookId index without deleting learning data. Cloud database migrations: none applied. Existing unrelated Supabase project left unchanged.
 
 ## Partially implemented / pending
@@ -32,4 +32,4 @@ Original science content awaits educator review and official XI/XII mapping. Off
 
 Required environment: none for guest learning. AI: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN; AI_BASE_URL optional. Configure secrets in Vercel, never chat or GitHub. Students never supply keys.
 
-Exact next task: finish live PDF import/render/index/search/resume/AI-context verification and record the release commit/deployment. Then verify permitted full textbook download/edition URLs, or accept publisher/user-provided PDFs; configure owner AI and durable quota service, then verify a real response. Select/create a dedicated Dreamers Supabase project only with confirmed organization/cost; do not reuse another project's database. Read checkpoint documents before further edits.
+Exact next task: inspect any textbook embed codes supplied by the owner and verify their publisher, edition, embedding permission and actual PDF download availability. An iframe alone does not provide offline bytes or AI text access. Verify permitted full textbook URLs, or accept publisher/user-provided PDFs; configure owner AI and durable quota service, then verify a real response. Select/create a dedicated Dreamers Supabase project only with confirmed organization/cost; do not reuse another project's database. Read checkpoint documents before further edits.
