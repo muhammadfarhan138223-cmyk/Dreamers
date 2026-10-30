@@ -33,6 +33,9 @@ Open the development URL printed by Next.js. Node 24 is recommended.
 - Optional science packs use explicit downloads, content validation and SHA-256 integrity checks.
 - Personal full-PDF import/reader, resumable selectable-text index/search, reading-position resume, separate PDF export and selected-page AI references. First opening caches about 5 MB of engine resources. Scans have no OCR; imported editions stay unverified.
 
+- Textbook-first colorful home/learn, 31 checked chapter headings from 3 supplied XII files, chapter search and private batch PDF import with automatic hash matching.
+- Tutor suggestions follow the selected book; related stories/history require explicit extra-context opt-in. Current exam exclusions and live model behavior remain unverified.
+
 ## Explicit limitations
 
 Content is original, educator review is pending, and official edition/chapter mapping is not yet verified. Compulsory-subject lessons and complete syllabus coverage are planned. Accounts, cloud synchronization, administrative operations and semantic AI search are not enabled. Guest events remain queued for a future authenticated migration; they are never silently discarded or described as synced. No exam outcome is guaranteed.
@@ -47,4 +50,4 @@ Read PROJECT_STATUS.md, DEVELOPMENT_ROADMAP.md, ARCHITECTURE.md, DEPLOYMENT.md a
 
 ## Content and brand
 
-Learning text, practice questions and production SVG assets are original DREAMERS work. No textbook pages or copyrighted question banks have been copied. Official resources should be verified and licensed before import. Source code is private-use by default unless the owner chooses a license; no third-party textbook rights are granted by this repository.
+Learning text, practice questions and production SVG assets are original DREAMERS work. Supplied textbook binaries remain private on the student’s device and are not redistributed in this repository. Official resources should be verified and licensed before import. Source code is private-use by default unless the owner chooses a license; no third-party textbook rights are granted by this repository.

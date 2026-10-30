@@ -15,3 +15,7 @@
 ## Next content steps
 
 Verify PECTAA official curriculum editions and current examination notifications for XI/XII. Record source URLs, effective academic year, permissions and reviewer identity. Do not infer current chapter numbers from older eLearn editions. Add one reviewed subject/chapter at a time.
+
+## 0.3.0 source-led experience
+
+Three supplied XII PDF identities and their chapter maps are registered; batch private import/deduplication and source-specific tutor suggestions are implemented. Home/learn have a colorful responsive refresh with optional related-story teaching. Official examination notice matching, OCR for Computer, permitted public PDF distribution and real model behavior verification remain pending.

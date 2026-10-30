@@ -13,6 +13,12 @@ import {
 } from "lucide-react";
 import * as db from "@/lib/db";
 import {
+  TEXTBOOKS,
+  DEFAULT_TEXTBOOK,
+  textbook,
+  textbookByHash,
+} from "@/lib/textbooks.mjs";
+import {
   MAX_PDF_BYTES,
   validatePdfHeader,
   bookTitle,
@@ -40,6 +46,7 @@ export type LocalBook = {
   pageCount?: number;
   indexedPages?: number;
   lastPage?: number;
+  catalogId?: string;
 };
 export type BookPage = {
   id: string;
@@ -50,8 +57,16 @@ export type BookPage = {
 export type BookContext = { title: string; page: number; text: string };
 export default function BookLibrary({
   onAsk,
+  requestedId,
+  requestedPage = 1,
+  onNavigate,
+  onAskTopic,
 }: {
-  onAsk: (context: BookContext, subject: string) => void;
+  onAsk: (context: BookContext, subject: string, catalogId?: string) => void;
+  requestedId?: string;
+  requestedPage?: number;
+  onNavigate: (url: string) => void;
+  onAskTopic: (bookId: string, topicId: string, extra?: boolean) => void;
 }) {
   const [books, setBooks] = useState<LocalBook[]>([]),
     [selected, setSelected] = useState<LocalBook | null>(null),
@@ -65,77 +80,124 @@ export default function BookLibrary({
     [targetPage, setTargetPage] = useState(1),
     [removeId, setRemoveId] = useState(""),
     [notice, setNotice] = useState("");
+  const [catalogId, setCatalogId] = useState(
+    requestedId && textbook(requestedId) ? requestedId : DEFAULT_TEXTBOOK,
+  );
   const input = useRef<HTMLInputElement>(null);
+  const activeBook = textbook(catalogId)!;
+  useEffect(() => {
+    const wanted = textbook(requestedId);
+    if (!wanted) return;
+    setCatalogId(wanted.id);
+    const saved = books.find((b) => b.sha256 === wanted.sha256);
+    if (saved) {
+      setSelected(saved);
+      setTargetPage(Math.max(1, Math.min(wanted.pages, requestedPage)));
+    }
+  }, [requestedId, requestedPage, books.length]);
   async function refresh() {
     setBooks((await db.list<LocalBook>("books")).sort((a, b) => b.at - a.at));
   }
   useEffect(() => {
     refresh().catch(() => setError("Device book storage is unavailable."));
   }, []);
-  async function importFile(file: File) {
+  async function importFiles(files: File[]) {
     setBusy(true);
     setError("");
-    try {
-      validatePdfHeader(
-        new Uint8Array(await file.slice(0, 1024).arrayBuffer()),
-        file.size,
-      );
-      const estimate = await navigator.storage?.estimate?.();
-      if (
-        estimate?.quota &&
-        estimate.usage !== undefined &&
-        estimate.quota - estimate.usage < file.size * 1.2
-      )
-        throw new Error(
-          "There is not enough available browser storage. Remove an unused book or free device space.",
+    let added = 0,
+      duplicates = 0;
+    const failures: string[] = [];
+    const savedBooks: LocalBook[] = [];
+    for (const file of files) {
+      try {
+        validatePdfHeader(
+          new Uint8Array(await file.slice(0, 1024).arrayBuffer()),
+          file.size,
         );
-      const digest = Array.from(
-        new Uint8Array(
-          await crypto.subtle.digest("SHA-256", await file.arrayBuffer()),
-        ),
-        (v) => v.toString(16).padStart(2, "0"),
-      ).join("");
-      const id = "book:" + digest;
-      const existing = await db.get<LocalBook>("books", id);
-      if (existing) {
-        setSelected(existing);
-        setTargetPage(existing.lastPage || 1);
-        setNotice(
-          "This PDF is already on your device. Opened your saved copy.",
-        );
-      } else {
+        const estimate = await navigator.storage?.estimate?.();
+        if (
+          estimate?.quota &&
+          estimate.usage !== undefined &&
+          estimate.quota - estimate.usage < file.size * 1.2
+        )
+          throw new Error(
+            "Not enough browser storage. Free device space or remove an unused copy.",
+          );
+        const digest = Array.from(
+          new Uint8Array(
+            await crypto.subtle.digest("SHA-256", await file.arrayBuffer()),
+          ),
+          (v) => v.toString(16).padStart(2, "0"),
+        ).join("");
+        const id = "book:" + digest,
+          existing = await db.get<LocalBook>("books", id);
+        if (existing) {
+          const known = textbookByHash(digest);
+          if (known) {
+            const fields = {
+              catalogId: known.id,
+              title: known.title,
+              subject: known.subject,
+              class: known.class,
+              pageCount: known.pages,
+              edition: known.edition,
+            };
+            await db.patch("books", id, fields);
+            Object.assign(existing, fields);
+          }
+          duplicates++;
+          savedBooks.push(existing);
+          continue;
+        }
+        const known = textbookByHash(digest);
         const book: LocalBook = {
           id,
-          title: bookTitle(file.name),
+          title: known?.title || bookTitle(file.name),
           filename: file.name,
-          subject,
-          class: grade,
-          edition: edition.trim().slice(0, 80) || "Edition not verified",
+          subject: known?.subject || subject,
+          class: known?.class || grade,
+          edition:
+            known?.edition ||
+            edition.trim().slice(0, 80) ||
+            "Edition not verified",
           blob: new Blob([file], { type: "application/pdf" }),
           bytes: file.size,
           sha256: digest,
           at: Date.now(),
+          ...(known ? { catalogId: known.id, pageCount: known.pages } : {}),
         };
         await db.put("books", book);
-        setSelected(book);
-        setTargetPage(1);
-        setNotice(
-          "Full PDF saved on this device. It has not been uploaded to a server.",
+        savedBooks.push(book);
+        added++;
+      } catch (e) {
+        failures.push(
+          `${file.name}: ${e instanceof Error ? e.message : "Could not save this file."}`,
         );
-        await refresh();
       }
+    }
+    try {
+      await refresh();
+      const wanted = textbook(requestedId);
+      const open =
+        savedBooks.find((b) => b.sha256 === wanted?.sha256) ||
+        (files.length === 1 ? savedBooks[0] : null);
+      if (open) {
+        setSelected(open);
+        setTargetPage(wanted ? requestedPage : open.lastPage || 1);
+      }
+      setNotice(
+        `${added} PDF${added === 1 ? "" : "s"} added · ${duplicates} exact duplicate${duplicates === 1 ? "" : "s"} skipped. Files stay on this device.`,
+      );
       if (navigator.storage?.persist)
         await navigator.storage.persist().catch(() => false);
-    } catch (e) {
-      setError(
-        e instanceof Error
-          ? e.message
-          : "The PDF could not be imported. Your other learning data is safe.",
+    } catch {
+      failures.push(
+        "Saved files could not be refreshed. Reload the shelf to retry.",
       );
-    } finally {
-      setBusy(false);
-      if (input.current) input.current.value = "";
     }
+    if (failures.length) setError(failures.join(" "));
+    setBusy(false);
+    if (input.current) input.current.value = "";
   }
   async function search() {
     setError("");
@@ -158,44 +220,106 @@ export default function BookLibrary({
     <>
       <div className="page-heading">
         <span className="eyebrow">YOUR OFFLINE TEXTBOOK SHELF</span>
-        <h1>Full books. On your device.</h1>
+        <h1>Your books. Your quiet corner.</h1>
         <p>
-          Open the official publisher catalogue, download the edition you need,
-          then add that PDF here for personal offline study.
+          Three supplied textbooks, one clear shelf. Add your files once, then
+          read your saved copies offline.
         </p>
       </div>
-      <div className="panel official-books">
-        <div>
-          <BookOpen size={30} />
-          <h2>Punjab official textbook sources</h2>
-          <p>
-            PECTAA lists Class XI/XII science and compulsory subjects. Choose
-            the correct subject, year and edition on the publisher’s website.
-            Direct textbook downloads are not yet verified in Dreamers. Your
-            imported file’s edition remains unverified.
-          </p>
-        </div>
-        <div className="actions">
-          <a
-            className="secondary"
-            href="https://pectaa.edu.pk/curriculum-compliance/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Open PECTAA catalogue <ExternalLink size={16} />
-          </a>
-          <a
-            className="secondary"
-            href="https://www.elearn.gov.pk/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Open eLearn Punjab <ExternalLink size={16} />
-          </a>
-        </div>
+      <div
+        className="supplied-book-tabs"
+        aria-label="Supplied textbook selection"
+      >
+        {TEXTBOOKS.map((b) => {
+          const saved = books.some((local) => local.sha256 === b.sha256);
+          return (
+            <button
+              key={b.id}
+              className={`${b.color} ${catalogId === b.id ? "active" : ""}`}
+              aria-pressed={catalogId === b.id}
+              onClick={() => setCatalogId(b.id)}
+            >
+              <BookOpen size={23} />
+              <span>
+                <b>{b.title}</b>
+                <small>
+                  {b.pages} pages · {(b.bytes / 1024 / 1024).toFixed(1)} MB
+                </small>
+              </span>
+              <span className={`book-local-status ${saved ? "ready" : ""}`}>
+                {saved ? "Saved locally" : "Add your PDF"}
+              </span>
+            </button>
+          );
+        })}
       </div>
+      <section className={`panel textbook-chapters ${activeBook.color}`}>
+        <div className="between">
+          <div>
+            <span className="eyebrow">CLASS XII / SUPPLIED COPY</span>
+            <h2>{activeBook.title}: find your chapter.</h2>
+            <p>{activeBook.edition}</p>
+          </div>
+          <span className="pill">{activeBook.chapters.length} chapters</span>
+        </div>
+        <p className="fineprint">
+          Headings checked in the supplied file. Current board exam exclusions
+          are not yet verified.{" "}
+          {activeBook.text === "scanned"
+            ? "This copy is scanned: image reading works; OCR text search is not available."
+            : ""}
+        </p>
+        <div className="textbook-chapter-list">
+          {activeBook.chapters.map((t, i) => (
+            <div className="textbook-chapter" key={t.id}>
+              <span>{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <b>{t.title}</b>
+                <small>
+                  PDF page {t.page}
+                  {t.printedPage ? ` · printed page ${t.printedPage}` : ""}
+                </small>
+              </div>
+              <button
+                className="secondary"
+                onClick={() => {
+                  const saved = books.find(
+                    (b) => b.sha256 === activeBook.sha256,
+                  );
+                  if (saved) openBook(saved, t.page);
+                  else {
+                    setNotice(
+                      `Add your ${activeBook.title} PDF below first. Its file signature will match it to this chapter map.`,
+                    );
+                    input.current?.click();
+                  }
+                }}
+              >
+                Read <ArrowRight size={14} />
+              </button>
+              <button
+                className="circle-button"
+                aria-label={`Ask AI about ${t.title}`}
+                onClick={() => onAskTopic(activeBook.id, t.id)}
+              >
+                <Search size={16} />
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
       <section className="panel book-import">
-        <h2>Add your downloaded full PDF</h2>
+        <div className="between">
+          <div>
+            <span className="eyebrow">PRIVATE / ON THIS DEVICE</span>
+            <h2>Add your PDF copies</h2>
+          </div>
+          <Upload size={26} />
+        </div>
+        <p className="fineprint">
+          Select all three at once. Matching supplied files are named and
+          classified automatically; identical files are saved only once.
+        </p>
         <div className="book-fields">
           <label className="field">
             Subject
@@ -240,11 +364,14 @@ export default function BookLibrary({
         <input
           className="sr-only"
           type="file"
+          multiple
+          tabIndex={-1}
+          aria-label="Select local PDF files"
           accept="application/pdf,.pdf"
           ref={input}
           onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) importFile(file);
+            const files = Array.from(e.target.files || []);
+            if (files.length) void importFiles(files);
           }}
         />
         <button
@@ -253,7 +380,7 @@ export default function BookLibrary({
           onClick={() => input.current?.click()}
         >
           <Upload size={17} />
-          {busy ? "Saving PDF…" : "Choose PDF from device"}
+          {busy ? "Saving PDF…" : "Choose PDFs from device"}
         </button>
         <p className="fineprint">
           First use prepares about 5 MB of offline reader resources. Up to{" "}
@@ -326,7 +453,9 @@ export default function BookLibrary({
               {b.edition} · {(b.bytes / 1024 / 1024).toFixed(1)} MB
             </p>
             <span className="content-badge">
-              Personal imported copy · edition not verified
+              {b.catalogId
+                ? "Matched supplied PDF · exam scope unverified"
+                : "Personal copy · edition not verified"}
             </span>
             <p className="tiny muted">
               {b.indexedPages || 0}/{b.pageCount || "?"} pages indexed · resume
@@ -398,6 +527,32 @@ export default function BookLibrary({
           </p>
         </div>
       )}
+      <details className="panel publisher-links">
+        <summary>Official sources & copy permissions</summary>
+        <p>
+          Personal PDFs stay on your device. Full public textbook downloads are
+          not bundled: the supplied Computer/Physics copies contain reproduction
+          restrictions.
+        </p>
+        <div className="actions">
+          <a
+            className="secondary"
+            href="https://pectaa.edu.pk/curriculum-compliance/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            PECTAA catalogue <ExternalLink size={14} />
+          </a>
+          <a
+            className="secondary"
+            href="https://www.elearn.gov.pk/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            eLearn Punjab <ExternalLink size={14} />
+          </a>
+        </div>
+      </details>
       {selected && (
         <PdfReader
           key={selected.id}
@@ -405,7 +560,7 @@ export default function BookLibrary({
           requestedPage={targetPage}
           onSaved={refresh}
           onClose={() => setSelected(null)}
-          onAsk={(c) => onAsk(c, selected.subject)}
+          onAsk={(c) => onAsk(c, selected.subject, selected.catalogId)}
         />
       )}
     </>

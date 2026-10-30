@@ -1,5 +1,14 @@
 "use client";
 import dynamic from "next/dynamic";
+import LearningHome from "./learning-home";
+import {
+  TEXTBOOKS,
+  DEFAULT_TEXTBOOK,
+  textbook,
+  textbookTopic,
+  topicSuggestions,
+  textbookSearch,
+} from "@/lib/textbooks.mjs";
 import type { BookContext } from "./book-library";
 const BookLibrary = dynamic(() => import("./book-library"), {
   ssr: false,
@@ -88,10 +97,10 @@ import type {
   RecordValue,
 } from "@/lib/types";
 const nav = [
-  ["/dashboard", "Overview", LayoutDashboard],
-  ["/learn", "My learning", BookOpen],
+  ["/dashboard", "Home", LayoutDashboard],
+  ["/learn", "Textbooks & topics", BookOpen],
   ["/dreamverse", "Dreamverse", Orbit],
-  ["/practice", "Practice arena", Target],
+  ["/practice", "Practice", Target],
   ["/revision", "Revision", CalendarDays],
   ["/flashcards", "Flashcards", Layers],
   ["/downloads", "Downloads", Download],
@@ -272,7 +281,7 @@ export default function DreamersApp() {
     [prefs, setPrefs] = useState<RecordValue>({
       id: "profile",
       name: "Explorer",
-      class: "XI",
+      class: "XII",
       theme: "dark",
     }),
     [online, setOnline] = useState(true),
@@ -297,13 +306,22 @@ export default function DreamersApp() {
     [reveal, setReveal] = useState(false),
     [shortAnswers, setShortAnswers] = useState<Record<string, string>>({}),
     [quizDone, setQuizDone] = useState(false);
+  const [studyBook, setStudyBook] = useState(DEFAULT_TEXTBOOK),
+    [aiContextKind, setAiContextKind] = useState("textbook"),
+    [aiTextbook, setAiTextbook] = useState(DEFAULT_TEXTBOOK),
+    [aiChapter, setAiChapter] = useState(
+      textbook(DEFAULT_TEXTBOOK)!.chapters[0].id,
+    ),
+    [allowEnrichment, setAllowEnrichment] = useState(false);
   const [bookContext, setBookContext] = useState<BookContext | null>(null),
     [aiPack, setAiPack] = useState("cells-starter"),
     [aiTopic, setAiTopic] = useState("cell-basics"),
     [language, setLanguage] = useState("English"),
     [mode, setMode] = useState(modes[0]),
     [aiInput, setAiInput] = useState(""),
-    [chat, setChat] = useState<{ role: string; text: string }[]>([]),
+    [chat, setChat] = useState<
+      { role: string; text: string; enriched?: boolean }[]
+    >([]),
     [aiBusy, setAiBusy] = useState(false),
     [aiConfigured, setAiConfigured] = useState(false),
     [noteText, setNoteText] = useState(""),
@@ -356,6 +374,38 @@ export default function DreamersApp() {
     if (p.length)
       setStorageBytes(new TextEncoder().encode(JSON.stringify(p[0])).length);
   }, []);
+  useEffect(() => {
+    db.get<RecordValue>("settings", "study-book")
+      .then((value) => {
+        if (value && textbook(String(value.bookId)))
+          setStudyBook(String(value.bookId));
+      })
+      .catch(() => {});
+  }, []);
+  function chooseStudyBook(id: string) {
+    if (!textbook(id)) return;
+    setStudyBook(id);
+    void db
+      .put("settings", { id: "study-book", bookId: id, at: Date.now() })
+      .catch(() => say("Book selection could not be saved."));
+  }
+  function askTextbook(id: string, topic: string, extra = false) {
+    const book = textbook(id);
+    const chapter = textbookTopic(id, topic);
+    if (!book || !chapter) return;
+    setAiContextKind("textbook");
+    setChat([]);
+    setAiTextbook(id);
+    setAiChapter(topic);
+    setAllowEnrichment(extra);
+    setBookContext(null);
+    setAiInput(
+      extra
+        ? `Explain ${chapter.title} simply, then add a clearly labelled related teaching story to help me remember it.`
+        : `Explain ${chapter.title} in simple words, focused on this textbook chapter.`,
+    );
+    navigate("/ai-tutor");
+  }
   const navigate = useCallback((url: string) => {
     history.pushState({}, "", url);
     setPath(url.split("?")[0]);
@@ -621,7 +671,9 @@ export default function DreamersApp() {
           mode: selectedMode,
           bookContext: bookContext || undefined,
           packId: aiPack,
-          topic: aiTopic,
+          textbookId: aiContextKind === "textbook" ? aiTextbook : undefined,
+          allowEnrichment,
+          topic: aiContextKind === "textbook" ? aiChapter : aiTopic,
           previous:
             chat
               .filter((c) => c.role === "assistant")
@@ -632,7 +684,10 @@ export default function DreamersApp() {
       const value = await r.json();
       if (!r.ok)
         throw new Error(value.error || "The AI teacher is unavailable.");
-      setChat((c) => [...c, { role: "assistant", text: value.answer }]);
+      setChat((c) => [
+        ...c,
+        { role: "assistant", text: value.answer, enriched: allowEnrichment },
+      ]);
       await db.put("notes", {
         id: crypto.randomUUID(),
         kind: "ai",
@@ -699,291 +754,18 @@ export default function DreamersApp() {
         <h2>{initPhase}</h2>
       </div>
     );
-  else if (path === "/dashboard" || path === "/")
+  else if (["/dashboard", "/", "/learn", "/subjects"].includes(path))
     content = (
-      <>
-        <div className="greeting">
-          <div>
-            <span className="eyebrow">A LITTLE CURIOSITY GOES A LONG WAY</span>
-            <h1>
-              Your next discovery awaits<span className="blue">.</span>
-            </h1>
-            <p>Big dreams start with small steps. Let’s take one today.</p>
-          </div>
-          <span className="session-badge">
-            <span /> Your own pace. Your own adventure.
-          </span>
-        </div>
-        <div className="dashboard-top">
-          <section className="hero panel">
-            <div className="hero-content">
-              <span className="hero-kicker">
-                <span /> WELCOME TO YOUR LEARNING UNIVERSE
-              </span>
-              <h2>
-                Don’t just study it.
-                <br />
-                <span>Understand it.</span>
-              </h2>
-              <p>
-                Explore tiny cells. Ask big questions.
-                <br />
-                Turn “I don’t get it” into “I’ve got this.”
-              </p>
-              {link(
-                continueLesson ? lessonUrl(continueLesson) : "/learn",
-                <>
-                  Let’s explore <ArrowRight size={17} />
-                </>,
-                "primary",
-              )}
-              <div className="hero-foot">
-                <CloudOff size={15} />
-                <span>Learn anywhere. Even without internet.</span>
-              </div>
-            </div>
-            <IconPlanet />
-            <div className="hero-coordinates">01 / LIFE WORLD</div>
-          </section>
-          <section className="mission panel">
-            <div className="section-label">
-              <span>
-                <Flag size={16} /> YOUR NEXT MISSION
-              </span>
-              <span className="mini-icon">✦</span>
-            </div>
-            <div className="mission-art">
-              <Target size={37} strokeWidth={1.4} />
-            </div>
-            <h3>
-              {state.completed.length
-                ? "Keep the curiosity going"
-                : "Make your first discovery"}
-            </h3>
-            <p>
-              {state.completed.length
-                ? "Take the next lesson, then test what you remember."
-                : "Meet the tiny building blocks that make life possible."}
-            </p>
-            <div className="mission-meta">
-              <span>
-                <Clock size={14} /> 4–6 min
-              </span>
-              <span className="xp">
-                <Zap size={14} /> +25 XP first time
-              </span>
-            </div>
-            {link(
-              continueLesson ? lessonUrl(continueLesson) : "/learn",
-              <>
-                Start mission <ArrowRight size={16} />
-              </>,
-              "secondary full",
-            )}
-          </section>
-        </div>
-        <div className="stat-row">
-          <div className="stat">
-            <span className="stat-icon blue-bg">
-              <Zap size={20} />
-            </span>
-            <div>
-              <strong>
-                {state.xp}
-                <small> XP</small>
-              </strong>
-              <span>Knowledge earned</span>
-            </div>
-          </div>
-          <div className="stat">
-            <span className="stat-icon green-bg">
-              <BookOpen size={20} />
-            </span>
-            <div>
-              <strong>
-                {totalState.completed.length}
-                <small>
-                  {" "}
-                  / {PACKS.reduce((n, p) => n + p.lessonIds.length, 0)}
-                </small>
-              </strong>
-              <span>Lessons discovered</span>
-            </div>
-          </div>
-          <div className="stat">
-            <span className="stat-icon purple-bg">
-              <Target size={20} />
-            </span>
-            <div>
-              <strong>
-                {state.accuracy === null ? "—" : state.accuracy + "%"}
-                <small>{state.attempts ? "" : " yet"}</small>
-              </strong>
-              <span>
-                {state.attempts
-                  ? `${state.attempts} practice attempts`
-                  : "Your practice starts here"}
-              </span>
-            </div>
-          </div>
-          <div className="stat">
-            <span className="stat-icon amber-bg">
-              <Trophy size={20} />
-            </span>
-            <div>
-              <strong>{state.level}</strong>
-              <span>Your explorer level</span>
-            </div>
-          </div>
-        </div>
-        <div className="section-heading">
-          <div>
-            <h2>Choose your world</h2>
-            <p>Different subjects. Endless possibilities.</p>
-          </div>
-          {link(
-            "/subjects",
-            <>
-              All subjects <ArrowRight size={15} />
-            </>,
-            "text-link",
-          )}
-        </div>
-        <div className="subject-grid">
-          {subjects.map((s) => (
-            <a
-              href={`/learn/${s.id}`}
-              onClick={(e) => {
-                e.preventDefault();
-                navigate(`/learn/${s.id}`);
-              }}
-              className={`subject-card ${s.color}`}
-              key={s.id}
-            >
-              <div className="subject-top">
-                <span className="subject-icon">
-                  <s.icon size={27} strokeWidth={1.6} />
-                </span>
-                <span className="world-label">{s.world.toUpperCase()}</span>
-                <ChevronRight size={17} />
-              </div>
-              <h3>{s.name}</h3>
-              <p>{s.caption}</p>
-              <div className="subject-footer">
-                <span>{s.count}</span>
-                <span className={s.available ? "available" : "planned"}>
-                  {s.available ? "Explore now" : "Coming later"}
-                </span>
-              </div>
-              <div className="subject-decoration">
-                <s.icon size={112} strokeWidth={0.7} />
-              </div>
-            </a>
-          ))}
-        </div>
-        <div className="dashboard-bottom">
-          <section className="panel journey">
-            <div className="section-heading">
-              <div>
-                <h2>Your first adventure</h2>
-                <p>Cells & membranes · Biology foundations</p>
-              </div>
-              {link(
-                "/learn/biology/cells",
-                <ArrowRight size={19} />,
-                "circle-button",
-              )}
-            </div>
-            <div className="journey-track">
-              {(pack?.lessons || []).map((l, i) => (
-                <a
-                  href={lessonUrl(l)}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate(lessonUrl(l));
-                  }}
-                  className={`journey-stop ${state.completed.includes(l.id) ? "done" : ""}`}
-                  key={l.id}
-                >
-                  <span>
-                    {state.completed.includes(l.id) ? (
-                      <Check size={19} />
-                    ) : (
-                      i + 1
-                    )}
-                  </span>
-                  <b>
-                    {["Cell basics", "Organelles", "Membranes", "Osmosis"][i]}
-                  </b>
-                  <small>{l.minutes} min</small>
-                </a>
-              ))}
-            </div>
-            <div className="progress-line">
-              <span style={{ width: progress + "%" }} />
-            </div>
-            <div className="between muted tiny">
-              <span>{state.completed.length} of 4 lessons completed</span>
-              <span>{progress}% explored</span>
-            </div>
-          </section>
-          <section className="zero-card">
-            <div className="zero-icon">
-              <Sparkles size={23} />
-            </div>
-            <span className="eyebrow">A FRESH START</span>
-            <h3>
-              “I know nothing.”
-              <br />
-              That’s a great place to start.
-            </h3>
-            <p>No judgement. Just a small plan and your first step.</p>
-            {link(
-              "/exams",
-              <>
-                Start from zero <ArrowRight size={16} />
-              </>,
-              "text-link",
-            )}
-          </section>
-        </div>
-      </>
-    );
-  else if (path === "/learn" || path === "/subjects")
-    content = (
-      <>
-        {heading(
-          "YOUR LEARNING LIBRARY",
-          "Find your next “aha!” moment.",
-          "Explore original Biology, Chemistry and Physics foundation packs. Official Punjab edition mapping remains pending.",
-        )}
-        <div className="subject-grid">
-          {subjects.map((s) => (
-            <div className={`subject-card ${s.color}`} key={s.id}>
-              <s.icon size={32} />
-              <h2>{s.name}</h2>
-              <p>{s.caption}</p>
-              {link(
-                `/learn/${s.id}`,
-                s.available ? "Explore chapter →" : "View curriculum status →",
-                "text-link",
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="panel notice">
-          <ShieldCheck />
-          <div>
-            <h3>Clarity before coverage.</h3>
-            <p>
-              This release teaches original foundation concepts. It does not
-              claim to cover a verified textbook edition or all examination
-              questions. Compulsory subjects and Class XI/XII textbook mapping
-              are in the roadmap.
-            </p>
-          </div>
-        </div>
-      </>
+      <LearningHome
+        name={String(prefs.name || "Explorer")}
+        xp={totalState.xp}
+        completed={totalState.completed.length}
+        view={path === "/learn" || path === "/subjects" ? "learn" : "home"}
+        bookId={studyBook}
+        onBookChange={chooseStudyBook}
+        onNavigate={navigate}
+        onAsk={askTextbook}
+      />
     );
   else if (routeMeta && routeMeta.subject !== "biology")
     content = (
@@ -997,6 +779,9 @@ export default function DreamersApp() {
         navigate={navigate}
         speak={speak}
         onAsk={(id, topic) => {
+          setAiContextKind("foundation");
+          setAllowEnrichment(false);
+          setChat([]);
           setAiPack(id);
           setAiTopic(topic);
           setAiInput("Help me understand this concept.");
@@ -1111,6 +896,9 @@ export default function DreamersApp() {
               <button
                 className="secondary full"
                 onClick={() => {
+                  setAiContextKind("foundation");
+                  setAllowEnrichment(false);
+                  setChat([]);
                   setAiPack("cells-starter");
                   setAiTopic(currentLesson.id);
                   setAiInput(`Help me understand ${currentLesson.subtitle}.`);
@@ -1713,17 +1501,33 @@ export default function DreamersApp() {
               <FileDown size={16} /> Export a backup
             </button>
             <p className="fineprint">
-              Browser storage may be cleared by your browser or device. PDF files are excluded from JSON backups; export them separately from Textbook PDFs. Export
-              important work.
+              Browser storage may be cleared by your browser or device. PDF
+              files are excluded from JSON backups; export them separately from
+              Textbook PDFs. Export important work.
             </p>
           </div>
         </div>
       </>
     );
-  else if (path === "/books")
+  else if (path === "/books" || path.startsWith("/books/"))
     content = (
       <BookLibrary
-        onAsk={(context, subject) => {
+        requestedId={path.split("/")[2]}
+        requestedPage={Number(path.split("/")[3]) || 1}
+        onNavigate={navigate}
+        onAskTopic={askTextbook}
+        onAsk={(context, subject, catalogId) => {
+          if (catalogId && textbook(catalogId)) {
+            setAiContextKind("textbook");
+            setAiTextbook(catalogId);
+            const book = textbook(catalogId)!;
+            setAiChapter(
+              [...book.chapters].reverse().find((t) => t.page <= context.page)
+                ?.id || book.chapters[0].id,
+            );
+          } else setAiContextKind("foundation");
+          setAllowEnrichment(false);
+          setChat([]);
           setBookContext(context);
           const meta = packForSubject(subject) || packMeta("cells-starter")!;
           setAiPack(meta.id);
@@ -1782,11 +1586,16 @@ export default function DreamersApp() {
                   <h2>Understanding starts with a question.</h2>
                   <p>What would you like to figure out today?</p>
                   <div className="suggestions">
-                    {[
-                      "Why do plant cells need mitochondria?",
-                      "Explain osmosis with a real-life example",
-                      "What happens at dynamic equilibrium?",
-                    ].map((s) => (
+                    {(aiContextKind === "textbook"
+                      ? topicSuggestions(aiTextbook)
+                      : installedPacks
+                          .find((p) => p.id === aiPack)
+                          ?.lessons.slice(0, 3)
+                          .map(
+                            (l) =>
+                              `Explain ${l.subtitle.toLowerCase()} simply.`,
+                          ) || []
+                    ).map((s) => (
                       <button onClick={() => setAiInput(s)} key={s}>
                         {s}
                         <ArrowRight size={15} />
@@ -1804,6 +1613,11 @@ export default function DreamersApp() {
                           ? "YOU"
                           : "SERVICE STATUS"}
                     </small>
+                    {c.role === "assistant" && c.enriched && (
+                      <span className="content-badge">
+                        Requested extra context · not an exam-scope claim
+                      </span>
+                    )}
                     <p>{c.text}</p>
                     {c.role === "assistant" && (
                       <button
@@ -1878,46 +1692,125 @@ export default function DreamersApp() {
                 ))}
               </select>
             </label>
-            <span className="eyebrow">YOUR CURRENT CONTEXT</span>
+            <span className="eyebrow">YOUR LEARNING SOURCE</span>
             <label className="field">
-              Subject pack
+              Source type
               <select
-                value={aiPack}
+                value={aiContextKind}
                 onChange={(e) => {
-                  setAiPack(e.target.value);
-                  setAiTopic(packMeta(e.target.value)!.lessonIds[0]);
+                  setAiContextKind(e.target.value);
+                  setBookContext(null);
                 }}
               >
-                {PACKS.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.subject}: {p.title}
-                  </option>
-                ))}
+                <option value="textbook">Supplied Class XII textbooks</option>
+                <option value="foundation">
+                  Original foundation practice (unmapped)
+                </option>
               </select>
             </label>
-            <label className="field">
-              Topic
-              <select
-                value={aiTopic}
-                onChange={(e) => setAiTopic(e.target.value)}
-              >
-                {(
-                  installedPacks.find((p) => p.id === aiPack)?.lessons ||
-                  packMeta(aiPack)!.lessonIds.map((id) => ({
-                    id,
-                    subtitle: id,
-                  }))
-                ).map((l) => (
-                  <option value={l.id} key={l.id}>
-                    {l.subtitle}
-                  </option>
-                ))}
-              </select>
+            {aiContextKind === "textbook" ? (
+              <>
+                <label className="field">
+                  Textbook
+                  <select
+                    value={aiTextbook}
+                    onChange={(e) => {
+                      const id = e.target.value;
+                      setAiTextbook(id);
+                      setAiChapter(textbook(id)!.chapters[0].id);
+                      setBookContext(null);
+                    }}
+                  >
+                    {TEXTBOOKS.map((b) => (
+                      <option key={b.id} value={b.id}>
+                        {b.title} · XII
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="field">
+                  Chapter
+                  <select
+                    value={aiChapter}
+                    onChange={(e) => {
+                      setAiChapter(e.target.value);
+                      setBookContext(null);
+                      setChat([]);
+                    }}
+                  >
+                    {textbook(aiTextbook)!.chapters.map((t) => (
+                      <option key={t.id} value={t.id}>
+                        {t.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <p className="fineprint">
+                  Suggestions use headings checked in your supplied PDF.
+                  Official current exam exclusions remain unverified. Without a
+                  selected page excerpt, AI uses the chapter title and its own
+                  knowledge.
+                </p>
+              </>
+            ) : (
+              <>
+                <label className="field">
+                  Subject pack
+                  <select
+                    value={aiPack}
+                    onChange={(e) => {
+                      setAiPack(e.target.value);
+                      setAiTopic(packMeta(e.target.value)!.lessonIds[0]);
+                    }}
+                  >
+                    {PACKS.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.subject}: {p.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="field">
+                  Topic
+                  <select
+                    value={aiTopic}
+                    onChange={(e) => setAiTopic(e.target.value)}
+                  >
+                    {(
+                      installedPacks.find((p) => p.id === aiPack)?.lessons ||
+                      packMeta(aiPack)!.lessonIds.map((id) => ({
+                        id,
+                        subtitle: id,
+                      }))
+                    ).map((l) => (
+                      <option key={l.id} value={l.id}>
+                        {l.subtitle}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </>
+            )}
+            <label
+              className={`enrichment-control ${allowEnrichment ? "enabled" : ""}`}
+            >
+              <input
+                type="checkbox"
+                checked={allowEnrichment}
+                onChange={(e) => setAllowEnrichment(e.target.checked)}
+              />
+              <span>
+                <b>Stories & extra context</b>
+                <small>
+                  Optional history, related ideas and memorable stories. Clearly
+                  labelled outside textbook scope.
+                </small>
+              </span>
             </label>
-            <p>
-              {packMeta(aiPack)?.title}
-              <br />
-              Class {String(prefs.class)} foundations
+            <p className="scope-note">
+              {allowEnrichment
+                ? "Extra context enabled by you. It does not become exam syllabus."
+                : "Textbook focus is on. Extra topics stay off until you choose them."}
             </p>
             <hr />
             <h4>Offline alternatives</h4>
@@ -1943,82 +1836,78 @@ export default function DreamersApp() {
       </>
     );
   else if (path === "/search") {
-    const search = searchText.toLowerCase().trim();
-    const synonyms: Record<string, string> = {
-      "plants use to make food": "photosynthesis",
-      powerhouse: "mitochondria",
-      "protein factory": "ribosomes",
-      "water movement": "osmosis",
-    };
-    const normalized =
-      Object.entries(synonyms).find(([key]) => search.includes(key))?.[1] ||
-      search;
-    const results =
-      installedPacks
-        .flatMap((p) => p.lessons)
-        .filter((l) =>
-          [l.title, l.subtitle, ...l.paragraphs, l.simple]
-            .join(" ")
-            .toLowerCase()
-            .includes(normalized),
-        ) || [];
+    const matches = textbookSearch(searchText);
     content = (
       <>
-        {heading(
-          "FIND YOUR NEXT CONNECTION",
-          "What are you curious about?",
-          "Search your downloaded learning content. This release uses local text search with a small synonym dictionary.",
-        )}
+        <div className="page-heading">
+          <span className="eyebrow">YOUR TEXTBOOK MAP</span>
+          <h1>Find the chapter. Follow the idea.</h1>
+          <p>
+            Search headings checked in the supplied Class XII books. For full
+            PDF text, use your indexed local bookshelf.
+          </p>
+        </div>
         <form
-          className="big-search panel"
+          className="panel big-search"
           onSubmit={(e) => {
             e.preventDefault();
             setSearchText(query);
           }}
         >
-          <Search size={24} />
+          <Search size={22} />
           <input
-            aria-label="Search downloaded content"
+            aria-label="Search textbook chapters"
             value={query}
+            placeholder="Try immunity, optics or Python…"
             onChange={(e) => {
               setQuery(e.target.value);
               setSearchText(e.target.value);
             }}
-            placeholder="Try “water movement” or “ribosomes”…"
           />
-          <span className="pill">Local search</span>
+          <span className="pill">Textbook headings</span>
         </form>
-        <p className="muted tiny">
-          {online ? "Online" : "Offline"} · downloaded content only · semantic
-          AI search is planned
-        </p>
         <div className="lesson-list">
-          {(search ? results : installedPacks.flatMap((p) => p.lessons)).map(
-            (l) => (
-              <div className="panel search-result" key={l.id}>
-                <div>
-                  <span className="eyebrow">
-                    {packForLesson(l.id)?.subject.toUpperCase()} /{" "}
-                    {l.subtitle.toUpperCase()}
-                  </span>
-                  <h3>{l.title}</h3>
-                  <p>{l.objective}</p>
-                </div>
-                {link(lessonUrl(l), <ArrowRight size={20} />, "circle-button")}
+          {(searchText.trim()
+            ? matches
+            : TEXTBOOKS.flatMap((book) =>
+                book.chapters.map((topic) => ({
+                  ...topic,
+                  bookId: book.id,
+                  bookTitle: book.title,
+                  subject: book.subject,
+                })),
+              )
+          ).map((t) => (
+            <div className="panel search-result" key={t.id}>
+              <div>
+                <span className="eyebrow">
+                  {t.bookTitle} · CLASS XII · PDF PAGE {t.page}
+                </span>
+                <h3>{t.title}</h3>
               </div>
-            ),
-          )}
-          {search && !results.length && (
+              <button
+                className="circle-button"
+                aria-label={`Read ${t.title}`}
+                onClick={() => navigate(`/books/${t.bookId}/${t.page}`)}
+              >
+                <ArrowRight size={19} />
+              </button>
+            </div>
+          ))}
+          {searchText.trim() && !matches.length && (
             <div className="panel empty">
-              <Search size={34} />
-              <h3>No downloaded lesson matched that phrase.</h3>
+              <Search size={32} />
+              <h3>No supplied textbook heading matched.</h3>
               <p>
-                Try a shorter keyword, such as “water”, “cell”, “diffusion” or
-                “protein”.
+                Try a shorter keyword or search selectable PDF text on your
+                local shelf.
               </p>
             </div>
           )}
         </div>
+        <button className="secondary" onClick={() => navigate("/books")}>
+          Search saved PDF text <BookOpen size={17} />
+        </button>
       </>
     );
   } else if (path === "/progress")
@@ -2691,7 +2580,7 @@ export default function DreamersApp() {
                       setPrefs({
                         id: "profile",
                         name: "Explorer",
-                        class: "XI",
+                        class: "XII",
                         theme: "dark",
                       });
                       await refresh();
@@ -2777,22 +2666,24 @@ export default function DreamersApp() {
         <div className="panel prose">
           <h2>A small, working beginning.</h2>
           <p>
-            This release includes original Biology, Chemistry and Physics foundation chapters,
-            question practice, offline storage, flashcards, notes and learning
-            evidence. Read a lesson, recall what you understood, practice, then
-            revisit mistakes.
+            This release includes original Biology, Chemistry and Physics
+            foundation chapters, question practice, offline storage, flashcards,
+            notes and learning evidence. Read a lesson, recall what you
+            understood, practice, then revisit mistakes.
           </p>
           <h3>What is available today?</h3>
           <p>
             Guest learning, offline starter pack, first-completion XP, local
             search, self-checked written answers, revision scheduling and
-            lightweight interactive science illustrations. Full PDFs imported from your device support local reading, text indexing, search and selected-page AI references.
+            lightweight interactive science illustrations. Full PDFs imported
+            from your device support local reading, text indexing, search and
+            selected-page AI references.
           </p>
           <h3>What needs further setup?</h3>
           <p>
             Online AI needs owner credentials and a durable quota service. Cloud
-            accounts, verified Punjab textbook mapping, compulsory-subject lessons,
-            administration and semantic search are not yet active.
+            accounts, verified Punjab textbook mapping, compulsory-subject
+            lessons, administration and semantic search are not yet active.
           </p>
           <h3>Learning responsibly</h3>
           <p>
@@ -3053,7 +2944,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.2.1 · Offline textbook shelf</span>
+              <span>v0.3.0 · Textbook-first learning</span>
             </div>
           </footer>
         </main>
@@ -3082,6 +2973,9 @@ export default function DreamersApp() {
           className="floating-ai"
           onClick={() => {
             if (currentLesson) {
+              setAiContextKind("foundation");
+              setAllowEnrichment(false);
+              setChat([]);
               setAiPack("cells-starter");
               setAiTopic(currentLesson.id);
             }

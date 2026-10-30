@@ -2,7 +2,7 @@
 
 Updated: 2026-10-30
 
-Current milestone: 0.2.1 guest offline science library and personal full-PDF reader. Milestones 1–4 have working foundation scope. Milestone 5 has a real server integration awaiting owner configuration.
+Current milestone: 0.3.0 textbook-first navigation, supplied-book catalogue and visual refresh. Milestones 1–4 have working foundation scope. Milestone 5 has a real server integration awaiting owner configuration.
 
 ## Completed
 
@@ -33,3 +33,13 @@ Original science content awaits educator review and official XI/XII mapping. Off
 Required environment: none for guest learning. AI: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN; AI_BASE_URL optional. Configure secrets in Vercel, never chat or GitHub. Students never supply keys.
 
 Exact next task: inspect any textbook embed codes supplied by the owner and verify their publisher, edition, embedding permission and actual PDF download availability. An iframe alone does not provide offline bytes or AI text access. Verify permitted full textbook URLs, or accept publisher/user-provided PDFs; configure owner AI and durable quota service, then verify a real response. Select/create a dedicated Dreamers Supabase project only with confirmed organization/cost; do not reuse another project's database. Read checkpoint documents before further edits.
+
+## 0.3.0 checkpoint (current work)
+
+Added three unique owner-supplied XII textbook metadata entries (Biology 252 pages, Physics 186, Computer Science 147) with exact SHA-256 fingerprints and 31 checked chapter headings. No exact duplicate attachments were present. Biology starts at chapter 13 and has no cover/edition page; it is labelled a supplied chapter collection, not a verified complete edition. Computer is an image-only scan. Physics text is an OCR layer and can contain recognition errors. Current board exam exclusions are unverified.
+
+Full public PDF distribution is deliberately not enabled: Computer PDF page 5 and Physics page 2 carry explicit reproduction restrictions. The application supports private batch device import, automatic recognition by file hash, duplicate skipping and chapter navigation. Existing imported copies can be enriched with catalogue metadata without duplicating their Blob. Actual files are not committed to the public repository or automatically downloaded.
+
+Home/learn now use colorful subject covers, a clear book→chapter→read/ask path, gentle decorative motion, reduced-motion support and distinct original foundation practice. Chapter search and tutor suggestions use only selected supplied-book headings. AI defaults to textbook focus, offers explicit story/extra-context opt-in, labels extra content as outside textbook scope, and includes scope in validation/cache identity. This policy is implemented; real model compliance remains unverified until owner AI setup.
+
+40 tests, TypeScript and production build passed before release. Local preview again stopped at its non-hydrated shell without an application console error; live browser QA is required after deployment. Latest previously verified production application is 0.2.1; this section is updated with the new release evidence after deployment. Exact next step: deploy 0.3.0 preview/production, verify textbook/topic navigation and scope controls, then import the supplied PDFs privately in the test browser and verify duplicate recognition/read access.

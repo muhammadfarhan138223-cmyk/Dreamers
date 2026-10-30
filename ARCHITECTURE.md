@@ -41,3 +41,11 @@ PDF.js 6.4.299 is pinned and lazily loaded only when the local reader opens. Bui
 `books` holds full Blobs, digest, user-labelled class/subject/edition and reading/index progress. `bookPages` holds extracted text keyed by book/page with a bookId index. Metadata patches use a single read/write transaction to avoid index/reading-position lost updates. Removal deletes the chosen book and its page index atomically. JSON backups exclude books/pages and include only a book manifest/notice; file export is separate. Whole-device deletion clears PDF stores too.
 
 Imported content is never labelled officially verified. Local search uses selectable text, with no OCR. Explicit selected-page AI context is bounded and validated server-side, included in the cache key, and sent as untrusted user reference data. No whole-book upload, embedding service, public book hosting or copyrighted book redistribution is implemented.
+
+## Textbook-first catalogue and scope
+
+`lib/textbooks.mjs` publishes only metadata and checked chapter headings from three owner-supplied PDFs. Exact hashes identify renamed duplicate downloads and attach class/subject/page metadata during private local import. Raw book bytes remain device-local; public redistribution is not configured because supplied copies contain reproduction restrictions. Computer's scan has no OCR implementation. A source catalogue is not an official current examination syllabus.
+
+Home and /learn share LearningHome with original CSS/SVG subject art, actual local learning totals and separate source labels. /books/[catalogueId]/[pdfPage] opens a matched local Blob or prompts for its import; chapter page links are independent of printed-page numbering. /search searches catalogue chapter headings. Foundation packs keep their stable routes and progress.
+
+Tutor requests may select a catalogue ID/chapter ID or an original foundation pack/topic. Server validation rejects cross-book topic IDs and non-boolean enrichment consent. Textbook focus is the default; explicit enrichment enables related stories/history labelled outside textbook scope. Scope/source are part of the cache identity. The tutor has only chapter metadata and optional selected excerpt, not the full uploaded library. Real model behavior remains setup-dependent.

@@ -25,3 +25,11 @@ Added optional original Chemistry and Physics packs: 12 lessons, 36 MCQs and 9 w
 - Added actual PDF parsing, Blob storage/deletion, multilingual search, backup and offline-engine tests.
 
 0.2.1 release verification: production READY, 36 tests/typecheck/build and live HTTP regression passed. Browser import/render/index/search/resume/AI-context and byte-identical PDF export passed; no official PDF book file or live provider response is claimed.
+
+## 0.3.0 — Textbook-first learning studio
+
+- Redesigned home/learn with colorful subject covers, a clearer chapter-first structure, subtle motion, responsive layouts and reduced-motion support.
+- Registered three unique supplied textbook hashes and 31 source-checked chapter headings; exact edition and current exam exclusions remain unverified.
+- Added private batch PDF import, automatic matching/classification and duplicate skipping, with deep chapter/page navigation. No restricted textbook binaries are publicly redistributed.
+- Replaced generic tutor/search suggestions with selected-book headings, added explicit extra-context/story opt-in and source/scope validation. Live AI setup is still pending.
+- Added catalogue identity, cross-book topic and default/opt-in scope tests; 40 automated tests pass.

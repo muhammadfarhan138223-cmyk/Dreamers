@@ -64,6 +64,31 @@ assert.equal((await post(valid, "https://unrelated.test")).status, 403);
 assert.equal((await post({ ...valid, question: "" })).status, 400);
 assert.equal((await post("not json")).status, 400);
 assert.equal((await post(valid, base, "text/plain")).status, 415);
+const textbookRequest = {
+  ...valid,
+  textbookId: "biology-xii-supplied",
+  topic: "bio12-1",
+  allowEnrichment: false,
+};
+assert.equal(
+  (await post({ ...textbookRequest, topic: "phy12-1" })).status,
+  400,
+);
+assert.equal(
+  (await post({ ...textbookRequest, allowEnrichment: "true" })).status,
+  400,
+);
+assert.equal(
+  (await post({ ...textbookRequest, textbookId: "invented" })).status,
+  400,
+);
+if (!health.aiConfigured) {
+  assert.equal((await post(textbookRequest)).status, 503);
+  assert.equal(
+    (await post({ ...textbookRequest, allowEnrichment: true })).status,
+    503,
+  );
+}
 const reference = {
   title: "QA original",
   page: 1,
