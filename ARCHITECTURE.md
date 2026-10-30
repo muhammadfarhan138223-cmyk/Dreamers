@@ -4,7 +4,7 @@ Next.js 16 App Router, React 19 and TypeScript; Tailwind 4 with a compact origin
 
 ## Local-first boundary
 
-`dreamers-local` IndexedDB version 1 has `packs`, `events`, `queue`, `notes`, `cards`, `settings` stores. Activity and pending queue entries are committed in the same transaction. Lesson IDs are stable and first-correct rewards are derived from unique question IDs: repeating activities cannot generate additional XP. Attempts keep full local history; latest answers identify unresolved mistakes. Atomic transaction completion is awaited before success UI.
+`dreamers-local` IndexedDB version 2 has `packs`, `events`, `queue`, `notes`, `cards`, `settings`, `assessments` stores. Activity and pending queue entries are committed in the same transaction. Lesson IDs are stable and first-correct rewards are derived from unique question IDs: repeating activities cannot generate additional XP. Attempts keep full local history; latest answers identify unresolved mistakes. Atomic transaction completion is awaited before success UI.
 
 The public shell cache stores the HTML root and its referenced Next.js static chunks. Navigations use the network when available and the cached public shell when offline. AI, account and admin endpoints are never cached. The initial compact original pack is included in shell preparation and materialized to IndexedDB on first use. Optional packs will require explicit download. Pack removal preserves progress.
 
@@ -25,3 +25,7 @@ Supabase PostgreSQL + Auth are intended for a dedicated project. Do not reuse un
 ## Recovery
 
 JSON backups are schema/size checked and merged in one IndexedDB transaction. Newer local notes survive older imports; events retain unique IDs and restored events are queued. Pack bytes from backups are ignored; reinstallation uses the app-owned resource. The starter seed marker prevents user-removed packs from silently reappearing on reload.
+
+## Chapter assessment checkpoint
+
+Version 2 adds the assessments store without modifying existing stores. Chapter runs persist shuffled question IDs, answers, navigation index and an optional absolute deadline. Finalization writes the completed run and idempotent per-question event/queue records in a single transaction. A pending answer write is awaited before scoring to avoid timer/selection races. An unfinished run resumes after reload. Test scores describe the starter chapter, never full-syllabus readiness.

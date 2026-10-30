@@ -56,6 +56,7 @@ import {
   Lock,
   Plus,
 } from "lucide-react";
+import ChapterChallenge from "@/components/chapter-challenge";
 import { validateBackup } from "@/lib/backup.mjs";
 import * as db from "@/lib/db";
 import { summarize, dueAt } from "@/lib/progress.mjs";
@@ -243,6 +244,7 @@ export default function DreamersApp() {
   const [path, setPath] = useState("/dashboard"),
     [pack, setPack] = useState<Pack | null>(null),
     [events, setEvents] = useState<LearningEvent[]>([]),
+    [assessments, setAssessments] = useState<RecordValue[]>([]),
     [notes, setNotes] = useState<RecordValue[]>([]),
     [cards, setCards] = useState<RecordValue[]>([]),
     [prefs, setPrefs] = useState<RecordValue>({
@@ -313,6 +315,11 @@ export default function DreamersApp() {
     const profile = s.find((v) => v.id === "profile");
     if (profile) setPrefs(profile);
     setPlan(s.find((v) => v.id === "plan") || null);
+    setAssessments(
+      (await db.list<RecordValue>("assessments")).filter(
+        (a) => a.status === "complete",
+      ),
+    );
     if (p.length)
       setStorageBytes(new TextEncoder().encode(JSON.stringify(p[0])).length);
   }, []);
@@ -439,6 +446,7 @@ export default function DreamersApp() {
   const link = (url: string, label: ReactNode, cls = "") => (
     <a
       href={url}
+      key={url}
       className={cls}
       aria-label={
         url === "/profile"
@@ -487,7 +495,7 @@ export default function DreamersApp() {
         const idx = pack.lessons.findIndex((l) => l.id === id);
         if (idx < pack.lessons.length - 1)
           navigate(`/learn/biology/cells/${pack.lessons[idx + 1].id}`);
-        else navigate("/practice/biology");
+        else navigate("/challenge/biology/cells");
       }
     });
   }
@@ -1171,7 +1179,7 @@ export default function DreamersApp() {
             </div>
             <div className="panel between">
               <div>
-                <h3>Ready for the chapter challenge?</h3>
+                <h3>Ready to put it together?</h3>
                 <p className="muted">
                   Practice 12 concepts with immediate explanations.
                 </p>
@@ -1189,6 +1197,37 @@ export default function DreamersApp() {
               past-paper items.
             </p>
           </>
+        )}
+      </>
+    );
+  else if (path === "/challenge/biology/cells")
+    content = (
+      <>
+        {heading(
+          "LIFE WORLD / CHAPTER CHALLENGE",
+          "Your discoveries, put together.",
+          "A saved assessment for the original Cells & membranes foundation chapter.",
+        )}
+        {!pack ? (
+          emptyPack
+        ) : state.completed.length < 4 ? (
+          <div className="panel empty">
+            <Lock size={42} />
+            <h2>Explore the four discoveries first.</h2>
+            <p>
+              The chapter challenge unlocks after all four lessons. Ordinary
+              practice is available anytime.
+            </p>
+            {link(
+              "/learn/biology/cells",
+              <>
+                Continue exploring <ArrowRight size={16} />
+              </>,
+              "primary",
+            )}
+          </div>
+        ) : (
+          <ChapterChallenge pack={pack} onSaved={refresh} />
         )}
       </>
     );
@@ -1506,13 +1545,13 @@ export default function DreamersApp() {
             ))}
             <div className="map-node boss">
               {link(
-                "/practice/biology",
+                "/challenge/biology/cells",
                 <>
                   <span>
                     <Trophy size={27} />
                   </span>
                   <b>The cell challenge</b>
-                  <small>12 questions · practice anytime</small>
+                  <small>12 questions · unlock after 4 lessons</small>
                 </>,
               )}
             </div>
@@ -1999,6 +2038,31 @@ export default function DreamersApp() {
           </div>
         </div>
         <section className="panel">
+          <h3>Chapter assessment history</h3>
+          {assessments.length ? (
+            assessments.map((a) => (
+              <div className="history-row" key={a.id}>
+                <span>
+                  Cells & membranes ·{" "}
+                  {String(
+                    (a.score as { correct: number; total: number }).correct,
+                  )}{" "}
+                  /{" "}
+                  {String(
+                    (a.score as { correct: number; total: number }).total,
+                  )}
+                </span>
+                <span className="muted">
+                  {new Date(Number(a.finishedAt)).toLocaleDateString()}
+                </span>
+              </div>
+            ))
+          ) : (
+            <p className="muted tiny">
+              Complete the four lessons to unlock a saved chapter challenge.
+            </p>
+          )}
+          <hr />
           <h3>Recent learning history</h3>
           {events.length ? (
             [...events]
@@ -2924,7 +2988,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.1.1 · Foundation release</span>
+              <span>v0.1.2 · Foundation release</span>
             </div>
           </footer>
         </main>

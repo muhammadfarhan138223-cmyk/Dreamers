@@ -69,3 +69,32 @@ test("backup restoration merges by record ID and preserves newer local notes", a
     1,
   );
 });
+test("completed assessment, evidence and pending queue commit together without duplicate replays", async () => {
+  const run = {
+    id: "assessment:test",
+    status: "complete",
+    packId: "cells-starter",
+    at: 100,
+  };
+  const evidence = [
+    {
+      id: "assessment:test:q1",
+      kind: "attempt",
+      target: "q1",
+      correct: true,
+      answer: 2,
+      at: 100,
+    },
+  ];
+  await db.finishAssessment(run, evidence);
+  await db.finishAssessment(run, evidence);
+  assert.equal(
+    (await db.list("assessments")).filter((r) => r.id === run.id).length,
+    1,
+  );
+  assert.equal(
+    (await db.list("events")).filter((e) => e.id === evidence[0].id).length,
+    1,
+  );
+  assert.ok((await db.list("queue")).some((e) => e.id === evidence[0].id));
+});

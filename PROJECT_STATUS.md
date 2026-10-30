@@ -12,11 +12,12 @@ Server AI route supports Groq or OpenAI-compatible chat completions, server-only
 
 ## Verification and commits
 
-19 automated tests, TypeScript and production build pass for hardening code. First release live HTTP checks passed, including PWA assets and AI authorization/validation. Live desktop lesson, bookmarking, completion, feedback, XP and reload persistence passed. See docs/VERIFICATION.md for exact coverage and limits.
-Latest verified deployed application commit: 63e0b9f2befaa0c884815c13ceb5add896fa2aad.
-Current hardening commit/deployment: pending next checkpoint push.
+25 automated tests, TypeScript and production build pass for hardening code. First release live HTTP checks passed, including PWA assets and AI authorization/validation. Live desktop lesson, bookmarking, completion, feedback, XP and reload persistence passed. See docs/VERIFICATION.md for exact coverage and limits.
+Latest verified deployed application commit: 0e11d788ded5c1081c26af5c8548f5db189ef8cc.
+Current chapter challenge commit/deployment: pending next checkpoint push.
 Production: https://dreamers-sooty.vercel.app — READY; Git-linked Vercel project dreamers, prj_ol5nVtQ2DprVqMgNY140bM86Lsvu.
-Database migrations: none applied. Existing unrelated Supabase project left unchanged.
+Local storage: IndexedDB v2 adds persistent assessments, with upgrade preservation tests.
+Cloud database migrations: none applied. Existing unrelated Supabase project left unchanged.
 
 ## Remaining / setup-dependent
 
@@ -28,4 +29,6 @@ Original content awaits educator review; no official chapter or past-paper cover
 
 Required environment: none for guest learning. AI: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN; AI_BASE_URL optional. Configure secrets through Vercel, never in chat or GitHub.
 
-Exact next task: push verified hardening, verify its Git-triggered deployment and live regression script, then configure owner AI and select a dedicated Dreamers Supabase project before implementing accounts. Read these checkpoint documents before resuming; preserve working code and student storage.
+Exact next task: push the verified chapter challenge, verify its Git-triggered deployment and test resume/scoring in the live browser, then configure owner AI and select a dedicated Dreamers Supabase project before implementing accounts. Read these checkpoint documents before resuming; preserve working code and student storage.
+
+Chapter challenge: separate unlocked assessment with optional timer, saved session, resume, atomic finalization and score history implemented. No claim of long-term mastery is made from one attempt.

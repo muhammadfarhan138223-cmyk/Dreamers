@@ -30,6 +30,7 @@ for (const path of [
   "/ai-tutor",
   "/settings",
   "/progress",
+  "/challenge/biology/cells",
 ])
   assert.match(await (await get(path)).text(), /DREAMERS/);
 const valid = {

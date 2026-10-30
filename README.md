@@ -26,6 +26,7 @@ Open the development URL printed by Next.js. Node 24 is recommended.
 - IndexedDB learning pack, progress events, notes, bookmarks, written drafts and review schedules.
 - Versioned public app-shell caching; offline navigation and practice after preparation.
 - First-completion XP, meaningful lesson map, 3 achievements, evidence-based progress summaries.
+- Saved chapter challenge with optional timer, resume, score and answer explanations.
 - Local text search, 12 self-rated flashcards, chapter study plan, data export/restore and device deletion.
 - Read-aloud using available browser voices, with text always available.
 

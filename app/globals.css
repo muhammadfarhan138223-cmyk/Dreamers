@@ -3666,3 +3666,76 @@ hr {
   scrollbar-width: thin;
   scrollbar-color: var(--line) transparent;
 }
+.timer-choice {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+  min-height: 44px;
+}
+.timer-choice input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--blue);
+}
+.challenge-result {
+  padding: 20px;
+}
+.challenge-result .empty {
+  padding-bottom: 20px;
+}
+.result-breakdown {
+  padding: 0 20px 20px;
+}
+.result-breakdown p {
+  font-size: 12px;
+  line-height: 1.9;
+}
+.danger-text {
+  color: #e8a4a4;
+  font-size: 12px;
+  margin: 15px 0;
+}
+.positive-text {
+  color: #68d7b3;
+}
+.challenge-intro {
+  max-width: 850px;
+  margin: auto;
+}
+.quiz .pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+:root[data-theme="light"] {
+  --subtle: #5f7392;
+}
+:root[data-theme="light"] .text-link,
+:root[data-theme="light"] .nav-item.active,
+:root[data-theme="light"] .lesson-nav.selected,
+:root[data-theme="light"] .tabs button.active,
+:root[data-theme="light"] .diagram-labels button.chosen {
+  color: #245bbb;
+}
+:root[data-theme="light"] .subject-card.green {
+  --subject: #1a7c68;
+}
+:root[data-theme="light"] .subject-card.purple {
+  --subject: #7951bd;
+}
+:root[data-theme="light"] .subject-card.blue {
+  --subject: #285fa6;
+}
+:root[data-theme="light"] .answer.correct,
+:root[data-theme="light"] .positive-text {
+  color: #16664e;
+}
+:root[data-theme="light"] .xp {
+  color: #8a5a12;
+}
+:root[data-theme="light"] .zero-card .text-link,
+:root[data-theme="light"] .zero-card .eyebrow {
+  color: #6651a2;
+}

@@ -6,13 +6,14 @@ const STORES = [
   "cards",
   "settings",
   "queue",
+  "assessments",
 ] as const;
 type Store = (typeof STORES)[number];
 let connection: Promise<IDBDatabase> | undefined;
 function db() {
   if (!connection)
     connection = new Promise((resolve, reject) => {
-      const r = indexedDB.open("dreamers-local", 1);
+      const r = indexedDB.open("dreamers-local", 2);
       r.onupgradeneeded = () => {
         for (const store of STORES)
           if (!r.result.objectStoreNames.contains(store))
@@ -136,6 +137,24 @@ export async function restoreData(records: Record<string, RecordValue[]>) {
         if (store === "events")
           tx.objectStore("queue").put({ ...row, sync: "awaiting-account" });
       }
+    }
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+}
+
+export async function finishAssessment(
+  value: RecordValue,
+  events: LearningEvent[],
+) {
+  const d = await db();
+  return new Promise<void>((resolve, reject) => {
+    const tx = d.transaction(["assessments", "events", "queue"], "readwrite");
+    tx.objectStore("assessments").put(value);
+    for (const event of events) {
+      tx.objectStore("events").put(event);
+      tx.objectStore("queue").put({ ...event, sync: "awaiting-account" });
     }
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);

@@ -24,3 +24,28 @@ test("backup validates event evidence and keeps imported packs out of runtime", 
   assert.equal(value.events.length, 1);
   assert.deepEqual(value.packs, []);
 });
+test("saved chapter assessment is importable and malformed answers are rejected", () => {
+  const assessment = {
+    id: "assessment:backup",
+    packId: "cells-starter",
+    packVersion: 1,
+    status: "in-progress",
+    order: Array.from({ length: 12 }, (_, i) => "q" + (i + 1)),
+    answers: { q1: 2 },
+    index: 0,
+    startedAt: 10,
+    at: 20,
+    deadline: null,
+  };
+  assert.equal(
+    validateBackup({ schemaVersion: 1, assessments: [assessment] }).assessments
+      .length,
+    1,
+  );
+  assert.throws(() =>
+    validateBackup({
+      schemaVersion: 1,
+      assessments: [{ ...assessment, answers: { q1: 99 } }],
+    }),
+  );
+});
