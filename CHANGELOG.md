@@ -48,3 +48,10 @@ Final 0.3.1 clarity pass: show class on PDF selection/export/removal/reader cont
 - Added explicit class-unconfirmed workbook classification and dynamic subject filters; retained separate grammar/legacy categories.
 - Defaulted tutor to provided-text evidence, refused heading-only textbook answers before provider calls, validated page bounds, checked returned source quotations and withheld malformed/incomplete/mismatched answers. General model knowledge requires an explicit control and is labelled not textbook-verified. A quotation check is not semantic fact verification.
 - Updated free-pilot model example and owner guide from current official documentation. No real provider/key/account/service configuration is claimed. Added deterministic quality and route regression tests. Shell v9 preserves all device storage.
+
+## 0.3.3 — Profile navigation and cross-book search
+
+- Made the header avatar a keyboard-accessible profile link with a 44px touch target.
+- Added lazy global search over all checked textbook headings, streamed IndexedDB PDF text indexes and downloaded original lessons. Added subject/class/book/result-type filters below search, ranked page expansion and direct local PDF page navigation.
+- Added bounded online AI topic discovery with validated existing catalogue IDs/terms, explicit generated relevance labels and honest configuration/offline/failure states. Only queries leave the device; private PDFs/notes are not uploaded. Search and tutor share durable quota protection.
+- Preserved IndexedDB v3 and PDF engine caches; shell v10 refreshes application assets. Current board exclusions, scanned-page OCR and real provider evaluation remain pending.

@@ -7,7 +7,14 @@ import {
   completionOptions,
 } from "@/lib/ai-quality.mjs";
 import { tutorScopePolicy } from "@/lib/tutor-policy.mjs";
-import { createHmac, createHash } from "node:crypto";
+import { createHash } from "node:crypto";
+import {
+  json,
+  readBody,
+  redis,
+  quotaIdentity,
+  consumeQuota,
+} from "@/lib/ai-server.mjs";
 import biology from "@/public/packs/cells-v1.json";
 import chemistry from "@/public/packs/atoms-v1.json";
 import physics from "@/public/packs/motion-v1.json";
@@ -31,50 +38,6 @@ const MODES = new Set([
   "Socratic Learning",
   "I Still Don’t Understand",
 ]);
-const json = (data: unknown, status = 200) =>
-  Response.json(data, { status, headers: { "Cache-Control": "no-store" } });
-async function readBody(request: Request) {
-  const reader = request.body?.getReader();
-  if (!reader) throw new Error("Missing body");
-  let size = 0;
-  const chunks: Uint8Array[] = [];
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    size += value.length;
-    if (size > 20000) {
-      await reader.cancel();
-      throw new Error("Request is too large");
-    }
-    chunks.push(value);
-  }
-  const all = new Uint8Array(size);
-  let offset = 0;
-  for (const chunk of chunks) {
-    all.set(chunk, offset);
-    offset += chunk.length;
-  }
-  return JSON.parse(new TextDecoder().decode(all));
-}
-async function redis(command: (string | number)[]) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) throw new Error("Quota service unavailable");
-  const r = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(command),
-    signal: AbortSignal.timeout(4000),
-    cache: "no-store",
-  });
-  if (!r.ok) throw new Error("Quota service unavailable");
-  const data = await r.json();
-  if (data.error) throw new Error("Quota service unavailable");
-  return data.result;
-}
 export async function POST(request: Request) {
   const origin = request.headers.get("origin");
   if (!origin || origin !== new URL(request.url).origin)
@@ -186,18 +149,7 @@ export async function POST(request: Request) {
     return json({ error: "The owner AI configuration needs attention." }, 503);
   }
   // Network quotas are durable and atomic across serverless instances. Guests behind one network share this limit.
-  const ip =
-    request.headers.get("x-vercel-forwarded-for")?.split(",")[0] ||
-    request.headers.get("x-forwarded-for")?.split(",")[0] ||
-    "unknown";
-  const network = createHmac("sha256", key)
-    .update(ip)
-    .digest("hex")
-    .slice(0, 32);
-  const day = Math.floor(Date.now() / 86400000),
-    minute = Math.floor(Date.now() / 60000);
-  const daily = `dreamers:quota:day:${day}:${network}`,
-    burst = `dreamers:quota:minute:${minute}:${network}`;
+  const { network, day, daily, burst } = quotaIdentity(request, key);
   const cacheKey =
     `dreamers:ai:${network}:` +
     createHash("sha256")
@@ -220,13 +172,7 @@ export async function POST(request: Request) {
       )
       .digest("hex");
   try {
-    const allowed = await redis([
-      "EVAL",
-      "local d=tonumber(redis.call('GET',KEYS[1]) or '0'); local b=tonumber(redis.call('GET',KEYS[2]) or '0'); if d>=12 or b>=3 then return 0 end; redis.call('INCR',KEYS[1]); redis.call('EXPIRE',KEYS[1],90000); redis.call('INCR',KEYS[2]); redis.call('EXPIRE',KEYS[2],120); return 1",
-      2,
-      daily,
-      burst,
-    ]);
+    const allowed = await consumeQuota(daily, burst);
     if (allowed !== 1)
       return json(
         {

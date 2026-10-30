@@ -88,7 +88,18 @@ export default function BookLibrary({
   const activeBook = textbook(catalogId)!;
   useEffect(() => {
     const wanted = textbook(requestedId);
-    if (!wanted) return;
+    if (!wanted) {
+      const local = books.find(
+        (b) => b.id === requestedId || encodeURIComponent(b.id) === requestedId,
+      );
+      if (local) {
+        setSelected(local);
+        setTargetPage(
+          Math.max(1, Math.min(local.pageCount || 1500, requestedPage)),
+        );
+      }
+      return;
+    }
     setCatalogId(wanted.id);
     const saved = books.find((b) => b.sha256 === wanted.sha256);
     if (saved) {

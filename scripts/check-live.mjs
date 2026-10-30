@@ -24,6 +24,8 @@ assert.match(worker.headers.get("cache-control"), /no-cache/);
 assert.match(await worker.text(), /api/);
 for (const path of [
   "/dashboard",
+  "/search",
+  "/profile",
   "/learn/biology/cells/osmosis",
   "/practice/biology",
   "/downloads",
@@ -134,6 +136,11 @@ if (!health.aiConfigured) {
   assert.equal((await post(valid)).status, 503);
   assert.equal((await post({ ...valid, bookContext: reference })).status, 503);
 }
+const postSearch = (body, origin=base) => fetch(base+"/api/search",{method:"POST",headers:{"Content-Type":"application/json",Origin:origin},body:JSON.stringify(body)});
+assert.equal((await postSearch({query:"kidney"},"https://unrelated.test")).status,403);
+assert.equal((await postSearch({query:""})).status,400);
+assert.equal((await postSearch({query:"x".repeat(601)})).status,400);
+if(!health.aiConfigured)assert.equal((await postSearch({query:"how do kidneys clean blood"})).status,503);
 console.log(
   "PASS: HTTPS routes, health, manifest, icon dimensions, worker headers, AI origin/input checks and missing-configuration handling.",
 );

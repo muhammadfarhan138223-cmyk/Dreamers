@@ -1,6 +1,6 @@
 # DREAMERS project status
 
-Updated: 2026-10-30. Current release/milestone: 0.3.2 provided-text AI safeguards and additional private PDF intake — live and verified.
+Updated: 2026-10-30. Current release/milestone: 0.3.3 profile navigation and global book search — local checks passed, release QA pending.
 
 ## Verified release
 
@@ -18,11 +18,14 @@ Documentation-only checkpoint commits may deploy identical application code.
 - Private multi-file PDF import, automatic source/class matching, exact duplicate skipping, full local Blob storage, canvas reader, selected text, local search/indexing, page resume, separate export/removal. Recognized files bypass optional manual fields. Actual Biology/Chemistry pages and all 11-file intake were browser-verified.
 - Default provided-text AI mode rejects heading-only textbook requests, requires a matching quotation, withholds malformed/truncated output and labels explicit general explanations not textbook-verified. Quotation matching does not establish factual correctness; real model evaluation remains pending. Current free-pilot candidate and owner steps are in docs/AI_SETUP.md. Source-specific tutor/search suggestions. Suggestion selection updates its topic ID and clears stale PDF context. Textbook focus is default; related stories/history require explicit enrichment opt-in and separate labelling. Pending-map sources need a readable selected PDF excerpt. Watermark-only scans are not treated as OCR.
 - Three original foundation packs, 12 lessons, 36 MCQs, nine written self-checks, diagrams/osmosis lab, atom/motion tools, saved attempts/drafts, resumable scored challenges, deduplicated XP/levels/achievements, flashcards/review schedules, notes/bookmarks, progress evidence and JSON backup/restore/deletion.
-- PWA manifest/icons, HTTPS, versioned shell v9, separately preserved PDF.js engine cache, IndexedDB v3, atomic pending queue and storage recovery. Optional packs require explicit download and SHA-256/schema checks. No progress is described as cloud-synced.
+- PWA manifest/icons, HTTPS, versioned shell v10, separately preserved PDF.js engine cache, IndexedDB v3, atomic pending queue and storage recovery. Optional packs require explicit download and SHA-256/schema checks. No progress is described as cloud-synced.
+
+- Header avatar now navigates to profile via a keyboard-accessible link and 44px touch target. Global search scans all checked chapters, downloaded foundation lessons and local PDF indexes, with subject/class/book/result-type filters below the search box. Filtered PDF ranking happens before result limits. Search/page links support manually imported book IDs.
+- Bounded `/api/search` discovery returns validated catalogue IDs and keywords using the owner's AI provider; only typed queries are sent, never private books. Search and tutor share durable network quotas; local results remain available when AI is offline/unconfigured. Current-word text requires indexed selectable PDF pages; no OCR is implied.
 
 ## Verification
 
-48 tests, TypeScript and production build passed for 0.3.2. Preview dpl_GjoGdmqsStRrNwffqfw9wKLsXube and production dpl_2c2Jtx7EYwxMNgCMr2unRVTQTBay reached READY at the exact application commit above. Stable production health reports 0.3.2; expanded anonymous live route/API/PWA checks passed. Browser verified default evidence checkbox on, stories off, heading-only Send disabled, explicit general explanation enabling Send, honest missing-owner service status, six-file private batch classification, actual scanned Computer XI page 4 rendering, and all six saved copies surviving reload. The 11-file intake and duplicate re-import evidence in the previous release is historical; this fresh QA browser imported the latest six files only. All 16 canonical metadata hashes/byte sizes were rechecked against unchanged source files. No real provider output was evaluated. See docs/VERIFICATION.md for limits.
+53 tests, TypeScript and production build passed locally for 0.3.3. Prior 0.3.2 live evidence follows; 0.3.3 release QA is pending. Preview dpl_GjoGdmqsStRrNwffqfw9wKLsXube and production dpl_2c2Jtx7EYwxMNgCMr2unRVTQTBay reached READY at the exact application commit above. Stable production health reports 0.3.2; expanded anonymous live route/API/PWA checks passed. Browser verified default evidence checkbox on, stories off, heading-only Send disabled, explicit general explanation enabling Send, honest missing-owner service status, six-file private batch classification, actual scanned Computer XI page 4 rendering, and all six saved copies surviving reload. The 11-file intake and duplicate re-import evidence in the previous release is historical; this fresh QA browser imported the latest six files only. All 16 canonical metadata hashes/byte sizes were rechecked against unchanged source files. No real provider output was evaluated. See docs/VERIFICATION.md for limits.
 
 ## Partial / pending
 

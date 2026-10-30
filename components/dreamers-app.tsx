@@ -1,13 +1,15 @@
 "use client";
 import dynamic from "next/dynamic";
 import LearningHome from "./learning-home";
+const GlobalSearch = dynamic(() => import("./global-search"), {
+  ssr: false,
+  loading: () => <div className="panel empty">Opening cross-book search…</div>,
+});
 import {
   TEXTBOOKS,
   DEFAULT_TEXTBOOK,
   textbook,
   textbookTopic,
-  topicSuggestions,
-  textbookSearch,
 } from "@/lib/textbooks.mjs";
 import type { BookContext } from "./book-library";
 const BookLibrary = dynamic(() => import("./book-library"), {
@@ -294,7 +296,7 @@ export default function DreamersApp() {
     [swReady, setSwReady] = useState(false),
     [update, setUpdate] = useState<ServiceWorker | null>(null),
     [query, setQuery] = useState(""),
-    [searchText, setSearchText] = useState(""),
+    [searchRequest, setSearchRequest] = useState({ query: "", id: 0 }),
     [busy, setBusy] = useState(false);
   const [quizIndex, setQuizIndex] = useState(0),
     [choice, setChoice] = useState<number | null>(null),
@@ -1937,83 +1939,17 @@ export default function DreamersApp() {
         </div>
       </>
     );
-  else if (path === "/search") {
-    const matches = textbookSearch(searchText);
+  else if (path === "/search")
     content = (
-      <>
-        <div className="page-heading">
-          <span className="eyebrow">YOUR TEXTBOOK MAP</span>
-          <h1>Find the chapter. Follow the idea.</h1>
-          <p>
-            Search checked headings in the supplied XI/XII books. For full PDF
-            text, use your indexed local bookshelf.
-          </p>
-        </div>
-        <form
-          className="panel big-search"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setSearchText(query);
-          }}
-        >
-          <Search size={22} />
-          <input
-            aria-label="Search textbook chapters"
-            value={query}
-            placeholder="Try immunity, optics or Python…"
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setSearchText(e.target.value);
-            }}
-          />
-          <span className="pill">Textbook headings</span>
-        </form>
-        <div className="lesson-list">
-          {(searchText.trim()
-            ? matches
-            : TEXTBOOKS.flatMap((book) =>
-                book.chapters.map((topic) => ({
-                  ...topic,
-                  bookId: book.id,
-                  bookTitle: book.title,
-                  subject: book.subject,
-                })),
-              )
-          ).map((t) => (
-            <div className="panel search-result" key={t.id}>
-              <div>
-                <span className="eyebrow">
-                  {t.bookTitle} · CLASS {textbook(t.bookId)?.class} · PDF PAGE{" "}
-                  {t.page}
-                </span>
-                <h3>{t.title}</h3>
-              </div>
-              <button
-                className="circle-button"
-                aria-label={`Read ${t.title}`}
-                onClick={() => navigate(`/books/${t.bookId}/${t.page}`)}
-              >
-                <ArrowRight size={19} />
-              </button>
-            </div>
-          ))}
-          {searchText.trim() && !matches.length && (
-            <div className="panel empty">
-              <Search size={32} />
-              <h3>No supplied textbook heading matched.</h3>
-              <p>
-                Try a shorter keyword or search selectable PDF text on your
-                local shelf.
-              </p>
-            </div>
-          )}
-        </div>
-        <button className="secondary" onClick={() => navigate("/books")}>
-          Search saved PDF text <BookOpen size={17} />
-        </button>
-      </>
+      <GlobalSearch
+        request={searchRequest}
+        online={online}
+        aiConfigured={aiConfigured}
+        navigate={navigate}
+        onQuery={setQuery}
+      />
     );
-  } else if (path === "/progress")
+  else if (path === "/progress")
     content = (
       <>
         {heading(
@@ -2786,7 +2722,9 @@ export default function DreamersApp() {
           <p>
             Online AI needs owner credentials and a durable quota service. Cloud
             accounts, verified Punjab textbook mapping, compulsory-subject
-            lessons, administration and semantic search are not yet active.
+            lessons and administration are not yet active. AI-assisted topic
+            discovery requires owner configuration; local cross-book search is
+            available.
           </p>
           <h3>Learning responsibly</h3>
           <p>
@@ -2962,16 +2900,20 @@ export default function DreamersApp() {
             className="top-search"
             onSubmit={(e) => {
               e.preventDefault();
-              setSearchText(query);
+              setSearchRequest((previous) => ({
+                query: query.trim(),
+                id: previous.id + 1,
+              }));
               navigate("/search");
             }}
           >
             <Search size={17} />
             <input
-              aria-label="Search textbook chapters"
+              aria-label="Search all books and topics"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search textbook chapters…"
+              placeholder="Search any book or describe a topic…"
+              maxLength={600}
             />
             <span>↵</span>
           </form>
@@ -2995,11 +2937,13 @@ export default function DreamersApp() {
             >
               {prefs.theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
             </button>
-            <div className="top-avatar" aria-label="Guest profile">
-              {String(prefs.name || "E")
+            {link(
+              "/profile",
+              String(prefs.name || "E")
                 .charAt(0)
-                .toUpperCase()}
-            </div>
+                .toUpperCase(),
+              "top-avatar",
+            )}
           </div>
         </header>
         <main id="main" className="main">
@@ -3049,7 +2993,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.3.2 · Your textbook studio</span>
+              <span>v0.3.3 · Your textbook studio</span>
             </div>
           </footer>
         </main>

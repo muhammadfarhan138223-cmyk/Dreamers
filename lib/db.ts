@@ -1,3 +1,4 @@
+import { searchBookPages } from "./books.mjs";
 import { packMeta, STARTER_PACK_ID } from "./catalog.mjs";
 import { validatePack } from "./pack-validation.mjs";
 import type { LearningEvent, Pack, RecordValue } from "./types";
@@ -251,4 +252,45 @@ export async function patch(
     tx.onerror = () => reject(tx.error);
     tx.onabort = () => reject(tx.error);
   });
+}
+
+// Cursor batches keep a large multi-book text index out of application state.
+export async function searchPages(
+  query: string,
+  bookIds?: string[],
+  limit = 12,
+) {
+  if (!query.trim() || bookIds?.length === 0) return [];
+  const allowed = bookIds ? new Set(bookIds) : null;
+  limit = Math.max(1, Math.min(100, limit));
+  type IndexedPage = { id: string; bookId: string; page: number; text: string };
+  const d = await db();
+  return new Promise<(IndexedPage & { score: number; snippet: string })[]>(
+    (resolve, reject) => {
+      const tx = d.transaction("bookPages"),
+        cursor = tx.objectStore("bookPages").openCursor();
+      let batch: IndexedPage[] = [],
+        results: (IndexedPage & { score: number; snippet: string })[] = [];
+      const flush = () => {
+        results = [...results, ...searchBookPages(batch, query, limit)]
+          .sort((a, b) => b.score - a.score || a.page - b.page)
+          .slice(0, limit);
+        batch = [];
+      };
+      cursor.onsuccess = () => {
+        const value = cursor.result;
+        if (!value) {
+          flush();
+          return;
+        }
+        if (!allowed || allowed.has(value.value.bookId))
+          batch.push(value.value);
+        if (batch.length >= 128) flush();
+        value.continue();
+      };
+      tx.oncomplete = () => resolve(results);
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error);
+    },
+  );
 }
