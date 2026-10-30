@@ -39,3 +39,5 @@ Added optional original Chemistry and Physics packs: 12 lessons, 36 MCQs and 9 w
 Registered eight additional unique file identities (11 total), XI/XII and grammar/reference filters, 77 checked headings, and honest pending-map states. Added detection of watermark-only scans. Fixed a tutor suggestion to select its corresponding chapter and clear stale PDF reference text. Preserved private PDF storage and original learning data.
 
 Final 0.3.1 clarity pass: show class on PDF selection/export/removal/reader controls, keep manual import fields optional, and explain why a pending-map source requires readable PDF text for tutoring.
+
+0.3.1 verified live at commit e5fd7d69999b029a9f2589b0196d1edd43fb1c51: 42 tests/typecheck/clean build, source-specific UI/scope controls, private 11-file intake, duplicate skip, reload preservation, Biology/Chemistry page rendering and current HTTP/API checks passed. Publisher-restricted PDFs are not publicly redistributed.

@@ -1,53 +1,46 @@
 # DREAMERS project status
 
-Updated: 2026-10-30
+Updated: 2026-10-30. Current release/milestone: 0.3.1 textbook-first learning studio and private supplied-PDF intake.
 
-Current milestone: 0.3.1 expanded source catalogue, private multi-book import and textbook-first UI. Milestones 1–4 have working foundation scope. Milestone 5 has a real server integration awaiting owner configuration.
+## Verified release
+
+Latest verified application commit: e5fd7d69999b029a9f2589b0196d1edd43fb1c51.
+Production deployment: dpl_6CYtJtGmuwDkqWsCJTKduknEACpA — READY.
+Live: https://dreamers-sooty.vercel.app
+Repository: https://github.com/muhammadfarhan138223-cmyk/Dreamers
+Vercel: dreamers / prj_ol5nVtQ2DprVqMgNY140bM86Lsvu / team_jwuAswY9vD3bNmcKQM2LqjoF.
+Documentation-only checkpoint commits may deploy identical application code.
 
 ## Completed
 
-Responsive dashboard, original SVG identity and PWA icons, themes/navigation; three original science chapters (Biology cells, Chemistry atoms/ions, Physics motion), 12 lessons, 36 MCQs and 9 written self-check questions. Interactive diagrams, qualitative osmosis lab, atom charge counter and motion calculator. Optional Chemistry/Physics packs download only at student request, with SHA-256/schema validation. Pack removal preserves progress. Global evidence and subject-specific practice, written drafts, flashcards, bookmarked lessons and resumable chapter challenges are supported.
+- Colorful responsive home/learn, original brand, light/dark/system themes, subtle decorative motion and reduced-motion CSS; clear book→chapter→read/ask flow and class/resource filters.
+- Eleven unique supplied PDF identities registered by SHA-256/byte size: eight textbooks, two XI/XII grammar resources, one older Ilm-ul-Taleem reference. Six checked maps contain 77 chapter/unit headings (Biology, Physics, Computer, Chemistry XI/XII and English XII). No exact duplicate attachments were present.
+- Private multi-file PDF import, automatic source/class matching, exact duplicate skipping, full local Blob storage, canvas reader, selected text, local search/indexing, page resume, separate export/removal. Recognized files bypass optional manual fields. Actual Biology/Chemistry pages and all 11-file intake were browser-verified.
+- Source-specific tutor/search suggestions. Suggestion selection updates its topic ID and clears stale PDF context. Textbook focus is default; related stories/history require explicit enrichment opt-in and separate labelling. Pending-map sources need a readable selected PDF excerpt. Watermark-only scans are not treated as OCR.
+- Three original foundation packs, 12 lessons, 36 MCQs, nine written self-checks, diagrams/osmosis lab, atom/motion tools, saved attempts/drafts, resumable scored challenges, deduplicated XP/levels/achievements, flashcards/review schedules, notes/bookmarks, progress evidence and JSON backup/restore/deletion.
+- PWA manifest/icons, HTTPS, versioned shell v8, separately preserved PDF.js engine cache, IndexedDB v3, atomic pending queue and storage recovery. Optional packs require explicit download and SHA-256/schema checks. No progress is described as cloud-synced.
 
-IndexedDB learning/activity records, atomic pending queue, versioned offline shell, deduplicated XP/levels/achievements, local content search, notes, revision schedules, read-aloud and JSON progress export/restore/deletion are implemented. JSON backups preserve legacy Biology IDs and the newer science IDs.
+## Verification
 
-Personal textbook library (/books): full local PDF Blob import (100 MB/file), SHA-256 deduplication, page rendering, selectable text extraction, resumable index (up to 1,500 pages/book), English/Urdu local text search, last-page resume, PDF export and local deletion. The complete versioned PDF.js engine is cached separately on first opening (about 5 MB); books remain in IndexedDB. Image-only scanned PDFs render but have no OCR. JSON progress backups exclude PDF bytes/text; export books separately. Official catalogue links are provided; no full official textbook PDF has been downloaded, verified or redistributed.
+42 tests, TypeScript and a clean production build passed. Live HTTP/API regression passed, including origin/input checks, source/topic validation, pending-map context rules, manifest/icons and engine assets. Final health reports 0.3.1 and serves shell v8. Browser checks covered themes, source/class selection, exact duplicate skip, all eleven private imports, reload/app-update preservation, actual PDF rendering/extraction and explicit enrichment controls. See docs/VERIFICATION.md for coverage and limits.
 
-A selected page excerpt (up to 2,000 characters) can be attached to an AI question. It is sent only on explicit question submission and is treated as untrusted reference text. The assistant is instructed to cite the PDF page and disclose missing information. This is selected-page context, not whole-book retrieval or verified curriculum grounding.
+## Partial / pending
 
-## Verification and commits
+- Five scan/support/legacy maps remain unreviewed and excluded from topic suggestions. No on-device OCR or whole-book semantic retrieval is implemented.
+- Exact publisher editions and current board exam inclusion/exclusion notices remain unverified. Biology starts at chapter 13 without a cover/edition page. Grammar and legacy references are not promoted into current FSc syllabus.
+- AI adapter, server-only credentials, durable Redis network quotas, validation, bounded references and caching are implemented. Owner credentials/quota service are absent; real provider output/compliance remains unverified. Valid requests return honest 503, never fake answers.
+- Accounts, authenticated cloud sync, dedicated Supabase/RLS migrations, administration, full syllabus question banks/readiness and advanced media remain pending. Physical Android installation/airplane-mode verification remains pending.
 
-Latest verified deployed application commit: 2902e3efdf76f4795593deee7bbba7963592ed44 (0.2.1).
-Science production deployment: dpl_HugnhbmuUCppHqtQPNAy8JJ8kmQo — READY. Live Chemistry download, question answer/feedback and storage flow passed.
-PDF release checks: 36 automated tests include actual PDF.js parsing, Blob persistence, metadata merge, scoped deletion, backup exclusions, English/Urdu search, v1→v3 storage preservation and offline worker/engine-cache serving. TypeScript, all 36 tests and production build passed. Live PDF import, two-page rendering, indexing, keyword search, page-2 resume after full navigation, AI reference attachment and honest 503 setup handling passed. Exported PDF matched the original file byte for byte. See docs/VERIFICATION.md for coverage/limits.
-PDF production deployment: dpl_HKXbLyx2SkUiLcakPPuBgUCuqYSM — READY. Production: https://dreamers-sooty.vercel.app — Git-linked project dreamers, prj_ol5nVtQ2DprVqMgNY140bM86Lsvu.
-Local storage: IndexedDB v3 adds books/bookPages and a bookId index without deleting learning data. Cloud database migrations: none applied. Existing unrelated Supabase project left unchanged.
+## Privacy / deployment boundary
 
-## Partially implemented / pending
+Supplied Computer/Physics/Chemistry files contain reproduction restrictions. Public Git/Vercel deployment includes metadata/maps, not restricted full PDF bytes. Students import their own copies once via Textbook PDFs → Choose PDFs from device. The QA browser's saved copies are not storage on a student's phone. Original attachments remain unchanged. JSON progress backups exclude PDF bytes/indexes; export books separately. Browser eviction can remove local storage, so retain originals.
 
-AI adapter supports Groq/OpenAI-compatible completions, server-only secrets, input/origin/size limits, timeouts, token limits, durable Redis network quotas and scoped caching. Real AI/provider responses remain unverified until owner setup. No fake responses are used. Accounts, authenticated cloud sync, RLS migrations, administration and semantic/whole-book AI retrieval remain pending. Queued guest work is local and is not described as synchronized.
+Known environment issue: local development preview did not hydrate; production did. A shared Turbopack generated-cache conflict was resolved by stopping preview and regenerating .next. No known blocking production issue was observed; device coverage is incomplete.
 
-## Known limits
+Database migration status: IndexedDB v3 active; no cloud migrations applied. Existing unrelated Supabase project remains untouched. No new paid resource created.
 
-Original science content awaits educator review and official XI/XII mapping. Official PECTAA catalogue direct fetch encountered Bot Verification; eLearn Grade 11 fetch returned an error. No full official PDF/edition or redistribution permission has been verified. Physical Android installation/offline and large/scanned/Urdu PDF device testing remain pending. Budget-device storage can be evicted by the browser; students should retain/export PDFs. No exam-readiness percentage is invented. No runtime monitoring drain is configured.
+Required environment: none for guest learning. Owner AI: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN; AI_BASE_URL optional. Configure secrets securely in Vercel, never chat/GitHub; students never supply keys.
 
-Required environment: none for guest learning. AI: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN; AI_BASE_URL optional. Configure secrets in Vercel, never chat or GitHub. Students never supply keys.
+## Exact next task
 
-Exact next task: inspect any textbook embed codes supplied by the owner and verify their publisher, edition, embedding permission and actual PDF download availability. An iframe alone does not provide offline bytes or AI text access. Verify permitted full textbook URLs, or accept publisher/user-provided PDFs; configure owner AI and durable quota service, then verify a real response. Select/create a dedicated Dreamers Supabase project only with confirmed organization/cost; do not reuse another project's database. Read checkpoint documents before further edits.
-
-## 0.3.0 checkpoint (current work)
-
-Added three unique owner-supplied XII textbook metadata entries (Biology 252 pages, Physics 186, Computer Science 147) with exact SHA-256 fingerprints and 31 checked chapter headings. No exact duplicate attachments were present. Biology starts at chapter 13 and has no cover/edition page; it is labelled a supplied chapter collection, not a verified complete edition. Computer is an image-only scan. Physics text is an OCR layer and can contain recognition errors. Current board exam exclusions are unverified.
-
-Full public PDF distribution is deliberately not enabled: Computer PDF page 5 and Physics page 2 carry explicit reproduction restrictions. The application supports private batch device import, automatic recognition by file hash, duplicate skipping and chapter navigation. Existing imported copies can be enriched with catalogue metadata without duplicating their Blob. Actual files are not committed to the public repository or automatically downloaded.
-
-Home/learn now use colorful subject covers, a clear book→chapter→read/ask path, gentle decorative motion, reduced-motion support and distinct original foundation practice. Chapter search and tutor suggestions use only selected supplied-book headings. AI defaults to textbook focus, offers explicit story/extra-context opt-in, labels extra content as outside textbook scope, and includes scope in validation/cache identity. This policy is implemented; real model compliance remains unverified until owner AI setup.
-
-40 tests, TypeScript and production build passed before release. Local preview again stopped at its non-hydrated shell without an application console error; live browser QA is required after deployment. Latest previously verified production application is 0.2.1; this section is updated with the new release evidence after deployment. Exact next step: deploy 0.3.0 preview/production, verify textbook/topic navigation and scope controls, then import the supplied PDFs privately in the test browser and verify duplicate recognition/read access.
-
-## 0.3.0 live verification and subsequent intake
-
-Commit 7b2fbacf8b32d7d04d5bbf958ca45d07316a0034 deployed as production dpl_TNJi1Wqfjrd8S9YarzG9ZHAr5MWa (READY). Browser home hydrated successfully, Physics selection changed the AI suggestions to the Physics book, and all first three supplied PDFs imported privately with correct classification. Re-importing Biology showed 0 added / 1 duplicate skipped. The actual Biology PDF rendered correctly and its selected page excerpt attached to Biology/chapter 13 context. Live HTTP/API regression passed.
-
-Eight additional files were received during this task. Total: 11 distinct SHA-256 hashes, no exact duplicate attachments. Catalogue now includes 8 textbooks, 2 shared XI/XII grammar resources and 1 legacy Ilm-ul-Taleem reference. Chemistry XI, Chemistry XII and English XII contents were inspected, bringing the checked heading count to 77 across 6 books. Mathematics, Urdu, grammar and legacy chapter maps remain pending and are excluded from suggestions. Watermark-only text layers are not treated as readable lesson text or OCR.
-
-0.3.1 adds class/resource filters, pending-map reading access, page-excerpt-only tutoring for a source with no checked chapter map, and fixes suggestion selection to update its chapter ID and clear a stale PDF excerpt. Supplied files remain device-local; there is no public book download distribution. Next: verify all checks, release 0.3.1, then import the eight new files on the QA device and verify scope/theme/persistence.
+Inspect further PDFs by hash/cover/edition before adding source metadata. Complete the five pending maps without inventing headings or syllabus; verify current board notices/exclusions. Obtain publisher permission/permitted official URLs before shared full-PDF distribution. Configure owner AI/quota service and verify a real response. Then select/create a dedicated Dreamers Supabase project with confirmed organization/cost for accounts/RLS/sync. Preserve all local work and queues; read these checkpoint documents before editing.

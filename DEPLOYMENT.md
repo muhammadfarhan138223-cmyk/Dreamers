@@ -52,3 +52,7 @@ Anonymous live HTTP regression checks passed for science/book routes, all three 
 Deploy code/catalogue metadata only. Never include the uploaded textbook binaries in Git or Vercel output without appropriate publisher permission. No new paid service, credentials or Supabase changes are needed. Service-worker shell version 6 refreshes the new interface; the versioned PDF engine and IndexedDB v3 data remain intact. Existing preview protection is preserved.
 
 0.3.0 release: commit 7b2fbacf8b32d7d04d5bbf958ca45d07316a0034, preview dpl_51MT352pBHJvjgRzn9fsVGpxkDeZ and production dpl_TNJi1Wqfjrd8S9YarzG9ZHAr5MWa both READY. Live supplied-book import/deduplication/rendering and source-specific tutor UI passed. 0.3.1 updates the shell to v7 while preserving the independent PDF engine cache and IndexedDB data. Raw textbook binaries remain outside deployment/Git.
+
+## Final 0.3.1 deployment checkpoint
+
+Main application commit e5fd7d69999b029a9f2589b0196d1edd43fb1c51 deployed READY as dpl_6CYtJtGmuwDkqWsCJTKduknEACpA. Stable alias remains https://dreamers-sooty.vercel.app. The server returned version 0.3.1; shell v8 is served. Pending-map sources reject requests without a readable page context; valid context returns honest 503 while owner setup is absent. Native preview protection and all project security settings remain unchanged. Documentation-only follow-up commits may trigger an identical-code production build.

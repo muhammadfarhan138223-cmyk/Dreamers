@@ -33,7 +33,7 @@ Open the development URL printed by Next.js. Node 24 is recommended.
 - Optional science packs use explicit downloads, content validation and SHA-256 integrity checks.
 - Personal full-PDF import/reader, resumable selectable-text index/search, reading-position resume, separate PDF export and selected-page AI references. First opening caches about 5 MB of engine resources. Scans have no OCR; imported editions stay unverified.
 
-- Textbook-first colorful home/learn, 31 checked chapter headings from 3 supplied XII files, chapter search and private batch PDF import with automatic hash matching.
+- Textbook-first colorful home/learn, 77 checked chapter/unit headings from six maps within 11 supplied XI/XII resources, chapter search and private batch PDF import with automatic hash matching.
 - Tutor suggestions follow the selected book; related stories/history require explicit extra-context opt-in. Current exam exclusions and live model behavior remain unverified.
 
 ## Explicit limitations

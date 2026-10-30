@@ -21,3 +21,5 @@ Verify PECTAA official curriculum editions and current examination notifications
 Three supplied XII PDF identities and their chapter maps are registered; batch private import/deduplication and source-specific tutor suggestions are implemented. Home/learn have a colorful responsive refresh with optional related-story teaching. Official examination notice matching, OCR for Computer, permitted public PDF distribution and real model behavior verification remain pending.
 
 Additional intake: 11 unique supplied resources registered; 77 headings in six checked maps. Remaining scan maps, on-device OCR, current board exclusion verification and publisher-authorized public downloads are pending. Never promote filenames or old editions into verified exam syllabus.
+
+0.3.1 deployed/verified. Next source work is five pending maps and official exam-notice verification. Next owner setup is AI/provider + durable quota configuration, then genuine response QA. Device-private PDF imports are working; shared public book hosting remains permission-dependent. Physical Android airplane-mode/install verification and dedicated Supabase/RLS/account work remain pending.
