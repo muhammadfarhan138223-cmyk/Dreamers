@@ -1,6 +1,6 @@
 # DREAMERS project status
 
-Updated: 2026-10-31. Release 0.4.2 — focused study, private offline PDFs and source-extract practice. Read this file and the roadmap/architecture/deployment/changelog before editing.
+Updated: 2026-10-31. Working release 0.5.0 — source-linked book plans and resumable chapter preparation. Local checks passed; live release verification pending. Read this file and the roadmap/architecture/deployment/changelog before editing.
 
 ## Verified application
 
@@ -54,3 +54,15 @@ Database migration status: IndexedDB v3 unchanged; no cloud migration. Existing 
 ## Exact next task
 
 Obtain the missing Biology XI PDF and a retrievable official pairing scheme for the student's actual examination year. Review one complete source chapter, add teacher-reviewed Q&A/MCQs and explicit multi-page coverage tracking. Evaluate v3 question relevance and long extracts against sources. Then implement whole-book retrieval and the dedicated authenticated Supabase/RLS/sync milestone while preserving all local work.
+
+## 0.5.0 prepared checkpoint — 2026-10-31
+
+At the user's suggestion, PDF endings were inspected with text extraction and rendered-page checks. Found Biology scheme at PDF 247–248 (printed label 2026–27), Chemistry instructions at PDF 262, Computer Science instructions at PDF 141–142, English instructions at PDF 160–161. Chemistry/Computer/English pages do not state an exam year; filenames do not establish one. No official board confirmation has been obtained. Urdu has a partial instruction page at PDF 153 (starts at Q3) and model paper 154–156; no complete Urdu scheme was invented. Scheme/model appendices are linked in the private PDF shelf.
+
+Four opt-in book-based study plans show actual marks, question groups and chapter relationships with source-page links and board-pending status. Biology/Chemistry two-chapter long pairs and Computer single-chapter long questions are distinguished. English unit/grammar sections are mapped as observed. Long-omitted chapters remain available for short/MCQ study. Biology chapters 13–25 and Chemistry 17–33 were checked; Computer 1–9 matches its inspected map.
+
+Last chapter ends now exclude appendix/model pages (Biology246, Chemistry261, English159, Computer140). Chapter preparation saves one page at a time with pause/manual resume, cached-set reuse, 22-second request spacing, visible gaps for scans/exercise-only/unsupported pages, and fail-safe quota/network/storage interruption handling. No closed-app background work or full concept mastery is implied. Preparation journals, selected chapter/mode/language and question choices remain local and backed up. Five questions per screen reduce long scrolling.
+
+64 tests, TypeScript/production build pass. New cases cover interrupted journals after successful question writes, replay without duplicate provider calls, pause/offline state, exercise gaps, language/policy coverage, scheme totals/source bounds and retained non-long chapters. Local preview rendered SSR but did not hydrate, matching the prior environment issue; it was stopped. Live browser verification pending. Shell v14, IndexedDB v3 unchanged; no new service, secret, dependency or cloud migration.
+
+Next: push/test preview, release and verify scheme enable/pair navigation, private source links, chapter journal failure/resume and persisted view on production. Then add indexed whole-book retrieval and remaining account/sync/revision milestones.

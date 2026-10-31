@@ -22,84 +22,110 @@
         "id": "bio12-1",
         "title": "Thermoregulation and Osmoregulation",
         "page": 1,
-        "printedPage": 1
+        "printedPage": 1,
+        "number": 13
       },
       {
         "id": "bio12-2",
         "title": "Human Urinary System",
         "page": 12,
-        "printedPage": 12
+        "printedPage": 12,
+        "number": 14
       },
       {
         "id": "bio12-3",
         "title": "Human Nervous System",
         "page": 25,
-        "printedPage": 25
+        "printedPage": 25,
+        "number": 15
       },
       {
         "id": "bio12-4",
         "title": "Human Endocrine System",
         "page": 57,
-        "printedPage": 57
+        "printedPage": 57,
+        "number": 16
       },
       {
         "id": "bio12-5",
         "title": "Human Reproductive Systems",
         "page": 73,
-        "printedPage": 73
+        "printedPage": 73,
+        "number": 17
       },
       {
         "id": "bio12-6",
         "title": "Inheritance",
         "page": 83,
-        "printedPage": 83
+        "printedPage": 83,
+        "number": 18
       },
       {
         "id": "bio12-7",
         "title": "Chromosome and DNA",
         "page": 115,
-        "printedPage": 115
+        "printedPage": 115,
+        "number": 19
       },
       {
         "id": "bio12-8",
         "title": "Biotechnology",
         "page": 155,
-        "printedPage": 155
+        "printedPage": 155,
+        "number": 20
       },
       {
         "id": "bio12-9",
         "title": "Immunity",
         "page": 169,
-        "printedPage": 169
+        "printedPage": 169,
+        "number": 21
       },
       {
         "id": "bio12-10",
         "title": "Biostatistics",
         "page": 186,
-        "printedPage": 186
+        "printedPage": 186,
+        "number": 22
       },
       {
         "id": "bio12-11",
         "title": "Pharmacology",
         "page": 208,
-        "printedPage": 208
+        "printedPage": 208,
+        "number": 23
       },
       {
         "id": "bio12-12",
         "title": "Evolution",
         "page": 215,
-        "printedPage": 215
+        "printedPage": 215,
+        "number": 24
       },
       {
         "id": "bio12-13",
         "title": "Ecology",
         "page": 228,
-        "printedPage": 228
+        "printedPage": 228,
+        "endPage": 246,
+        "number": 25
       }
     ],
     "kind": "textbook",
-    "classes": [
-      "XII"
+    "classes": ["XII"],
+    "appendices": [
+      {
+        "title": "Paper pattern / pairing scheme",
+        "page": 247,
+        "endPage": 248,
+        "kind": "exam-pattern"
+      },
+      {
+        "title": "Model paper",
+        "page": 249,
+        "endPage": 252,
+        "kind": "model-paper"
+      }
     ]
   },
   {
@@ -177,9 +203,7 @@
       }
     ],
     "kind": "textbook",
-    "classes": [
-      "XII"
-    ]
+    "classes": ["XII"]
   },
   {
     "id": "computer-xii-supplied",
@@ -204,60 +228,82 @@
         "id": "cs12-1",
         "title": "Computer Networks",
         "page": 6,
-        "printedPage": 1
+        "printedPage": 1,
+        "number": 1
       },
       {
         "id": "cs12-2",
         "title": "Computational Thinking & Algorithms",
         "page": 25,
-        "printedPage": 20
+        "printedPage": 20,
+        "number": 2
       },
       {
         "id": "cs12-3",
         "title": "Object Oriented Programming Using Python",
         "page": 38,
-        "printedPage": 33
+        "printedPage": 33,
+        "number": 3
       },
       {
         "id": "cs12-4",
         "title": "Development of Graphical User Interface (GUI)",
         "page": 50,
-        "printedPage": 45
+        "printedPage": 45,
+        "number": 4
       },
       {
         "id": "cs12-5",
         "title": "Code Testing and Debugging",
         "page": 65,
-        "printedPage": 60
+        "printedPage": 60,
+        "number": 5
       },
       {
         "id": "cs12-6",
         "title": "Data and Analysis",
         "page": 77,
-        "printedPage": 72
+        "printedPage": 72,
+        "number": 6
       },
       {
         "id": "cs12-7",
         "title": "Hypothesis Testing",
         "page": 94,
-        "printedPage": 89
+        "printedPage": 89,
+        "number": 7
       },
       {
         "id": "cs12-8",
         "title": "Applications of Computer Science",
         "page": 108,
-        "printedPage": 103
+        "printedPage": 103,
+        "number": 8
       },
       {
         "id": "cs12-9",
         "title": "Cybersecurity and Safe Digital Collaboration",
         "page": 123,
-        "printedPage": 118
+        "printedPage": 118,
+        "number": 9,
+        "endPage": 140
       }
     ],
     "kind": "textbook",
-    "classes": [
-      "XII"
+    "classes": ["XII"],
+    "appendices": [
+      {
+        "title": "Paper-setting instructions",
+        "page": 141,
+        "endPage": 142,
+        "kind": "exam-pattern"
+      },
+      {
+        "title": "Model paper (contains a duplicated page)",
+        "page": 143,
+        "endPage": 146,
+        "kind": "model-paper"
+      }
     ]
   },
   {
@@ -267,9 +313,7 @@
     "title": "Chemistry",
     "subtitle": "Periodic ideas, reactions & matter",
     "class": "XI",
-    "classes": [
-      "XI"
-    ],
+    "classes": ["XI"],
     "kind": "textbook",
     "text": "selectable",
     "color": "mint",
@@ -388,10 +432,7 @@
     "title": "Urdu Grammar & Composition",
     "subtitle": "Language support for intermediate study",
     "class": "XI–XII",
-    "classes": [
-      "XI",
-      "XII"
-    ],
+    "classes": ["XI", "XII"],
     "kind": "grammar",
     "text": "scanned",
     "color": "peach",
@@ -413,10 +454,7 @@
     "title": "English Grammar & Composition",
     "subtitle": "Grammar and writing support",
     "class": "XI–XII",
-    "classes": [
-      "XI",
-      "XII"
-    ],
+    "classes": ["XI", "XII"],
     "kind": "grammar",
     "text": "scanned",
     "color": "violet",
@@ -438,9 +476,7 @@
     "title": "English",
     "subtitle": "Literature, language & fresh perspectives",
     "class": "XII",
-    "classes": [
-      "XII"
-    ],
+    "classes": ["XII"],
     "kind": "textbook",
     "text": "mixed",
     "color": "peach",
@@ -530,7 +566,22 @@
         "id": "eng12-13",
         "title": "The Pearl",
         "page": 96,
-        "printedPage": 92
+        "printedPage": 92,
+        "endPage": 159
+      }
+    ],
+    "appendices": [
+      {
+        "title": "Paper-setting instructions",
+        "page": 160,
+        "endPage": 161,
+        "kind": "exam-pattern"
+      },
+      {
+        "title": "Model paper",
+        "page": 162,
+        "endPage": 165,
+        "kind": "model-paper"
       }
     ]
   },
@@ -541,9 +592,7 @@
     "title": "Mathematics",
     "subtitle": "Patterns, reasoning & problem solving",
     "class": "XII",
-    "classes": [
-      "XII"
-    ],
+    "classes": ["XII"],
     "kind": "textbook",
     "text": "scanned",
     "color": "violet",
@@ -565,9 +614,7 @@
     "title": "Ilm-ul-Taleem",
     "subtitle": "Older education reference · not FSc core",
     "class": "XII",
-    "classes": [
-      "XII"
-    ],
+    "classes": ["XII"],
     "kind": "legacy",
     "text": "scanned",
     "color": "mint",
@@ -589,9 +636,7 @@
     "title": "Chemistry",
     "subtitle": "Organic chemistry, materials & analysis",
     "class": "XII",
-    "classes": [
-      "XII"
-    ],
+    "classes": ["XII"],
     "kind": "textbook",
     "text": "selectable",
     "color": "mint",
@@ -609,103 +654,135 @@
         "id": "chem12-1",
         "title": "Group 2 Elements",
         "page": 4,
-        "printedPage": 1
+        "printedPage": 1,
+        "number": 17
       },
       {
         "id": "chem12-2",
         "title": "Transition Metals",
         "page": 17,
-        "printedPage": 14
+        "printedPage": 14,
+        "number": 18
       },
       {
         "id": "chem12-3",
         "title": "Basics of Organic Chemistry",
         "page": 38,
-        "printedPage": 35
+        "printedPage": 35,
+        "number": 19
       },
       {
         "id": "chem12-4",
         "title": "Aromatic Hydrocarbons",
         "page": 59,
-        "printedPage": 56
+        "printedPage": 56,
+        "number": 20
       },
       {
         "id": "chem12-5",
         "title": "Halogenoalkanes",
         "page": 75,
-        "printedPage": 72
+        "printedPage": 72,
+        "number": 21
       },
       {
         "id": "chem12-6",
         "title": "Hydroxy Compounds",
         "page": 88,
-        "printedPage": 85
+        "printedPage": 85,
+        "number": 22
       },
       {
         "id": "chem12-7",
         "title": "Carbonyl Compounds and Carboxylic Acids",
         "page": 101,
-        "printedPage": 98
+        "printedPage": 98,
+        "number": 23
       },
       {
         "id": "chem12-8",
         "title": "Organic Nitrogen Compounds",
         "page": 118,
-        "printedPage": 115
+        "printedPage": 115,
+        "number": 24
       },
       {
         "id": "chem12-9",
         "title": "Organic Synthesis",
         "page": 134,
-        "printedPage": 131
+        "printedPage": 131,
+        "number": 25
       },
       {
         "id": "chem12-10",
         "title": "Polymers",
         "page": 145,
-        "printedPage": 142
+        "printedPage": 142,
+        "number": 26
       },
       {
         "id": "chem12-11",
         "title": "Biochemistry",
         "page": 160,
-        "printedPage": 157
+        "printedPage": 157,
+        "number": 27
       },
       {
         "id": "chem12-12",
         "title": "Chromatography",
         "page": 178,
-        "printedPage": 175
+        "printedPage": 175,
+        "number": 28
       },
       {
         "id": "chem12-13",
         "title": "Spectroscopy–1",
         "page": 186,
-        "printedPage": 183
+        "printedPage": 183,
+        "number": 29
       },
       {
         "id": "chem12-14",
         "title": "Spectroscopy–2 NMR",
         "page": 202,
-        "printedPage": 199
+        "printedPage": 199,
+        "number": 30
       },
       {
         "id": "chem12-15",
         "title": "Materials and Energy",
         "page": 217,
-        "printedPage": 214
+        "printedPage": 214,
+        "number": 31
       },
       {
         "id": "chem12-16",
         "title": "Medicine, Agriculture and Industry",
         "page": 232,
-        "printedPage": 229
+        "printedPage": 229,
+        "number": 32
       },
       {
         "id": "chem12-17",
         "title": "Water",
         "page": 247,
-        "printedPage": 244
+        "printedPage": 244,
+        "endPage": 261,
+        "number": 33
+      }
+    ],
+    "appendices": [
+      {
+        "title": "Paper-setting instructions",
+        "page": 262,
+        "endPage": 262,
+        "kind": "exam-pattern"
+      },
+      {
+        "title": "Model paper",
+        "page": 263,
+        "endPage": 266,
+        "kind": "model-paper"
       }
     ]
   },
@@ -716,9 +793,7 @@
     "title": "Urdu",
     "subtitle": "Read, reflect & find your words",
     "class": "XII",
-    "classes": [
-      "XII"
-    ],
+    "classes": ["XII"],
     "kind": "textbook",
     "text": "scanned",
     "color": "peach",
@@ -731,7 +806,21 @@
     "sourceStatus": "file-inspected",
     "examStatus": "Current board syllabus / exclusions not verified",
     "access": "local-import",
-    "chapters": []
+    "chapters": [],
+    "appendices": [
+      {
+        "title": "Partial paper-setting instructions (starts at Q3)",
+        "page": 153,
+        "endPage": 153,
+        "kind": "exam-pattern-partial"
+      },
+      {
+        "title": "Model paper",
+        "page": 154,
+        "endPage": 156,
+        "kind": "model-paper"
+      }
+    ]
   },
   {
     "id": "computer-xi-supplied",
@@ -739,9 +828,7 @@
     "title": "Computer Science & Entrepreneurship",
     "subtitle": "Software, Python & digital problem solving",
     "class": "XI",
-    "classes": [
-      "XI"
-    ],
+    "classes": ["XI"],
     "kind": "textbook",
     "pages": 144,
     "bytes": 17823455,
@@ -840,9 +927,7 @@
     "title": "Psychology / Nafsiyat",
     "subtitle": "Older Urdu-medium elective reference",
     "class": "XII",
-    "classes": [
-      "XII"
-    ],
+    "classes": ["XII"],
     "kind": "legacy",
     "pages": 98,
     "bytes": 8544212,
@@ -864,9 +949,7 @@
     "title": "Tarjuma-tul-Quran",
     "subtitle": "Grade 12 Urdu translation textbook",
     "class": "XII",
-    "classes": [
-      "XII"
-    ],
+    "classes": ["XII"],
     "kind": "textbook",
     "pages": 188,
     "bytes": 34245946,
@@ -888,9 +971,7 @@
     "title": "Pakistan Studies / Mutalla Pakistan",
     "subtitle": "Grade 12 Urdu-medium supplied textbook",
     "class": "XII",
-    "classes": [
-      "XII"
-    ],
+    "classes": ["XII"],
     "kind": "textbook",
     "pages": 88,
     "bytes": 10595576,

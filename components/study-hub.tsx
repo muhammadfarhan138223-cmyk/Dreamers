@@ -22,6 +22,9 @@ import * as db from "@/lib/db";
 import { STUDY_POLICY } from "@/lib/study-practice.mjs";
 import type { Pack, RecordValue } from "@/lib/types";
 import type { LocalBook, BookPage } from "./book-library";
+import ChapterPreparation from "./chapter-preparation";
+import BookExamPlan from "./book-exam-plan";
+import { schemeForBook } from "@/lib/exam-schemes.mjs";
 export type StudyFocus = { grade: "XI" | "XII"; subject: string };
 type Card = {
   id: string;
@@ -32,7 +35,7 @@ type Card = {
   sourceQuote?: string;
   explanation?: string;
 };
-type SavedSet = RecordValue & {
+export type SavedSet = RecordValue & {
   grade: string;
   subject: string;
   mode: string;
@@ -43,6 +46,7 @@ type SavedSet = RecordValue & {
   at: number;
   revision?: string;
   policy?: string;
+  language?: string;
 };
 const subjectOptions = [
   {
@@ -146,7 +150,9 @@ export default function StudyHub({
     [language, setLanguage] = useState("English"),
     [question, setQuestion] = useState(""),
     [reply, setReply] = useState(""),
-    [allowStory, setAllowStory] = useState(false);
+    [allowStory, setAllowStory] = useState(false),
+    [questionGroup, setQuestionGroup] = useState(0),
+    [loadedView, setLoadedView] = useState("");
   async function refresh() {
     const [b, s] = await Promise.all([
       db.list<LocalBook>("books"),
@@ -176,6 +182,49 @@ export default function StudyHub({
       setGrade(focus.grade);
     }
   }, [focus]);
+  const viewId = focus ? `study-view:${focus.grade}:${focus.subject}` : "";
+  useEffect(() => {
+    if (!viewId) return;
+    let current = true;
+    void db
+      .get<RecordValue>("settings", viewId)
+      .then((v) => {
+        if (!current) return;
+        if (v) {
+          if (typeof v.bookChoice === "string") setBookChoice(v.bookChoice);
+          if (typeof v.chapter === "string") setChapter(v.chapter);
+          if (["short", "mcq", "long", "pdf", "ai"].includes(String(v.mode)))
+            setMode(String(v.mode));
+          if (["English", "Roman Urdu", "Urdu"].includes(String(v.language)))
+            setLanguage(String(v.language));
+          if (v.sourceKind === "book" || v.sourceKind === "foundation")
+            setSourceKind(v.sourceKind);
+        }
+        setLoadedView(viewId);
+      })
+      .catch(() => setNotice("Study preferences could not be loaded."));
+    return () => {
+      current = false;
+    };
+  }, [viewId]);
+  useEffect(() => {
+    if (!viewId || loadedView !== viewId) return;
+    void db
+      .put("settings", {
+        id: viewId,
+        bookChoice,
+        chapter,
+        mode,
+        language,
+        sourceKind,
+        at: Date.now(),
+      })
+      .catch(() =>
+        setNotice(
+          "Study preferences could not be saved. Earlier work is safe.",
+        ),
+      );
+  }, [viewId, loadedView, bookChoice, chapter, mode, language, sourceKind]);
   const subject = subjectOptions.find((s) => s.id === focus?.subject),
     Icon = subject?.icon || BookOpen;
   const matches = books.filter(
@@ -204,6 +253,7 @@ export default function StudyHub({
     firstPage,
     Math.min(
       local?.pageCount || 1500,
+      selectedChapter?.endPage || 1500,
       chapterIndex >= 0
         ? (catalog?.chapters[chapterIndex + 1]?.page ||
             (local?.pageCount || 1500) + 1) - 1
@@ -215,7 +265,16 @@ export default function StudyHub({
     setReply("");
     setAllowStory(false);
     setRevealed({});
-  }, [selectedChapter?.id, local?.id, focus?.grade, focus?.subject]);
+    setQuestionGroup(0);
+  }, [
+    selectedChapter?.id,
+    local?.id,
+    focus?.grade,
+    focus?.subject,
+    mode,
+    language,
+    sourceKind,
+  ]);
   const base = packs.find((p) => p.subject === focus?.subject);
   const scopeBook = sourceKind === "foundation" ? base?.id : local?.id;
   const scopeChapter =
@@ -229,7 +288,9 @@ export default function StudyHub({
         s.subject === focus?.subject &&
         s.bookId === scopeBook &&
         s.chapter === scopeChapter &&
-        s.mode === mode,
+        s.mode === mode &&
+        (s.language === language ||
+          (!s.language && s.id.endsWith(`:${language}`))),
     )
     .sort((a, b) => a.page - b.page || a.at - b.at);
   const matchingSets = scopedSets.filter((s) => s.policy === STUDY_POLICY);
@@ -254,11 +315,12 @@ export default function StudyHub({
     ...matchingSets.flatMap((s) =>
       s.questions.map((q) => ({
         ...q,
+        sourcePage: s.page,
         id: s.id + (s.revision ? ":" + s.revision : "") + ":" + q.id,
       })),
     ),
   ];
-  async function sourceText() {
+  async function sourceText(atPage = page, allowInsufficient = false) {
     if (sourceKind === "foundation" && base)
       return {
         title: base.title,
@@ -272,17 +334,17 @@ export default function StudyHub({
       throw new Error(
         "Add your PDF first. It will stay available offline on this device.",
       );
-    let saved = await db.get<BookPage>("bookPages", `${local.id}:p:${page}`);
+    let saved = await db.get<BookPage>("bookPages", `${local.id}:p:${atPage}`);
     if (!saved) {
       const { openLocalPdf } = await import("@/lib/pdf-client");
       const { meaningfulPdfText } = await import("@/lib/books.mjs");
       const pdf = await openLocalPdf(local.blob);
       try {
-        const p = await pdf.getPage(page);
+        const p = await pdf.getPage(atPage);
         saved = {
-          id: `${local.id}:p:${page}`,
+          id: `${local.id}:p:${atPage}`,
           bookId: local.id,
-          page,
+          page: atPage,
           text: meaningfulPdfText((await p.getTextContent()).items),
         };
         await db.put("bookPages", saved);
@@ -290,15 +352,59 @@ export default function StudyHub({
         await pdf.loadingTask.destroy();
       }
     }
-    if (!saved.text || saved.text.trim().length < 60)
+    if (!allowInsufficient && (!saved.text || saved.text.trim().length < 60))
       throw new Error(
         "This page is an image or has too little readable text. Read it in PDF mode. OCR is not available yet; AI cannot read this scan automatically.",
       );
     return {
       title: local.title.slice(0, 120),
-      page,
+      page: atPage,
       text: saved.text.slice(0, 6000),
     };
+  }
+  async function createPractice(source: {
+    title: string;
+    page: number;
+    text: string;
+  }): Promise<boolean> {
+    const response = await fetch("/api/study", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ source, mode, language }),
+    });
+    const data = await response.json();
+    if (!response.ok)
+      throw new Error(data.error || "Practice could not be made.");
+    if (!data.questions.length) return false;
+    const id = `study-set:${scopeBook}:${scopeChapter}:${mode}:${source.page}:${language}`;
+    const revision = Array.from(
+      new Uint8Array(
+        await crypto.subtle.digest(
+          "SHA-256",
+          new TextEncoder().encode(JSON.stringify(data.questions)),
+        ),
+      ),
+    )
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("")
+      .slice(0, 12);
+    await db.put("settings", {
+      id,
+      revision,
+      policy: STUDY_POLICY,
+      grade: focus!.grade,
+      subject: focus!.subject,
+      bookId: scopeBook,
+      chapter: scopeChapter,
+      mode,
+      language,
+      page: source.page,
+      questions: data.questions,
+      at: Date.now(),
+      verification: "Source extract answers — educator review pending",
+    });
+    await refresh();
+    return true;
   }
   async function generate() {
     if (busy) return;
@@ -312,45 +418,10 @@ export default function StudyHub({
     setBusy(true);
     try {
       const source = await sourceText();
-      const response = await fetch("/api/study", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ source, mode, language }),
-      });
-      const data = await response.json();
-      if (!response.ok)
-        throw new Error(data.error || "Practice could not be made.");
-      if (!data.questions.length)
+      if (!(await createPractice(source)))
         throw new Error(
-          "This page does not contain enough information for this practice type. Try another page.",
+          "No supported questions returned. Try another relevant page.",
         );
-      const id = `study-set:${scopeBook}:${scopeChapter}:${mode}:${source.page}:${language}`;
-      const revision = Array.from(
-        new Uint8Array(
-          await crypto.subtle.digest(
-            "SHA-256",
-            new TextEncoder().encode(JSON.stringify(data.questions)),
-          ),
-        ),
-      )
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("")
-        .slice(0, 12);
-      await db.put("settings", {
-        id,
-        revision,
-        policy: STUDY_POLICY,
-        grade: focus!.grade,
-        subject: focus!.subject,
-        bookId: scopeBook,
-        chapter: scopeChapter,
-        mode,
-        page: source.page,
-        questions: data.questions,
-        at: Date.now(),
-        verification: "Source extract answers — educator review pending",
-      });
-      await refresh();
       setNotice("Practice saved on this device. You can use it offline now.");
     } catch (e) {
       setNotice(
@@ -493,7 +564,11 @@ export default function StudyHub({
             {focus.grade === "XI" ? "First year" : "Second year"} · Punjab Board
           </p>
         </div>
-        <button className="secondary" onClick={() => setChoosing(true)}>
+        <button
+          className="secondary"
+          disabled={busy}
+          onClick={() => setChoosing(true)}
+        >
           Change subject
         </button>
       </header>
@@ -535,6 +610,7 @@ export default function StudyHub({
             Saved book
             <select
               value={local?.id || ""}
+              disabled={busy}
               onChange={(e) => {
                 setBookChoice(e.target.value);
                 setChapter("");
@@ -605,6 +681,15 @@ export default function StudyHub({
           </div>
         </section>
       )}
+      {sourceKind === "book" && catalog && (
+        <BookExamPlan
+          bookId={catalog.id}
+          chapterId={selectedChapter?.id}
+          busy={busy}
+          onChapter={setChapter}
+          navigate={navigate}
+        />
+      )}
       <nav className="study-tabs" aria-label="Chapter learning mode">
         {[
           ["short", "Short Q&A"],
@@ -615,6 +700,7 @@ export default function StudyHub({
         ].map(([id, label]) => (
           <button
             key={id}
+            disabled={busy}
             aria-pressed={mode === id}
             className={mode === id ? "active" : ""}
             onClick={() => {
@@ -727,85 +813,118 @@ export default function StudyHub({
               </div>
             </div>
             <div className="study-cards">
-              {cards.map((q, i) => (
-                <article className="study-question" key={q.id}>
-                  <span className="question-number">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <h3>{q.question}</h3>
-                    {q.options ? (
-                      <div className="study-mcq-options">
-                        {q.options.map((option, n) => (
+              {cards
+                .slice(questionGroup * 5, questionGroup * 5 + 5)
+                .map((q, i) => (
+                  <article className="study-question" key={q.id}>
+                    <span className="question-number">
+                      {String(questionGroup * 5 + i + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <h3>{q.question}</h3>
+                      {q.options ? (
+                        <div className="study-mcq-options">
+                          {q.options.map((option, n) => (
+                            <button
+                              key={n}
+                              className={
+                                answers[q.id] === n
+                                  ? n === q.correct
+                                    ? "correct"
+                                    : "retry"
+                                  : ""
+                              }
+                              onClick={() => {
+                                setAnswers((a) => ({ ...a, [q.id]: n }));
+                                void db
+                                  .put("settings", {
+                                    id: `study-answer:${q.id}`,
+                                    choice: n,
+                                    at: Date.now(),
+                                  })
+                                  .catch(() =>
+                                    setNotice(
+                                      "This answer could not be saved. Please try again.",
+                                    ),
+                                  );
+                              }}
+                            >
+                              <span>{String.fromCharCode(65 + n)}</span>
+                              {option}
+                            </button>
+                          ))}
+                          {answers[q.id] !== undefined && (
+                            <p className="answer-feedback">
+                              {answers[q.id] === q.correct
+                                ? "Correct — well understood."
+                                : `Try again. The answer is: ${q.answer}`}{" "}
+                              {q.explanation}
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        <>
                           <button
-                            key={n}
-                            className={
-                              answers[q.id] === n
-                                ? n === q.correct
-                                  ? "correct"
-                                  : "retry"
-                                : ""
+                            className="answer-toggle"
+                            onClick={() =>
+                              setRevealed((v) => ({ ...v, [q.id]: !v[q.id] }))
                             }
-                            onClick={() => {
-                              setAnswers((a) => ({ ...a, [q.id]: n }));
-                              void db
-                                .put("settings", {
-                                  id: `study-answer:${q.id}`,
-                                  choice: n,
-                                  at: Date.now(),
-                                })
-                                .catch(() =>
-                                  setNotice(
-                                    "This answer could not be saved. Please try again.",
-                                  ),
-                                );
-                            }}
                           >
-                            <span>{String.fromCharCode(65 + n)}</span>
-                            {option}
+                            {revealed[q.id] ? "Hide answer" : "Show answer"}{" "}
+                            <ChevronRight size={15} />
                           </button>
-                        ))}
-                        {answers[q.id] !== undefined && (
-                          <p className="answer-feedback">
-                            {answers[q.id] === q.correct
-                              ? "Correct — well understood."
-                              : `Try again. The answer is: ${q.answer}`}{" "}
-                            {q.explanation}
-                          </p>
-                        )}
-                      </div>
-                    ) : (
-                      <>
-                        <button
-                          className="answer-toggle"
-                          onClick={() =>
-                            setRevealed((v) => ({ ...v, [q.id]: !v[q.id] }))
-                          }
-                        >
-                          {revealed[q.id] ? "Hide answer" : "Show answer"}{" "}
-                          <ChevronRight size={15} />
-                        </button>
-                        {revealed[q.id] && (
-                          <p className="study-answer" dir="auto">
-                            {q.answer}
-                          </p>
-                        )}
-                      </>
-                    )}
-                    {q.sourceQuote && (
-                      <details className="source-reference">
-                        <summary>Check source quote</summary>
-                        <p dir="auto">“{q.sourceQuote}”</p>
-                        <small>
-                          Answer text matched the source. Check that it fully
-                          answers the question.
+                          {revealed[q.id] && (
+                            <p className="study-answer" dir="auto">
+                              {q.answer}
+                            </p>
+                          )}
+                        </>
+                      )}
+                      {"sourcePage" in q && (
+                        <small className="fineprint">
+                          Source PDF page {Number(q.sourcePage)}
                         </small>
-                      </details>
-                    )}
-                  </div>
-                </article>
-              ))}
+                      )}
+                      {q.sourceQuote && (
+                        <details className="source-reference">
+                          <summary>Check source quote</summary>
+                          <p dir="auto">“{q.sourceQuote}”</p>
+                          <small>
+                            Answer text matched the source. Check that it fully
+                            answers the question.
+                          </small>
+                        </details>
+                      )}
+                    </div>
+                  </article>
+                ))}
             </div>
+            {cards.length > 5 && (
+              <nav
+                className="question-paging"
+                aria-label="Practice question pages"
+              >
+                <button
+                  className="secondary"
+                  disabled={questionGroup === 0}
+                  onClick={() => setQuestionGroup((p) => p - 1)}
+                >
+                  Previous
+                </button>
+                <span>
+                  Questions {questionGroup * 5 + 1}–
+                  {Math.min(cards.length, questionGroup * 5 + 5)} of{" "}
+                  {cards.length}
+                </span>
+                <button
+                  className="secondary"
+                  disabled={(questionGroup + 1) * 5 >= cards.length}
+                  onClick={() => setQuestionGroup((p) => p + 1)}
+                >
+                  Next
+                </button>
+              </nav>
+            )}
             {!cards.length && (
               <div className="study-empty">
                 <Target size={38} />
@@ -841,6 +960,28 @@ export default function StudyHub({
                   {busy ? "Making source-based questions…" : "Make practice"}
                 </button>
               </div>
+            )}
+            {sourceKind === "book" && local && selectedChapter && (
+              <ChapterPreparation
+                key={`${local.id}:${selectedChapter.id}:${mode}:${language}`}
+                scope={{
+                  bookId: local.id,
+                  chapter: selectedChapter.id,
+                  grade: focus.grade,
+                  subject: focus.subject,
+                  mode,
+                  language,
+                  first: firstPage,
+                  last: lastPage,
+                }}
+                sets={matchingSets}
+                busy={busy}
+                online={online}
+                onBusy={setBusy}
+                loadSource={(p) => sourceText(p, true)}
+                createPractice={createPractice}
+                onPage={setPage}
+              />
             )}
             <p className="fineprint">
               Questions are AI-generated. Answer keys quote your selected
@@ -902,6 +1043,11 @@ export default function StudyHub({
       </section>
       <details className="exam-source-details">
         <summary>Exam pairing scheme & sources</summary>
+        <p>
+          {catalog && schemeForBook(catalog.id)
+            ? "A paper pattern was inspected in this supplied book. Use the source-linked book plan above; current board confirmation remains pending."
+            : "No mapped paper pattern is available for this selected resource yet."}
+        </p>
         <p>
           Select the scheme for your actual examination year. A textbook edition
           does not establish the current pairing scheme. The official PECTAA

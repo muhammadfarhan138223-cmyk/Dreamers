@@ -5944,3 +5944,194 @@ hr {
     min-height: 48px;
   }
 }
+
+/* Source-linked book plans and durable chapter preparation */
+.book-exam-plan,
+.chapter-preparation {
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 18px;
+  padding: 20px;
+  margin: 18px 0;
+}
+.book-exam-plan {
+  border-left: 4px solid #8b6ef1;
+}
+.book-exam-plan h2 {
+  font-size: 19px;
+  margin: 5px 0 8px;
+}
+.book-exam-plan p,
+.chapter-preparation p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 7px 0;
+}
+.book-exam-plan .between,
+.chapter-preparation .between {
+  gap: 16px;
+}
+.book-exam-plan .text-link {
+  margin: 8px 0;
+  font-size: 12px;
+}
+.book-exam-plan summary,
+.chapter-preparation summary {
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--blue);
+}
+.exam-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0;
+}
+.exam-summary span {
+  background: var(--card2);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 12px;
+}
+.exam-summary b {
+  font-size: 22px;
+  color: var(--blue);
+  margin-right: 6px;
+}
+.current-chapter-pattern {
+  display: flex;
+  gap: 12px;
+  padding: 15px;
+  background: var(--card2);
+  border-radius: 13px;
+}
+.current-chapter-pattern > svg {
+  flex: none;
+  color: var(--blue);
+  margin-top: 3px;
+}
+.exam-group {
+  border-bottom: 1px solid var(--line);
+  padding: 13px 0;
+  font-size: 13px;
+}
+.exam-pairs {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.exam-pairs > div {
+  padding: 9px;
+  border-radius: 9px;
+  background: var(--card2);
+}
+.exam-pairs button {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--blue);
+  padding: 8px;
+  min-height: 44px;
+}
+.book-exam-plan small,
+.chapter-preparation small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+  display: block;
+  margin-top: 10px;
+}
+.chapter-preparation {
+  background: var(--bg);
+}
+.chapter-preparation progress {
+  display: block;
+  width: 100%;
+  height: 8px;
+  margin: 14px 0 3px;
+  accent-color: #3985ff;
+}
+.coverage-pages {
+  display: flex;
+  overflow-x: auto;
+  gap: 7px;
+  padding: 12px 0;
+}
+.coverage-pages button {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--card);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  min-height: 44px;
+  padding: 9px;
+}
+.coverage-pages button.saved {
+  background: #c9f2df;
+  color: #176347;
+  border-color: #81c9aa;
+}
+.question-paging {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  margin: 18px 0;
+}
+.question-paging .secondary {
+  padding: 9px 13px;
+}
+@media (max-width: 760px) {
+  .book-exam-plan,
+  .chapter-preparation {
+    padding: 16px;
+  }
+  .book-exam-plan > .between {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .book-exam-plan .between > .primary,
+  .book-exam-plan .between > .secondary {
+    width: 100%;
+  }
+  .exam-summary span {
+    flex: 1;
+    font-size: 11px;
+    padding: 10px;
+  }
+  .current-chapter-pattern {
+    padding: 12px;
+  }
+  .chapter-preparation .row > button {
+    width: 100%;
+  }
+  .book-exam-plan h2 {
+    font-size: 17px;
+  }
+  .question-paging {
+    font-size: 11px;
+  }
+}
+.book-appendices {
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 17px;
+  margin: 18px 0;
+  background: var(--card);
+}
+.book-appendices .row {
+  margin: 12px 0;
+}
+.book-appendices small {
+  color: var(--muted);
+  font-size: 11px;
+}

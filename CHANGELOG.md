@@ -1,3 +1,11 @@
+# 0.5.0 — 2026-10-31
+
+- Add four source-linked book paper plans with actual chapter groups, attempt rules and source/year/verification labels; preserve all chapters.
+- Register five books' pattern/model appendices, including a partial Urdu instruction page. Exclude inspected appendices from chapter preparation bounds.
+- Add durable per-chapter practice preparation with manual pause/resume, existing-set reuse, request spacing and explicit unreadable/exercise/unsupported gaps.
+- Persist chapter/mode/language selection; show five practice questions per screen and retain source page labels.
+- Shell v14; IndexedDB v3 and existing progress remain unchanged.
+
 # 0.4.2 — 2026-10-31 (live and verified)
 
 - Require practice answer keys to match the selected source verbatim; a matching quote and model audit alone proved insufficient in live QA. Original generated questions retain review-pending status.

@@ -303,6 +303,36 @@ export default function BookLibrary({
           );
         })}
       </div>
+      {activeBook?.appendices?.length ? (
+        <section className="book-appendices">
+          <b>Paper patterns & model papers in this copy</b>
+          <div className="row">
+            {activeBook.appendices.map((a) => (
+              <button
+                key={a.page}
+                className="secondary"
+                onClick={() => {
+                  const saved = books.find(
+                    (b) => b.catalogId === activeBook.id,
+                  );
+                  if (saved) openBook(saved, a.page);
+                  else
+                    setError(
+                      "Add this PDF once to open its paper-pattern pages offline.",
+                    );
+                }}
+              >
+                {a.title} · PDF {a.page}
+                {a.endPage !== a.page ? `–${a.endPage}` : ""}
+              </button>
+            ))}
+          </div>
+          <small>
+            Source pages checked in this supplied file; official board/year
+            confirmation remains pending.
+          </small>
+        </section>
+      ) : null}
       {activeBook && (
         <section className={`panel textbook-chapters ${activeBook.color}`}>
           <div className="between">
