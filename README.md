@@ -34,11 +34,11 @@ Open the development URL printed by Next.js. Node 24 is recommended.
 - Personal full-PDF import/reader, resumable selectable-text index/search, reading-position resume, separate PDF export and selected-page AI references. First opening caches about 5 MB of engine resources. Scans have no OCR; imported editions stay unverified.
 
 - Textbook-first colorful home/learn, 86 checked chapter/unit headings from seven maps within 16 unique supplied resources, chapter search and private batch PDF import with automatic hash matching.
-- Tutor suggestions follow the selected book; related stories/history require explicit extra-context opt-in. Current exam exclusions and live model behavior remain unverified.
+- Tutor suggestions follow the selected book; related stories/history require explicit extra-context opt-in. Current exam exclusions remain unverified; live source-only tutor/search and source-extract short/MCQ flows were tested.
 
 ## Explicit limitations
 
-Content is original, educator review is pending, and official edition/chapter mapping is not yet verified. Compulsory-subject lessons and complete syllabus coverage are planned. Accounts, cloud synchronization, administrative operations and semantic AI search are not enabled. Guest events remain queued for a future authenticated migration; they are never silently discarded or described as synced. No exam outcome is guaranteed.
+Content is original, educator review is pending, and official edition/chapter mapping is not yet verified. Compulsory-subject lessons and complete syllabus coverage are planned. Accounts, cloud synchronization, administrative operations and whole-book semantic retrieval are not enabled. Online AI topic discovery and private local PDF search are available. Guest events remain queued for a future authenticated migration; they are never silently discarded or described as synced. No exam outcome is guaranteed.
 
 AI requires owner-only environment configuration. Never commit `.env` files. Students never supply API keys. See DEPLOYMENT.md for setup and current verification status.
 
@@ -52,11 +52,11 @@ Read PROJECT_STATUS.md, DEVELOPMENT_ROADMAP.md, ARCHITECTURE.md, DEPLOYMENT.md a
 
 Learning text, practice questions and production SVG assets are original DREAMERS work. Supplied textbook binaries remain private on the student’s device and are not redistributed in this repository. Official resources should be verified and licensed before import. Source code is private-use by default unless the owner chooses a license; no third-party textbook rights are granted by this repository.
 
-AI configuration and verified current free-provider options: [Owner AI setup](docs/AI_SETUP.md). Provided-text mode is default; quotation matching is a reference check, not automatic factual verification. Remote provider evaluation is still pending.
+AI configuration and verified current free-provider options: [Owner AI setup](docs/AI_SETUP.md). Provided-text mode is default; quotation matching is a reference check, not automatic factual verification. Limited real-provider smoke tests passed; broader educator-led factual/language evaluation remains pending.
 
 Global search (`/search`) searches checked chapters across all books, indexed local PDF passages and downloaded foundation lessons. Filter by subject, class, book and result type. Online AI-assisted discovery uses the owner's configured provider; it sends only the query and never silently uploads private books. Full PDF word search requires selectable text and local indexing; scanned pages still need OCR.
 
-### Focused study (0.4.0)
+### Focused study (0.4.2)
 Choose class and one subject on My study. Add your own permitted PDF once, read it offline, then make small source-page short Q&A/MCQ/long-answer sets online and reuse saved questions offline. Original basics are clearly separate from syllabus mapping. Biology XI and current-year official pairing mapping are pending. Generated practice is review-pending and does not establish full chapter coverage.
 
 Practice answer keys use direct excerpts from the selected readable page, with exact text checks; question wording is generated and still needs review. Use Ask AI for a separately labelled simpler explanation or translation. Keys retain the source language. Pages without enough text cannot produce long answers. A source quote or model audit is not an accuracy guarantee.

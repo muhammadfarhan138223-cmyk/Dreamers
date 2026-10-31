@@ -70,3 +70,5 @@ Matching quotations alone did not prevent unsupported long-answer expansion in l
 
 ### Deterministic source keys (0.4.2)
 Live model auditing still accepted extra inferred facts. Practice policy v3 therefore requires normalized answer text to be a contiguous substring of the selected source; MCQ correct choices obey the same condition and have a 20-character minimum. Long keys are 300–1800-character extracts. Questions are generated and audited; answers are extracts rather than AI paraphrases. This prevents answer-key expansion but does not establish that the question fully fits the answer or that the supplied source is correct. Questions may be translated; keys retain source language. Separate AI tutor explanations remain probabilistic and labelled generated.
+
+0.4.2 deployment and real source-extract practice were verified at application 185b44c52149d75ae83db7ed1e4126abbd703481. IndexedDB remains v3; no cloud migration. See PROJECT_STATUS.md for current boundaries and exact continuation task.

@@ -1,4 +1,4 @@
-# 0.4.2 — 2026-10-31
+# 0.4.2 — 2026-10-31 (live and verified)
 
 - Require practice answer keys to match the selected source verbatim; a matching quote and model audit alone proved insufficient in live QA. Original generated questions retain review-pending status.
 - Keep answer extracts in the book's language; question language and separately labelled AI simplification/translation remain available.
@@ -78,3 +78,5 @@ Final 0.3.1 clarity pass: show class on PDF selection/export/removal/reader cont
 - Added lazy global search over all checked textbook headings, streamed IndexedDB PDF text indexes and downloaded original lessons. Added subject/class/book/result-type filters below search, ranked page expansion and direct local PDF page navigation.
 - Added bounded online AI topic discovery with validated existing catalogue IDs/terms, explicit generated relevance labels and honest configuration/offline/failure states. Only queries leave the device; private PDFs/notes are not uploaded. Search and tutor share durable quota protection.
 - Preserved IndexedDB v3 and PDF engine caches; shell v10 refreshes application assets. Current board exclusions, scanned-page OCR and real provider evaluation remain pending.
+
+0.4.2 verified application: 185b44c52149d75ae83db7ed1e4126abbd703481; production dpl_54xPk1bQtrvsah1trPVCEzmxZxv9. Real supplied-PDF source-extract short/MCQ generation, saved sets/choices and shell update persistence passed.

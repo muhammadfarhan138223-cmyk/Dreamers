@@ -4,10 +4,10 @@
 2. Offline learning — original Biology, Chemistry and Physics chapters, IndexedDB, starter pack, offline progress: implemented; network-failure worker tests passed; physical offline installation pending.
 3. Question engine — MCQ feedback, history, mistake review, short/long self-check: implemented; live MCQ feedback/history QA passed; written drafts included.
 4. Dreamverse — first-completion XP, levels, chapter map and achievements: implemented for starter scope. A separate unlocked chapter challenge now saves/resumes sessions and commits scores/evidence atomically.
-5. AI teacher — secure Groq/OpenAI-compatible adapter, input checks, durable network quotas and cache boundary implemented; requires owner credentials and durable rate-limit service before live AI verification.
+5. AI teacher — secure Groq/OpenAI-compatible adapter, input checks, durable network quotas and cache boundary implemented; owner production credentials/quota service configured and genuine tutor/search/practice smoke tests passed. Source-extract answer keys now prevent unchecked expansion; broader teacher review remains pending.
 6. Accounts — dedicated Supabase project, migrations, RLS, sign-in and guest migration pending. Preserve queues until authenticated acknowledgements succeed.
 7. Study features — initial flashcards, notes and chapter plan implemented; delayed retention and validated subject readiness remain pending.
-8. Advanced media — browser read-aloud and cell/osmosis illustrations implemented; semantic search, images, microphone input and generated practice pending.
+8. Advanced media — browser read-aloud and cell/osmosis illustrations implemented; AI topic discovery and source-page generated questions/extract keys implemented; whole-book retrieval, images and microphone input pending.
 9. Administration — server RBAC, content review/import/publish and usage dashboards pending. No admin operations enabled.
 10. Hardening — accessibility/mobile/offline checks, API authorization tests and preview-to-production verification in this session; further device coverage later.
 11. Full-PDF library — personal offline import/reader, local selectable-text search and selected-page AI context implemented; verified official downloads, OCR and whole-book retrieval remain pending.
@@ -34,3 +34,5 @@ Implemented locally: colorful one-subject workspace, simplified navigation, sour
 0.4.0 live QA completed. 0.4.1 audit follow-up must be deployed and checked after long-answer QA exposed unsupported expansion. Teacher review remains needed; never claim hallucination-free output. Verified current-year scheme and Biology XI are still prerequisites for the full requested syllabus focus.
 
 0.4.2: deterministic source extracts replace generated practice answer keys after live semantic-audit failures. Questions remain generated/review-pending. Next: live source-extract regression, teacher review, current official scheme and missing Biology XI. Full-chapter batch generation, whole-book retrieval and OCR remain pending.
+
+0.4.2 live source-extract regression passed on supplied Biology XII: three short questions, two statement MCQs, exact keys and persisted choices. Latest verified application 185b44c52149d75ae83db7ed1e4126abbd703481. Next priority: verified Biology XI/current exam scheme and one fully reviewed chapter with coverage tracking.

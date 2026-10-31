@@ -7,6 +7,11 @@ Live production alias: https://dreamers-sooty.vercel.app
 An initial unused unlinked dreamers-learning project also exists; do not deploy there.
 Runtime: Node 24, framework Next.js, build `npm run build`, install `npm ci`.
 
+## Current verified release — 0.4.2
+Application 185b44c52149d75ae83db7ed1e4126abbd703481; preview dpl_BU6k2PeDPmTTKSzcaHXhfnMtNiiP READY; production dpl_54xPk1bQtrvsah1trPVCEzmxZxv9 READY with stable alias. Health configured=true, standalone manifest and shell v13 verified. 56 tests/build pass. Real source-extract short/MCQ generation from supplied Biology PDF and saved choices passed browser QA. Broader accuracy/device coverage remains pending.
+
+All six owner AI/quota env keys exist as sensitive production values. Secret works for configuration strings as well as keys; re-entry as Config is unnecessary. Preview credentials remain absent. Metadata-only inspection, no secret decryption. Practice answer extracts retain source language, with separate generated AI explanation/translation. Historical deployment records follow.
+
 First production deployment `dpl_6Cm7JzaPQR8VaYKFPazRQgTytHFc` is READY, from commit `63e0b9f2befaa0c884815c13ceb5add896fa2aad`. Browser flows and live HTTP checks passed. The native Git context confirms the Dreamers repository is linked to the dreamers Vercel project. No secrets are required for the offline guest release.
 
 The Git project helper initially returned a schema error after creating the project; read-only verification confirmed creation and Git linking. Do not create another project. Existing SSO protection is preserved. An automatic review rejected disabling it; no bypass or protection change was applied. The production alias is reachable in the test browser and anonymous HTTP checks.
@@ -31,7 +36,7 @@ NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY are planned. N
 
 Run typecheck, tests, production build, browser navigation and real offline reload/practice/persistence. Verify manifest and icons over HTTPS. PWA installation depends on browser support and must not be inferred from a shortcut. Test accounts/RLS and live AI only after setup; do not mark them verified beforehand.
 
-## Latest verified release
+## Historical 0.1.2 checkpoint
 
 0.1.2, commit d2fcfd83845500dd19c397f7c118eb09472bf254, Git-triggered deployment dpl_DabfgwQVqSWSPqfpTBZQ5zY6H1Nw, READY. Production alias and live API/PWA asset regression checks passed. Browser testing confirmed chapter challenge unlock, interrupted-session resume, actual scoring, saved history and XP deduplication. Existing SSO configuration remains unchanged. Documentation-only checkpoint pushes may produce a newer build of identical application code.
 
