@@ -564,9 +564,9 @@ export default function StudyHub({
                 setNotice("");
               }}
             >
-              {catalog.chapters.map((t, i) => (
+              {catalog.chapters.map((t) => (
                 <option key={t.id} value={t.id}>
-                  {i + 1}. {t.title}
+                  {t.title} · PDF p. {t.page}
                 </option>
               ))}
             </select>
@@ -637,7 +637,7 @@ export default function StudyHub({
         {mode === "pdf" ? (
           <div className="study-empty">
             <BookOpen size={44} />
-            <h2>Your full textbook, ready offline.</h2>
+            <h2>Your saved PDF, ready offline.</h2>
             <p>
               {local
                 ? `${local.title} · ${local.pageCount || "?"} PDF pages · saved on this device`

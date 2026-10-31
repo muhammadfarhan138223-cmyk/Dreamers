@@ -256,6 +256,14 @@ export default function BookLibrary({
           Your supplied books, one clear shelf. Add your files once, then read
           your saved copies offline.
         </p>
+        <button
+          className="primary"
+          style={{ marginTop: 16 }}
+          disabled={busy}
+          onClick={() => input.current?.click()}
+        >
+          <Upload size={18} /> Add PDF to read offline
+        </button>
       </div>
       {focus && (
         <div className="shelf-focus">

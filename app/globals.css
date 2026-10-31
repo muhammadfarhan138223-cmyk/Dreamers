@@ -5910,7 +5910,7 @@ hr {
   }
   .study-tabs {
     position: sticky;
-    top: 0;
+    top: 64px;
     z-index: 3;
     background: var(--bg);
   }
@@ -5935,5 +5935,12 @@ hr {
   .subject-pick:hover,
   .year-choices button:hover {
     transform: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .bottom-nav a {
+    font-size: 11px;
+    min-height: 48px;
   }
 }
