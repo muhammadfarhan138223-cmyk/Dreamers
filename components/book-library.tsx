@@ -62,17 +62,23 @@ export default function BookLibrary({
   requestedPage = 1,
   onNavigate,
   onAskTopic,
+  focus,
 }: {
   onAsk: (context: BookContext, subject: string, catalogId?: string) => void;
+  focus?: { grade: string; subject: string } | null;
   requestedId?: string;
   requestedPage?: number;
   onNavigate: (url: string) => void;
   onAskTopic: (bookId: string, topicId: string, extra?: boolean) => void;
 }) {
+  const [showAll, setShowAll] = useState(false);
+  const narrow = !!focus && !showAll && !requestedId;
   const [books, setBooks] = useState<LocalBook[]>([]),
     [selected, setSelected] = useState<LocalBook | null>(null),
-    [subject, setSubject] = useState("biology"),
-    [grade, setGrade] = useState("XII"),
+    [subject, setSubject] = useState(
+      focus?.subject.replaceAll("-", " ") || "biology",
+    ),
+    [grade, setGrade] = useState(focus?.grade || "XII"),
     [edition, setEdition] = useState(""),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -85,7 +91,20 @@ export default function BookLibrary({
     requestedId && textbook(requestedId) ? requestedId : DEFAULT_TEXTBOOK,
   );
   const input = useRef<HTMLInputElement>(null);
-  const activeBook = textbook(catalogId)!;
+  const visibleCatalog = narrow
+    ? TEXTBOOKS.filter(
+        (b) => b.subject === focus!.subject && b.classes.includes(focus!.grade),
+      )
+    : TEXTBOOKS;
+  const visibleBooks = narrow
+    ? books.filter(
+        (b) =>
+          b.subject.replaceAll(" ", "-") === focus!.subject &&
+          (b.class === focus!.grade || b.class === "XI–XII"),
+      )
+    : books;
+  const activeBook =
+    visibleCatalog.find((b) => b.id === catalogId) || visibleCatalog[0];
   useEffect(() => {
     const wanted = textbook(requestedId);
     if (!wanted) {
@@ -238,11 +257,21 @@ export default function BookLibrary({
           your saved copies offline.
         </p>
       </div>
+      {focus && (
+        <div className="shelf-focus">
+          <b>
+            {focus.subject.replaceAll("-", " ")} · Class {focus.grade}
+          </b>
+          <button className="secondary" onClick={() => setShowAll((v) => !v)}>
+            {showAll ? "Only my subject" : "Show all books"}
+          </button>
+        </div>
+      )}
       <div
         className="supplied-book-tabs"
         aria-label="Supplied textbook selection"
       >
-        {TEXTBOOKS.map((b) => {
+        {visibleCatalog.map((b) => {
           const saved = books.some((local) => local.sha256 === b.sha256);
           return (
             <button
@@ -266,92 +295,97 @@ export default function BookLibrary({
           );
         })}
       </div>
-      <section className={`panel textbook-chapters ${activeBook.color}`}>
-        <div className="between">
-          <div>
-            <span className="eyebrow">
-              CLASS {activeBook.class} /{" "}
-              {activeBook.kind === "legacy"
-                ? "LEGACY REFERENCE"
-                : activeBook.kind === "grammar"
-                  ? "GRAMMAR SUPPORT"
-                  : "SUPPLIED COPY"}
+      {activeBook && (
+        <section className={`panel textbook-chapters ${activeBook.color}`}>
+          <div className="between">
+            <div>
+              <span className="eyebrow">
+                CLASS {activeBook.class} /{" "}
+                {activeBook.kind === "legacy"
+                  ? "LEGACY REFERENCE"
+                  : activeBook.kind === "grammar"
+                    ? "GRAMMAR SUPPORT"
+                    : "SUPPLIED COPY"}
+              </span>
+              <h2>{activeBook.title}: find your chapter.</h2>
+              <p>{activeBook.edition}</p>
+            </div>
+            <span className="pill">
+              {activeBook.chapters.length} checked chapters
             </span>
-            <h2>{activeBook.title}: find your chapter.</h2>
-            <p>{activeBook.edition}</p>
           </div>
-          <span className="pill">
-            {activeBook.chapters.length} checked chapters
-          </span>
-        </div>
-        <p className="fineprint">
-          {activeBook.chapters.length
-            ? "Headings checked in the supplied file."
-            : "Chapter map pending review; no suggested topics are generated from this file yet."}{" "}
-          Current board exam exclusions are not yet verified.{" "}
-          {activeBook.text !== "selectable"
-            ? "This copy is scanned: image reading works; OCR text search is not available."
-            : ""}
-        </p>
-        {!activeBook.chapters.length && (
-          <div className="chapter-map-pending">
-            <BookOpen size={28} />
-            <h3>Read your PDF copy</h3>
-            <p>
-              This file can be saved and read now. Chapter suggestions will
-              appear after its contents are checked.
-            </p>
-            <button
-              className="primary"
-              onClick={() => {
-                const saved = books.find((b) => b.sha256 === activeBook.sha256);
-                if (saved) openBook(saved, 1);
-                else input.current?.click();
-              }}
-            >
-              Open / add PDF <Upload size={16} />
-            </button>
-          </div>
-        )}
-        <div className="textbook-chapter-list">
-          {activeBook.chapters.map((t, i) => (
-            <div className="textbook-chapter" key={t.id}>
-              <span>{String(i + 1).padStart(2, "0")}</span>
-              <div>
-                <b>{t.title}</b>
-                <small>
-                  PDF page {t.page}
-                  {t.printedPage ? ` · printed page ${t.printedPage}` : ""}
-                </small>
-              </div>
+          <p className="fineprint">
+            {activeBook.chapters.length
+              ? "Headings checked in the supplied file."
+              : "Chapter map pending review; no suggested topics are generated from this file yet."}{" "}
+            Current board exam exclusions are not yet verified.{" "}
+            {activeBook.text !== "selectable"
+              ? "This copy is scanned: image reading works; OCR text search is not available."
+              : ""}
+          </p>
+          {!activeBook.chapters.length && (
+            <div className="chapter-map-pending">
+              <BookOpen size={28} />
+              <h3>Read your PDF copy</h3>
+              <p>
+                This file can be saved and read now. Chapter suggestions will
+                appear after its contents are checked.
+              </p>
               <button
-                className="secondary"
+                className="primary"
                 onClick={() => {
                   const saved = books.find(
                     (b) => b.sha256 === activeBook.sha256,
                   );
-                  if (saved) openBook(saved, t.page);
-                  else {
-                    setNotice(
-                      `Add your ${activeBook.title} PDF below first. Its file signature will match it to this chapter map.`,
-                    );
-                    input.current?.click();
-                  }
+                  if (saved) openBook(saved, 1);
+                  else input.current?.click();
                 }}
               >
-                Read <ArrowRight size={14} />
-              </button>
-              <button
-                className="circle-button"
-                aria-label={`Ask AI about ${t.title}`}
-                onClick={() => onAskTopic(activeBook.id, t.id)}
-              >
-                <Sparkles size={16} />
+                Open / add PDF <Upload size={16} />
               </button>
             </div>
-          ))}
-        </div>
-      </section>
+          )}
+          <div className="textbook-chapter-list">
+            {activeBook.chapters.map((t, i) => (
+              <div className="textbook-chapter" key={t.id}>
+                <span>{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <b>{t.title}</b>
+                  <small>
+                    PDF page {t.page}
+                    {t.printedPage ? ` · printed page ${t.printedPage}` : ""}
+                  </small>
+                </div>
+                <button
+                  className="secondary"
+                  onClick={() => {
+                    const saved = books.find(
+                      (b) => b.sha256 === activeBook.sha256,
+                    );
+                    if (saved) openBook(saved, t.page);
+                    else {
+                      setNotice(
+                        `Add your ${activeBook.title} PDF below first. Its file signature will match it to this chapter map.`,
+                      );
+                      input.current?.click();
+                    }
+                  }}
+                >
+                  Read <ArrowRight size={14} />
+                </button>
+                <button
+                  className="circle-button"
+                  aria-label={`Ask AI about ${t.title}`}
+                  onClick={() => onAskTopic(activeBook.id, t.id)}
+                >
+                  <Sparkles size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="panel book-import">
         <div className="between">
           <div>
@@ -496,7 +530,7 @@ export default function BookLibrary({
         })}
       </div>
       <div className="book-shelf">
-        {books.map((b) => (
+        {visibleBooks.map((b) => (
           <article className={`panel saved-book ${b.subject}`} key={b.id}>
             <FileText size={33} />
             <h3>{b.title}</h3>
@@ -571,7 +605,7 @@ export default function BookLibrary({
           </article>
         ))}
       </div>
-      {!books.length && (
+      {!visibleBooks.length && (
         <div className="panel empty">
           <BookOpen size={40} />
           <h2>Your first textbook belongs here.</h2>

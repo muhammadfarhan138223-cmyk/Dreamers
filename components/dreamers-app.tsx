@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import LearningHome from "./learning-home";
+import StudyHub, { type StudyFocus } from "./study-hub";
 const GlobalSearch = dynamic(() => import("./global-search"), {
   ssr: false,
   loading: () => <div className="panel empty">Opening cross-book search…</div>,
@@ -284,7 +284,7 @@ export default function DreamersApp() {
       id: "profile",
       name: "Explorer",
       class: "XII",
-      theme: "dark",
+      theme: "light",
     }),
     [online, setOnline] = useState(true),
     [ready, setReady] = useState(false),
@@ -308,6 +308,7 @@ export default function DreamersApp() {
     [reveal, setReveal] = useState(false),
     [shortAnswers, setShortAnswers] = useState<Record<string, string>>({}),
     [quizDone, setQuizDone] = useState(false);
+  const [studyFocus, setStudyFocus] = useState<StudyFocus | null>(null);
   const [studyBook, setStudyBook] = useState(DEFAULT_TEXTBOOK),
     [aiContextKind, setAiContextKind] = useState("textbook"),
     [aiTextbook, setAiTextbook] = useState(DEFAULT_TEXTBOOK),
@@ -382,6 +383,28 @@ export default function DreamersApp() {
       .then((value) => {
         if (value && textbook(String(value.bookId)))
           setStudyBook(String(value.bookId));
+      })
+      .catch(() => {});
+  }, []);
+  function chooseFocus(value: StudyFocus) {
+    setStudyFocus(value);
+    void db
+      .put("settings", { id: "study-focus", ...value, at: Date.now() })
+      .catch(() => say("Study selection could not be saved."));
+  }
+  useEffect(() => {
+    void db
+      .get<RecordValue>("settings", "study-focus")
+      .then((value) => {
+        if (
+          value &&
+          ["XI", "XII"].includes(String(value.grade)) &&
+          typeof value.subject === "string"
+        )
+          setStudyFocus({
+            grade: value.grade as "XI" | "XII",
+            subject: value.subject,
+          });
       })
       .catch(() => {});
   }, []);
@@ -502,11 +525,19 @@ export default function DreamersApp() {
             "Offline app shell could not be prepared. Reconnect and reload before going offline.",
           ),
         );
-    fetch("/api/health", { cache: "no-store" })
-      .then((r) => r.json())
-      .then((v) => setAiConfigured(v.aiConfigured))
-      .catch(() => {});
+    const checkAi = () => {
+      if (!navigator.onLine) return;
+      void fetch("/api/health", { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((v) => setAiConfigured(v.aiConfigured === true))
+        .catch(() => {});
+    };
+    checkAi();
+    window.addEventListener("focus", checkAi);
+    window.addEventListener("online", checkAi);
     return () => {
+      window.removeEventListener("focus", checkAi);
+      window.removeEventListener("online", checkAi);
       window.removeEventListener("online", sync);
       window.removeEventListener("offline", sync);
       window.removeEventListener("popstate", pop);
@@ -765,17 +796,14 @@ export default function DreamersApp() {
         <h2>{initPhase}</h2>
       </div>
     );
-  else if (["/dashboard", "/", "/learn", "/subjects"].includes(path))
+  else if (["/dashboard", "/", "/learn", "/subjects", "/study"].includes(path))
     content = (
-      <LearningHome
-        name={String(prefs.name || "Explorer")}
-        xp={totalState.xp}
-        completed={totalState.completed.length}
-        view={path === "/learn" || path === "/subjects" ? "learn" : "home"}
-        bookId={studyBook}
-        onBookChange={chooseStudyBook}
-        onNavigate={navigate}
-        onAsk={askTextbook}
+      <StudyHub
+        focus={studyFocus}
+        onFocus={chooseFocus}
+        navigate={navigate}
+        packs={installedPacks}
+        online={online}
       />
     );
   else if (routeMeta && routeMeta.subject !== "biology")
@@ -1523,6 +1551,7 @@ export default function DreamersApp() {
   else if (path === "/books" || path.startsWith("/books/"))
     content = (
       <BookLibrary
+        focus={studyFocus}
         requestedId={path.split("/")[2]}
         requestedPage={Number(path.split("/")[3]) || 1}
         onNavigate={navigate}
@@ -2782,59 +2811,69 @@ export default function DreamersApp() {
             DREAMERS<span>MAKE ROOM FOR POSSIBILITY</span>
           </div>
         </a>
-        <div className="workspace-label">YOUR LEARNING SPACE</div>
+        <div className="workspace-label">LEARN, ONE STEP AT A TIME</div>
         <nav>
-          {nav.map(([url, title, Icon]) =>
-            link(
-              url,
+          {[
+            ["/dashboard", "My study", BookOpen],
+            ["/books", "Offline PDFs", Download],
+            ["/search", "Search books", Search],
+            ["/ai-tutor", "AI teacher", Sparkles],
+            ["/profile", "My profile", GraduationCap],
+          ].map(([url, title, Icon]) => {
+            const I = Icon as typeof BookOpen;
+            return link(
+              String(url),
               <>
-                <Icon size={19} strokeWidth={1.7} />
-                <span>{title}</span>
-                {url === "/dreamverse" && (
-                  <span className="new-label">EXPLORE</span>
-                )}
+                <I size={20} />
+                <span>{String(title)}</span>
               </>,
-              `nav-item ${path === url || (url === "/learn" && path.startsWith("/learn/")) || (url === "/practice" && path.startsWith("/practice/")) ? "active" : ""}`,
-            ),
-          )}
+              `nav-item ${path === url ? "active" : ""}`,
+            );
+          })}
         </nav>
-        <div className="sidebar-separator" />
-        <div className="workspace-label">YOUR TOOLKIT</div>
-        <nav>
-          {link(
-            "/ai-tutor",
-            <>
-              <Sparkles size={19} />
-              <span>AI teacher</span>
-              <span className="tiny-dot" />
-            </>,
-            "nav-item " + (path === "/ai-tutor" ? "active" : ""),
-          )}
-          {link(
-            "/notes",
-            <>
-              <StickyNote size={19} />
-              <span>My notes</span>
-            </>,
-            "nav-item " + (path === "/notes" ? "active" : ""),
-          )}
-          {link(
-            "/bookmarks",
-            <>
-              <Bookmark size={19} />
-              <span>Bookmarks</span>
-            </>,
-            "nav-item " + (path === "/bookmarks" ? "active" : ""),
-          )}
-          {link(
-            "/progress",
-            <>
-              <Trophy size={19} />
-              <span>My progress</span>
-            </>,
-            "nav-item " + (path === "/progress" ? "active" : ""),
-          )}
-        </nav>
+        <details className="more-study-tools">
+          <summary>More tools</summary>
+          <nav>
+            {nav
+              .filter(
+                ([url]) => !["/dashboard", "/learn", "/books"].includes(url),
+              )
+              .map(([url, title, Icon]) =>
+                link(
+                  url,
+                  <>
+                    <Icon size={18} />
+                    <span>{title}</span>
+                  </>,
+                  "nav-item",
+                ),
+              )}
+            {link(
+              "/notes",
+              <>
+                <StickyNote size={18} />
+                <span>My notes</span>
+              </>,
+              "nav-item",
+            )}
+            {link(
+              "/bookmarks",
+              <>
+                <Bookmark size={18} />
+                <span>Bookmarks</span>
+              </>,
+              "nav-item",
+            )}
+            {link(
+              "/progress",
+              <>
+                <Trophy size={18} />
+                <span>My progress</span>
+              </>,
+              "nav-item",
+            )}
+          </nav>
+        </details>
         <div className="sidebar-bottom">
           <div className="offline-card">
             <span className={swReady ? "online-dot" : "pending-dot"} />
@@ -2993,18 +3032,17 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.3.3 · Your textbook studio</span>
+              <span>v0.4.0 · One subject at a time</span>
             </div>
           </footer>
         </main>
       </div>
       <nav className="bottom-nav">
         {[
-          ["/dashboard", "Home", LayoutDashboard],
-          ["/learn", "Learn", BookOpen],
-          ["/practice", "Practice", Target],
-          ["/dreamverse", "Worlds", Orbit],
-          ["/downloads", "Offline", Download],
+          ["/dashboard", "Study", BookOpen],
+          ["/books", "PDFs", Download],
+          ["/search", "Search", Search],
+          ["/profile", "Profile", GraduationCap],
         ].map(([url, title, Icon]) => {
           const I = Icon as typeof Brain;
           return link(
@@ -3017,7 +3055,14 @@ export default function DreamersApp() {
           );
         })}
       </nav>
-      {path !== "/ai-tutor" && (
+      {![
+        "/ai-tutor",
+        "/dashboard",
+        "/study",
+        "/learn",
+        "/subjects",
+        "/search",
+      ].includes(path) && (
         <button
           className="floating-ai"
           onClick={() => {

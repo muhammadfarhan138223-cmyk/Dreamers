@@ -56,6 +56,10 @@ export async function POST(request: Request) {
       400,
     );
   }
+  const pdfOnly =
+    input?.contextKind === "pdf" &&
+    input?.bookContext &&
+    input?.textbookId === undefined;
   const selectedBook =
     input?.textbookId === undefined ? null : textbook(input.textbookId);
   const selectedChapter = selectedBook
@@ -73,7 +77,8 @@ export async function POST(request: Request) {
   );
   if (
     !input ||
-    (!pack && !selectedBook) ||
+    (!pack && !selectedBook && !pdfOnly) ||
+    (input.contextKind !== undefined && input.contextKind !== "pdf") ||
     (input.textbookId !== undefined && (!selectedBook || !selectedChapter)) ||
     (input.referenceOnly !== undefined &&
       typeof input.referenceOnly !== "boolean") ||
@@ -85,7 +90,9 @@ export async function POST(request: Request) {
     !LANGUAGES.has(input.language) ||
     !MODES.has(input.mode) ||
     typeof input.topic !== "string" ||
-    (!selectedBook && !pack?.lessons.some((l) => l.id === input.topic)) ||
+    (!selectedBook &&
+      !pdfOnly &&
+      !pack?.lessons.some((l) => l.id === input.topic)) ||
     (input.previous !== undefined &&
       (typeof input.previous !== "string" || input.previous.length > 2000))
   )
@@ -160,7 +167,7 @@ export async function POST(request: Request) {
           endpoint,
           referenceOnly,
           model,
-          selectedBook?.id || pack!.id,
+          selectedBook?.id || (pdfOnly ? "personal-pdf" : pack!.id),
           input.allowEnrichment === true,
           input.question,
           input.language,
@@ -188,7 +195,9 @@ export async function POST(request: Request) {
     const grounding =
       selectedBook && selectedChapter
         ? `Selected source: ${selectedBook.title}, Class ${selectedBook.class}, category ${selectedBook.kind}. Chapter heading observed in the student-supplied PDF: ${selectedChapter.title}. PDF page: ${selectedChapter.page}. Exact publisher edition/current exam syllabus exclusions are not independently verified. You have only this chapter heading unless a student-selected PDF excerpt is also supplied. Follow the selected evidence policy; a heading alone cannot support a textbook answer. Do not pretend the full textbook is in context.`
-        : `Original foundation topic (not mapped to an official edition): ${lesson!.subtitle}\nOriginal foundation context: ${lesson!.paragraphs.join("\n")}\nObjective: ${lesson!.objective}`;
+        : pdfOnly
+          ? `Student-selected PDF excerpt: ${input.bookContext.title}, PDF page ${input.bookContext.page}. Its subject, chapter, edition and exam mapping are unverified. Use only sourceText; do not substitute an original foundation lesson or invent book contents.`
+          : `Original foundation topic (not mapped to an official edition): ${lesson!.subtitle}\nOriginal foundation context: ${lesson!.paragraphs.join("\n")}\nObjective: ${lesson!.objective}`;
     const sourceText =
       input.bookContext?.text ||
       (selectedBook ? "" : lesson!.paragraphs.join("\n"));
@@ -209,6 +218,7 @@ export async function POST(request: Request) {
               role: "user",
               content: JSON.stringify({
                 question: input.question,
+                sourceText: referenceOnly ? sourceText : undefined,
                 previousExplanation: input.previous || "",
                 pdfReference: input.bookContext || null,
               }),

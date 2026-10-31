@@ -55,3 +55,6 @@ Learning text, practice questions and production SVG assets are original DREAMER
 AI configuration and verified current free-provider options: [Owner AI setup](docs/AI_SETUP.md). Provided-text mode is default; quotation matching is a reference check, not automatic factual verification. Remote provider evaluation is still pending.
 
 Global search (`/search`) searches checked chapters across all books, indexed local PDF passages and downloaded foundation lessons. Filter by subject, class, book and result type. Online AI-assisted discovery uses the owner's configured provider; it sends only the query and never silently uploads private books. Full PDF word search requires selectable text and local indexing; scanned pages still need OCR.
+
+### Focused study (0.4.0)
+Choose class and one subject on My study. Add your own permitted PDF once, read it offline, then make small source-page short Q&A/MCQ/long-answer sets online and reuse saved questions offline. Original basics are clearly separate from syllabus mapping. Biology XI and current-year official pairing mapping are pending. Generated practice is review-pending and does not establish full chapter coverage.

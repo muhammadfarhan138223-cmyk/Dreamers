@@ -140,6 +140,28 @@ test("AI route gates source evidence and withholds malformed, invented or trunca
     ).json();
     assert.match(general.answer, /not textbook-verified/);
     assert.equal(sent.response_format, undefined);
+    providerAnswer = JSON.stringify({
+      supported: true,
+      answer: "Particles spread from higher to lower concentration.",
+      sourceQuote: text,
+    });
+    const privatePdf = await POST(
+      request({
+        ...valid,
+        textbookId: undefined,
+        topic: "pdf-page",
+        contextKind: "pdf",
+      }),
+    );
+    assert.equal(privatePdf.status, 200);
+    assert.equal(JSON.parse(sent.messages[1].content).sourceText, text);
+    assert.match(
+      sent.messages[0].content,
+      /chapter, edition and exam mapping are unverified/,
+    );
+    assert.ok(
+      !sent.messages[0].content.includes("Original foundation context:"),
+    );
     quota = 0;
     assert.equal((await POST(request(valid))).status, 429);
   } finally {

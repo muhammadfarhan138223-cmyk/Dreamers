@@ -112,9 +112,23 @@ export default function GlobalSearch({
         );
         return;
       }
-      if (!aiConfigured) {
+      let configured = aiConfigured;
+      if (!configured) {
+        try {
+          configured =
+            (
+              await (
+                await fetch("/api/health", {
+                  cache: "no-store",
+                  signal: controller.signal,
+                })
+              ).json()
+            ).aiConfigured === true;
+        } catch {}
+      }
+      if (!configured) {
         setAiStatus(
-          "AI search awaits owner configuration. Local results are ready; students do not need API keys.",
+          "AI search is not ready right now. Your local results are still available.",
         );
         return;
       }

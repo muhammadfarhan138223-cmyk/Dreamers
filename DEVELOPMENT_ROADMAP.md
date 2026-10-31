@@ -27,3 +27,6 @@ Additional intake: 11 unique supplied resources registered; 77 headings in six c
 0.3.2 checkpoint: additional intake deduplicated to 16 unique sources and 86 checked headings. Default provided-text answer gate, matching-quotation validation and explicit general explanation implemented. Remaining: teacher review of actual configured model outputs, OCR and permitted whole-book retrieval, nine pending maps/current board mapping, dedicated cloud authentication/sync. Public full-PDF redistribution is still permission-dependent.
 
 0.3.3: profile avatar navigation, all-book local chapter/PDF/foundation search and filters implemented. AI-assisted catalogue discovery is connected to owner configuration with validated IDs/shared quotas; real model evaluation remains setup-dependent. Whole-book semantic retrieval/OCR and full verified syllabus coverage remain pending.
+
+## Focused learning priority — 2026-10-31
+Implemented locally: colorful one-subject workspace, simplified navigation, source-page short/MCQ/long practice, offline saved sets, focused PDF shelf and stale AI health repair. Pending: live QA, supplied Biology XI, verified current-year pairing scheme, whole-chapter multi-page coverage tracking, educator review of generated content. Do not describe page batches as complete chapters.

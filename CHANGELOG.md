@@ -1,3 +1,11 @@
+# 0.4.0 — 2026-10-31
+
+- Replace crowded home with class and single-subject study focus, colorful cards, short Q&A first and simple mobile navigation.
+- Focus private offline PDF shelf; keep unmatched imports separate from checked maps.
+- Add source-page short/MCQ/long practice with exact quotation checks, shared quotas and offline saved sets/answers.
+- Refresh stale AI configuration status on focus/reconnect; explicitly include lesson evidence in tutor requests.
+- Keep current pairing schemes and Biology XI marked unavailable rather than inventing coverage.
+
 # Changelog
 
 ## 0.1.0 — 2026-10-30
