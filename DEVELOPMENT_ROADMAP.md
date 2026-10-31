@@ -30,3 +30,5 @@ Additional intake: 11 unique supplied resources registered; 77 headings in six c
 
 ## Focused learning priority — 2026-10-31
 Implemented locally: colorful one-subject workspace, simplified navigation, source-page short/MCQ/long practice, offline saved sets, focused PDF shelf and stale AI health repair. Pending: live QA, supplied Biology XI, verified current-year pairing scheme, whole-chapter multi-page coverage tracking, educator review of generated content. Do not describe page batches as complete chapters.
+
+0.4.0 live QA completed. 0.4.1 audit follow-up must be deployed and checked after long-answer QA exposed unsupported expansion. Teacher review remains needed; never claim hallucination-free output. Verified current-year scheme and Biology XI are still prerequisites for the full requested syllabus focus.

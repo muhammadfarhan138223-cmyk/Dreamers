@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { TEXTBOOKS, textbook } from "@/lib/textbooks.mjs";
 import * as db from "@/lib/db";
+import { STUDY_POLICY } from "@/lib/study-practice.mjs";
 import type { Pack, RecordValue } from "@/lib/types";
 import type { LocalBook, BookPage } from "./book-library";
 export type StudyFocus = { grade: "XI" | "XII"; subject: string };
@@ -40,6 +41,8 @@ type SavedSet = RecordValue & {
   page: number;
   questions: Card[];
   at: number;
+  revision?: string;
+  policy?: string;
 };
 const subjectOptions = [
   {
@@ -142,7 +145,8 @@ export default function StudyHub({
     [notice, setNotice] = useState(""),
     [language, setLanguage] = useState("English"),
     [question, setQuestion] = useState(""),
-    [reply, setReply] = useState("");
+    [reply, setReply] = useState(""),
+    [allowStory, setAllowStory] = useState(false);
   async function refresh() {
     const [b, s] = await Promise.all([
       db.list<LocalBook>("books"),
@@ -209,6 +213,7 @@ export default function StudyHub({
   useEffect(() => {
     setPage(selectedChapter?.page || local?.lastPage || 1);
     setReply("");
+    setAllowStory(false);
     setRevealed({});
   }, [selectedChapter?.id, local?.id, focus?.grade, focus?.subject]);
   const base = packs.find((p) => p.subject === focus?.subject);
@@ -217,7 +222,7 @@ export default function StudyHub({
     sourceKind === "foundation"
       ? "foundation"
       : selectedChapter?.id || "selected-page";
-  const matchingSets = sets
+  const scopedSets = sets
     .filter(
       (s) =>
         s.grade === focus?.grade &&
@@ -227,6 +232,8 @@ export default function StudyHub({
         s.mode === mode,
     )
     .sort((a, b) => a.page - b.page || a.at - b.at);
+  const matchingSets = scopedSets.filter((s) => s.policy === STUDY_POLICY);
+  const legacySets = scopedSets.filter((s) => s.policy !== STUDY_POLICY);
   const original: Card[] =
     sourceKind !== "foundation" || !base
       ? []
@@ -245,7 +252,10 @@ export default function StudyHub({
   const cards = [
     ...original,
     ...matchingSets.flatMap((s) =>
-      s.questions.map((q) => ({ ...q, id: s.id + ":" + q.id })),
+      s.questions.map((q) => ({
+        ...q,
+        id: s.id + (s.revision ? ":" + s.revision : "") + ":" + q.id,
+      })),
     ),
   ];
   async function sourceText() {
@@ -315,8 +325,21 @@ export default function StudyHub({
           "This page does not contain enough information for this practice type. Try another page.",
         );
       const id = `study-set:${scopeBook}:${scopeChapter}:${mode}:${source.page}:${language}`;
+      const revision = Array.from(
+        new Uint8Array(
+          await crypto.subtle.digest(
+            "SHA-256",
+            new TextEncoder().encode(JSON.stringify(data.questions)),
+          ),
+        ),
+      )
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("")
+        .slice(0, 12);
       await db.put("settings", {
         id,
+        revision,
+        policy: STUDY_POLICY,
         grade: focus!.grade,
         subject: focus!.subject,
         bookId: scopeBook,
@@ -355,7 +378,7 @@ export default function StudyHub({
         sourceKind === "book" && local?.catalogId && selectedChapter;
       const body =
         sourceKind === "foundation"
-          ? { packId: base!.id, topic: base!.lessons[0].id }
+          ? { packId: base!.id, topic: "pack-overview" }
           : {
               ...(known
                 ? { textbookId: local!.catalogId, topic: selectedChapter!.id }
@@ -369,8 +392,8 @@ export default function StudyHub({
           question,
           language,
           mode: "Friendly Teacher",
-          referenceOnly: true,
-          allowEnrichment: false,
+          referenceOnly: !allowStory,
+          allowEnrichment: allowStory,
           bookContext:
             sourceKind === "book"
               ? { ...source, text: source.text.slice(0, 2000) }
@@ -550,6 +573,11 @@ export default function StudyHub({
           </label>
         )}
       </div>
+      {sourceKind === "book" && local && (
+        <p className="fineprint">
+          Using your saved PDF: <strong>{local.title}</strong>
+        </p>
+      )}
       {sourceKind === "book" && !local && (
         <section className="add-study-book">
           <BookOpen size={35} />
@@ -598,6 +626,13 @@ export default function StudyHub({
           </button>
         ))}
       </nav>
+      {!!legacySets.length && (
+        <p className="study-notice">
+          Earlier AI practice is still saved, but is withheld here until you
+          re-create it with the additional source check. Your backup retains the
+          earlier sets.
+        </p>
+      )}
       <section className="study-content">
         {mode === "pdf" ? (
           <div className="study-empty">
@@ -631,6 +666,23 @@ export default function StudyHub({
                 rows={3}
                 placeholder="Explain this concept in simple words…"
               />
+            </label>
+            <label className="enrichment-control">
+              <input
+                type="checkbox"
+                checked={allowStory}
+                disabled={busy}
+                onChange={(e) => {
+                  setAllowStory(e.target.checked);
+                  setReply("");
+                }}
+              />
+              <span>
+                Use a related story or analogy{" "}
+                <small>
+                  Optional general explanation · may go beyond this page
+                </small>
+              </span>
             </label>
             <button
               className="primary"
@@ -808,6 +860,7 @@ export default function StudyHub({
               Source PDF page
               <input
                 type="number"
+                disabled={busy}
                 min={firstPage}
                 max={lastPage}
                 value={page}
@@ -826,7 +879,7 @@ export default function StudyHub({
             </button>
             <button
               className="secondary"
-              disabled={page >= lastPage}
+              disabled={busy || page >= lastPage}
               onClick={() => setPage((p) => p + 1)}
             >
               Next page <ArrowRight size={16} />

@@ -2904,7 +2904,10 @@ export default function DreamersApp() {
             </div>
             <div>
               <b>{String(prefs.name || "Explorer")}</b>
-              <small>Class {String(prefs.class)} · Guest explorer</small>
+              <small>
+                Class {studyFocus?.grade || String(prefs.class)} · Guest
+                explorer
+              </small>
             </div>
             {link("/profile", <ChevronRight size={17} />, "profile-arrow")}
           </div>
@@ -3032,7 +3035,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.4.0 · One subject at a time</span>
+              <span>v0.4.1 · One subject at a time</span>
             </div>
           </footer>
         </main>

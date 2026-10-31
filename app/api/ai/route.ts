@@ -92,6 +92,7 @@ export async function POST(request: Request) {
     typeof input.topic !== "string" ||
     (!selectedBook &&
       !pdfOnly &&
+      input.topic !== "pack-overview" &&
       !pack?.lessons.some((l) => l.id === input.topic)) ||
     (input.previous !== undefined &&
       (typeof input.previous !== "string" || input.previous.length > 2000))
@@ -191,7 +192,16 @@ export async function POST(request: Request) {
     const cached = await redis(["GET", cacheKey]);
     if (typeof cached === "string")
       return json({ answer: cached, generated: true, cached: true });
-    const lesson = pack?.lessons.find((l) => l.id === input.topic);
+    const lesson =
+      pack?.lessons.find((l) => l.id === input.topic) ||
+      (pack && input.topic === "pack-overview"
+        ? {
+            ...pack.lessons[0],
+            subtitle: pack.title,
+            objective: "Review concepts in this original foundation pack.",
+            paragraphs: pack.lessons.flatMap((l) => l.paragraphs),
+          }
+        : undefined);
     const grounding =
       selectedBook && selectedChapter
         ? `Selected source: ${selectedBook.title}, Class ${selectedBook.class}, category ${selectedBook.kind}. Chapter heading observed in the student-supplied PDF: ${selectedChapter.title}. PDF page: ${selectedChapter.page}. Exact publisher edition/current exam syllabus exclusions are not independently verified. You have only this chapter heading unless a student-selected PDF excerpt is also supplied. Follow the selected evidence policy; a heading alone cannot support a textbook answer. Do not pretend the full textbook is in context.`

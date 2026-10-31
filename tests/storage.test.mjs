@@ -2,6 +2,43 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import "fake-indexeddb/auto";
 import * as db from "../lib/db.ts";
+import { validateBackup } from "../lib/backup.mjs";
+test("source practice, choices and subject focus survive export and restore without AI access", async () => {
+  const set = {
+    id: "study-set:qa:chapter:mcq:1:English",
+    grade: "XI",
+    subject: "biology",
+    bookId: "qa",
+    chapter: "chapter",
+    page: 1,
+    mode: "mcq",
+    revision: "abc",
+    questions: [
+      {
+        id: "q1",
+        question: "Which direction?",
+        answer: "High to low",
+        options: ["High to low", "Low to high", "None", "Unknown"],
+        correct: 0,
+        sourceQuote: "Particles move from higher to lower concentration.",
+      },
+    ],
+    at: 10,
+  };
+  const choice = {
+    id: "study-answer:" + set.id + ":abc:q1",
+    choice: 0,
+    at: 11,
+  };
+  const focus = { id: "study-focus", grade: "XI", subject: "biology", at: 12 };
+  for (const row of [set, choice, focus]) await db.put("settings", row);
+  const checked = validateBackup(await db.exportData());
+  for (const row of [set, choice, focus]) await db.remove("settings", row.id);
+  await db.restoreData(checked);
+  assert.deepEqual(await db.get("settings", set.id), set);
+  assert.equal((await db.get("settings", choice.id)).choice, 0);
+  assert.equal((await db.get("settings", focus.id)).grade, "XI");
+});
 test("local event and sync queue are atomic and replay-safe", async () => {
   const event = {
     id: "lesson:cell-basics",

@@ -77,6 +77,7 @@ test("practice API enforces origin, source bounds, shared durable quota, checked
     calls = 0,
     reply = { questions: [card] },
     status = 200,
+    auditFlags = [true],
     sent;
   const cache = new Map();
   t.mock.method(globalThis, "fetch", async (url, options) => {
@@ -102,7 +103,13 @@ test("practice API enforces origin, source bounds, shared durable quota, checked
       {
         choices: [
           {
-            message: { content: JSON.stringify(reply) },
+            message: {
+              content: JSON.stringify(
+                body.messages[0].content.startsWith("Audit educational")
+                  ? { supported: auditFlags }
+                  : reply,
+              ),
+            },
             finish_reason: "stop",
           },
         ],
@@ -135,13 +142,14 @@ test("practice API enforces origin, source bounds, shared durable quota, checked
       ).status,
       400,
     );
+    assert.equal((await POST(request({ ...valid, mode: "long" }))).status, 422);
     assert.equal(calls, 0);
     const first = await POST(request(valid));
     assert.equal(first.status, 200);
     assert.equal((await first.json()).questions.length, 1);
     assert.equal(JSON.parse(sent.messages[1].content).sourceText, text);
     assert.equal((await (await POST(request(valid))).json()).cached, true);
-    assert.equal(calls, 1);
+    assert.equal(calls, 2);
     cache.clear();
     reply = {
       questions: [
@@ -150,6 +158,14 @@ test("practice API enforces origin, source bounds, shared durable quota, checked
     };
     assert.equal((await POST(request(valid))).status, 502);
     assert.equal(cache.size, 0);
+    reply = { questions: [card] };
+    auditFlags = [false];
+    const withheld = await POST(request(valid));
+    assert.equal(withheld.status, 200);
+    assert.deepEqual((await withheld.json()).questions, []);
+    cache.clear();
+    auditFlags = ["true"];
+    assert.equal((await POST(request(valid))).status, 502);
     status = 429;
     assert.equal((await POST(request(valid))).status, 503);
     quota = 0;

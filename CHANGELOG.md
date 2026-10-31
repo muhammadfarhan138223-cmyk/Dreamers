@@ -1,3 +1,11 @@
+# 0.4.1 — 2026-10-31
+
+- Add an independent model source-support audit after quote checks; withhold unsupported questions. Long-answer generation requires fuller source text. This reduces unsupported expansion, without claiming educator verification.
+- Preserve older generated sets in backup while withholding them pending regeneration with the new check.
+- Version question choices by content so regenerated questions do not inherit stale answers.
+- Align sidebar class with selected study focus; add an explicit optional story/analogy switch and ground original-basics tutoring in the full selected pack.
+- Offline shell v12; source practice/focus/choice backup regression test.
+
 # 0.4.0 — 2026-10-31
 
 - Replace crowded home with class and single-subject study focus, colorful cards, short Q&A first and simple mobile navigation.

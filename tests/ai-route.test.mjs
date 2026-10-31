@@ -162,6 +162,26 @@ test("AI route gates source evidence and withholds malformed, invented or trunca
     assert.ok(
       !sent.messages[0].content.includes("Original foundation context:"),
     );
+    providerAnswer = JSON.stringify({
+      supported: true,
+      answer: "Particles spread down the concentration gradient.",
+      sourceQuote:
+        "Diffusion is the net movement of particles from a region of higher concentration to a region of lower concentration because of random motion.",
+    });
+    const overview = await POST(
+      request({
+        question: "Explain diffusion",
+        topic: "pack-overview",
+        packId: "cells-starter",
+        language: "English",
+        mode: "Friendly Teacher",
+      }),
+    );
+    assert.equal(overview.status, 200);
+    assert.match(
+      JSON.parse(sent.messages[1].content).sourceText,
+      /Diffusion is the net movement/,
+    );
     quota = 0;
     assert.equal((await POST(request(valid))).status, 429);
   } finally {

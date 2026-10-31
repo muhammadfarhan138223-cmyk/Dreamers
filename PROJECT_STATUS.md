@@ -1,6 +1,6 @@
 # DREAMERS project status
 
-Updated: 2026-10-31. Current working release: 0.4.0 focused study workspace. Local checks passed; deployment verification pending this checkpoint.
+Updated: 2026-10-31. Current working release: 0.4.1 focused study and source audit. 0.4.0 is live; source-audit follow-up deployment pending.
 
 ## Verified release
 
@@ -18,7 +18,7 @@ Documentation-only checkpoint commits may deploy identical application code.
 - Private multi-file PDF import, automatic source/class matching, exact duplicate skipping, full local Blob storage, canvas reader, selected text, local search/indexing, page resume, separate export/removal. Recognized files bypass optional manual fields. Actual Biology/Chemistry pages and all 11-file intake were browser-verified.
 - Default provided-text AI mode rejects heading-only textbook requests, requires a matching quotation, withholds malformed/truncated output and labels explicit general explanations not textbook-verified. Quotation matching does not establish factual correctness; real model evaluation remains pending. Current free-pilot candidate and owner steps are in docs/AI_SETUP.md. Source-specific tutor/search suggestions. Suggestion selection updates its topic ID and clears stale PDF context. Textbook focus is default; related stories/history require explicit enrichment opt-in and separate labelling. Pending-map sources need a readable selected PDF excerpt. Watermark-only scans are not treated as OCR.
 - Three original foundation packs, 12 lessons, 36 MCQs, nine written self-checks, diagrams/osmosis lab, atom/motion tools, saved attempts/drafts, resumable scored challenges, deduplicated XP/levels/achievements, flashcards/review schedules, notes/bookmarks, progress evidence and JSON backup/restore/deletion.
-- PWA manifest/icons, HTTPS, versioned shell v11, separately preserved PDF.js engine cache, IndexedDB v3, atomic pending queue and storage recovery. Optional packs require explicit download and SHA-256/schema checks. No progress is described as cloud-synced.
+- PWA manifest/icons, HTTPS, versioned shell v12, separately preserved PDF.js engine cache, IndexedDB v3, atomic pending queue and storage recovery. Optional packs require explicit download and SHA-256/schema checks. No progress is described as cloud-synced.
 
 - Header avatar now navigates to profile via a keyboard-accessible link and 44px touch target. Global search scans all checked chapters, downloaded foundation lessons and local PDF indexes, with subject/class/book/result-type filters below the search box. Filtered PDF ranking happens before result limits. Search/page links support manually imported book IDs.
 - Bounded `/api/search` discovery returns validated catalogue IDs and keywords using the owner's AI provider; only typed queries are sent, never private books. Search and tutor share durable network quotas; local results remain available when AI is offline/unconfigured. Current-word text requires indexed selectable PDF pages; no OCR is implied.
@@ -59,3 +59,13 @@ Verify this focused release in preview and production, then evaluate useful tuto
 - Local verification: 55 tests pass, production build including TypeScript passes. Initial generated Turbopack cache failed; deleting only .next and rebuilding resolved it. Live/browser verification of 0.4.0 is pending. No cloud migration or unrelated resource change.
 
 Next: verify source-grounded real tutor and practice, mobile focus flow and saved practice reload; deploy verified application; then obtain Biology XI and a retrievable official pairing scheme for the student's actual exam year. Full chapter batch orchestration remains pending.
+
+## Live 0.4.0 QA and 0.4.1 corrective checkpoint
+
+Application 4e4a6592d2f665f7446fe532ea01777fb18cca4f, preview dpl_Ff4d2R2P83QGNtzYKEjU4qzXnAft and production dpl_Btc1vGjyL2wg7XPD34hJ4HZtgTt8 reached READY. Stable alias verified; production health aiConfigured=true. Existing HTTPS route/icon/manifest/API-boundary regression passed. Real Groq source-only diffusion tutor returned a correct definition and ATP statement supported by its original lesson.
+
+Browser verified class XI Biology focus and its missing supplied book message, original Q&A/MCQs/feedback, subject persistence through update/reload, focused shelf, private 949-byte original QA PDF import/read, genuine short and MCQ generation from that page, matched answer/source quotation, saved questions across reload and genuine private-PDF tutor response. Generated sets were local; no supplied restricted PDF was published.
+
+Long-answer QA revealed unsupported expansion despite a matched quote. 0.4.1 now requires ≥600 source characters for long mode and a second model audit checking every question/answer claim against source. Unsupported items are withheld; audit failure fails closed. Practice policy/cache version changed; older generated sets remain in IndexedDB/backups but are withheld until regenerated. This is still probabilistic AI checking, not teacher review or a guarantee of accuracy. Each new generation may make two bounded provider calls within one shared student allowance action. Content-derived revision IDs prevent old MCQ choices attaching to changed questions.
+
+Physical mobile/Android installation and airplane-mode tests remain pending; browser backend provides no viewport/network emulation. Automated worker/network-disconnected and IndexedDB backup checks cover the offline layer. Current source-audit build and live QA will be recorded after verification.
