@@ -1,13 +1,13 @@
 # DREAMERS project status
 
-Updated: 2026-10-31. Working release 0.5.0 — source-linked book plans and resumable chapter preparation. Local checks passed; live release verification pending. Read this file and the roadmap/architecture/deployment/changelog before editing.
+Updated: 2026-10-31. Release 0.5.0 — source-linked book plans and resumable chapter preparation. Automated/build and live UI checks passed; live batch generation paused on the real shared-network quota. Read this file and the roadmap/architecture/deployment/changelog before editing.
 
 ## Verified application
 
-Latest verified application commit: 185b44c52149d75ae83db7ed1e4126abbd703481.
-Application tree: 2913b5125e7ff83daf447d1d052244be965a4cab.
-Preview: dpl_BU6k2PeDPmTTKSzcaHXhfnMtNiiP — READY.
-Production: dpl_54xPk1bQtrvsah1trPVCEzmxZxv9 — READY, stable alias assigned.
+Latest verified application commit: f6a6c2542399f8e3c12275479035085683d24abe.
+Application tree: 8b52ccf838088f3dd92e4252132f848f2b877b9c.
+Preview: dpl_GjYWcdMPiSe7MB99XWhzs5TrHmM9 — READY.
+Production: dpl_8pLfgjkQtbouureyDP8J3hGFfDaM — READY, stable alias assigned.
 Live: https://dreamers-sooty.vercel.app
 Repository: https://github.com/muhammadfarhan138223-cmyk/Dreamers
 Vercel project: dreamers / prj_ol5nVtQ2DprVqMgNY140bM86Lsvu / team_jwuAswY9vD3bNmcKQM2LqjoF. Never deploy to the unused dreamers-learning project. Documentation-only checkpoint commits may deploy identical application code.
@@ -66,3 +66,11 @@ Last chapter ends now exclude appendix/model pages (Biology246, Chemistry261, En
 64 tests, TypeScript/production build pass. New cases cover interrupted journals after successful question writes, replay without duplicate provider calls, pause/offline state, exercise gaps, language/policy coverage, scheme totals/source bounds and retained non-long chapters. Local preview rendered SSR but did not hydrate, matching the prior environment issue; it was stopped. Live browser verification pending. Shell v14, IndexedDB v3 unchanged; no new service, secret, dependency or cloud migration.
 
 Next: push/test preview, release and verify scheme enable/pair navigation, private source links, chapter journal failure/resume and persisted view on production. Then add indexed whole-book retrieval and remaining account/sync/revision milestones.
+
+## 0.5.0 live verification
+
+Production f6a6c2542399f8e3c12275479035085683d24abe / dpl_8pLfgjkQtbouureyDP8J3hGFfDaM READY; protected preview dpl_GjYWcdMPiSe7MB99XWhzs5TrHmM9 READY. Browser preserved a privately imported actual Biology PDF through upgrade, enabled the book plan, showed Ch13 MCQ1/Q2-short3/long13+25 (4+4), navigated to Ecology and correctly bounded it to 19 pages (228–246), then restored chapter/plan through shell update. Source link opened the actual saved PDF247 and rendered/extracted the printed scheme. Chemistry showed Ch17/long17+21; Computer showed75 total and8-mark single-chapter long questions; English showed20+80 and source-defined unit/grammar sections.
+
+Real chapter request returned429 shared-network quota. Journal paused with0/11 (no fake saved pages), exposed manual Resume and retained that state after reload without auto-running. No quota reset/bypass was attempted. Positive multi-page generation, request spacing and interruption recovery are tested with isolated fixtures, not claimed live. Five appendix-bearing source files' SHA256/byte sizes match canonical identities.
+
+Exact next feature: local indexed-book passage retrieval inside focused Ask AI, with explicit chosen source and bounded excerpt. New live AI calls are blocked by this QA network's daily allowance; preserve rate limits. Broader teacher review, official board confirmation, missing Biology XI and dedicated accounts/sync remain pending.

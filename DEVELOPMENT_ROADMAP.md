@@ -38,3 +38,5 @@ Implemented locally: colorful one-subject workspace, simplified navigation, sour
 0.4.2 live source-extract regression passed on supplied Biology XII: three short questions, two statement MCQs, exact keys and persisted choices. Latest verified application 185b44c52149d75ae83db7ed1e4126abbd703481. Next priority: verified Biology XI/current exam scheme and one fully reviewed chapter with coverage tracking.
 
 0.5.0 local checkpoint: four observed book patterns, appendix separation and resumable chapter-page preparation implemented/tested. Official board/year confirmation remains pending. Whole-chapter question generation now supports resumable passes with explicit gaps; it still cannot claim complete concept coverage. Next: live browser QA, then indexed whole-book retrieval, source-based revision/flashcards and dedicated cloud accounts/sync.
+
+0.5.0 live plan/pair/source and persisted-view checks passed; real batch quota-pause persistence passed. Next: scoped indexed-book retrieval inside focused Ask AI, then remaining source-review/account/sync/revision work.

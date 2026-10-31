@@ -81,3 +81,5 @@ All six AI/quota env keys exist as sensitive production values; no need to re-en
 
 ## 0.5.0 release preparation
 64 tests and production build pass. No new dependency/env/resource or cloud migration. Shell v14 retains separate PDF engine cache and IndexedDB v3. Metadata links to private source appendices, never public book binaries. Local managed preview SSR rendered but client hydration did not complete; live browser verification remains required. Existing deployment protection must stay enabled.
+
+0.5.0 application f6a6c2542399f8e3c12275479035085683d24abe: preview dpl_GjYWcdMPiSe7MB99XWhzs5TrHmM9 and production dpl_8pLfgjkQtbouureyDP8J3hGFfDaM READY. Browser plan/pair/source-page/view-update checks passed. Real batch hit existing12/day shared network quota and paused safely; no quota bypass/reset.

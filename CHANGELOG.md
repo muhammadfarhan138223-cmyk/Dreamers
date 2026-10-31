@@ -88,3 +88,5 @@ Final 0.3.1 clarity pass: show class on PDF selection/export/removal/reader cont
 - Preserved IndexedDB v3 and PDF engine caches; shell v10 refreshes application assets. Current board exclusions, scanned-page OCR and real provider evaluation remain pending.
 
 0.4.2 verified application: 185b44c52149d75ae83db7ed1e4126abbd703481; production dpl_54xPk1bQtrvsah1trPVCEzmxZxv9. Real supplied-PDF source-extract short/MCQ generation, saved sets/choices and shell update persistence passed.
+
+0.5.0 live UI/source/upgrade and real quota-pause persistence passed at f6a6c2542399f8e3c12275479035085683d24abe. Positive multi-page generation remains fixture-verified only.
