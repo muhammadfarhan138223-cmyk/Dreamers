@@ -67,3 +67,6 @@ The header avatar uses the same client navigation profile link as the sidebar, w
 
 ### Source support correction (0.4.1)
 Matching quotations alone did not prevent unsupported long-answer expansion in live QA. Practice policy v2 adds a separate model source audit, rejects too-short long-answer sources and withholds audit-unsupported items. Malformed/unavailable audit fails closed. Two bounded provider calls per noncached generation; shared student quota remains one action. Older policy sets remain stored/exportable but are not displayed as current practice. Content revision hashes isolate choices after regeneration. This model check is not educator verification.
+
+### Deterministic source keys (0.4.2)
+Live model auditing still accepted extra inferred facts. Practice policy v3 therefore requires normalized answer text to be a contiguous substring of the selected source; MCQ correct choices obey the same condition and have a 20-character minimum. Long keys are 300–1800-character extracts. Questions are generated and audited; answers are extracts rather than AI paraphrases. This prevents answer-key expansion but does not establish that the question fully fits the answer or that the supplied source is correct. Questions may be translated; keys retain source language. Separate AI tutor explanations remain probabilistic and labelled generated.

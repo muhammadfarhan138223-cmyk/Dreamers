@@ -8,13 +8,34 @@ const text =
   "Diffusion is the net movement of particles from higher to lower concentration.";
 const card = {
   question: "What is diffusion?",
-  answer: "Movement from higher to lower concentration.",
+  answer: "from higher to lower concentration.",
   sourceQuote: text,
 };
 test("practice rejects invented references, malformed MCQ keys and incomplete generation", () => {
   const check = (questions, mode = "short", finish = "stop") =>
     checkStudyQuestions(JSON.stringify({ questions }), text, mode, finish);
   assert.equal(check([card]).length, 1);
+  assert.throws(
+    () =>
+      check([
+        {
+          ...card,
+          answer:
+            "Diffusion increases entropy through random thermal motion, without external energy.",
+        },
+      ]),
+    /reference/,
+  );
+  const longSource = (text + " ").repeat(5);
+  assert.equal(
+    checkStudyQuestions(
+      JSON.stringify({ questions: [{ ...card, answer: longSource.trim() }] }),
+      longSource,
+      "long",
+      "stop",
+    ).length,
+    1,
+  );
   assert.deepEqual(check([]), []);
   assert.throws(() =>
     check([

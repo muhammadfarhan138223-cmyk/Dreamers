@@ -58,3 +58,5 @@ Global search (`/search`) searches checked chapters across all books, indexed lo
 
 ### Focused study (0.4.0)
 Choose class and one subject on My study. Add your own permitted PDF once, read it offline, then make small source-page short Q&A/MCQ/long-answer sets online and reuse saved questions offline. Original basics are clearly separate from syllabus mapping. Biology XI and current-year official pairing mapping are pending. Generated practice is review-pending and does not establish full chapter coverage.
+
+Practice answer keys use direct excerpts from the selected readable page, with exact text checks; question wording is generated and still needs review. Use Ask AI for a separately labelled simpler explanation or translation. Keys retain the source language. Pages without enough text cannot produce long answers. A source quote or model audit is not an accuracy guarantee.

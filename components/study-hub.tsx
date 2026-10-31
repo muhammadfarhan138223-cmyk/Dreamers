@@ -348,7 +348,7 @@ export default function StudyHub({
         page: source.page,
         questions: data.questions,
         at: Date.now(),
-        verification: "AI generated — educator review pending",
+        verification: "Source extract answers — educator review pending",
       });
       await refresh();
       setNotice("Practice saved on this device. You can use it offline now.");
@@ -797,8 +797,8 @@ export default function StudyHub({
                         <summary>Check source quote</summary>
                         <p dir="auto">“{q.sourceQuote}”</p>
                         <small>
-                          Quote matched the page. AI wording still needs
-                          checking.
+                          Answer text matched the source. Check that it fully
+                          answers the question.
                         </small>
                       </details>
                     )}
@@ -843,9 +843,10 @@ export default function StudyHub({
               </div>
             )}
             <p className="fineprint">
-              Generated questions are original AI practice, not official board
-              questions or a verified answer key. Page batches do not establish
-              complete chapter coverage.
+              Questions are AI-generated. Answer keys quote your selected
+              source; they are not official board answers or educator-reviewed.
+              Use Ask AI for a simpler explanation or translation. Page batches
+              do not cover a whole chapter.
             </p>
           </>
         )}
@@ -887,7 +888,7 @@ export default function StudyHub({
           </div>
         )}
         <label className="field study-language">
-          Explanation language
+          Question language
           <select
             value={language}
             disabled={busy}

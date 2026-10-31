@@ -1,6 +1,6 @@
 # DREAMERS project status
 
-Updated: 2026-10-31. Current working release: 0.4.1 focused study and source audit. 0.4.0 is live; source-audit follow-up deployment pending.
+Updated: 2026-10-31. Current working release: 0.4.2 source-extract practice keys. 0.4.1 is live; 0.4.2 deployment verification pending.
 
 ## Verified release
 
@@ -69,3 +69,13 @@ Browser verified class XI Biology focus and its missing supplied book message, o
 Long-answer QA revealed unsupported expansion despite a matched quote. 0.4.1 now requires ≥600 source characters for long mode and a second model audit checking every question/answer claim against source. Unsupported items are withheld; audit failure fails closed. Practice policy/cache version changed; older generated sets remain in IndexedDB/backups but are withheld until regenerated. This is still probabilistic AI checking, not teacher review or a guarantee of accuracy. Each new generation may make two bounded provider calls within one shared student allowance action. Content-derived revision IDs prevent old MCQ choices attaching to changed questions.
 
 Physical mobile/Android installation and airplane-mode tests remain pending; browser backend provides no viewport/network emulation. Automated worker/network-disconnected and IndexedDB backup checks cover the offline layer. Current source-audit build and live QA will be recorded after verification.
+
+## 0.4.2 source-answer correction
+
+Further live checks showed the model audit could accept an inferred ectotherm definition from a learning-outcome list and could accept roles not explained on that single page. Correct general knowledge is still not evidence from the selected source. Therefore practice policy v3 requires every answer key to be an exact contiguous source excerpt (whitespace-normalized), in addition to quotation, MCQ structure and model audit checks. Short keys must contain at least 20 characters; MCQs use source statements; long keys require 300–1800 source characters and a fuller source page. Out-of-source answer claims now fail deterministic validation. Questions still need educator review for relevance/ambiguity. The separate AI tutor remains generated and cannot be described as hallucination-free.
+
+Questions may be translated; answer keys retain the original source language. Ask AI provides separately labelled simplification/translation and optional stories. Earlier generated policies remain saved/exportable but are withheld from current practice until regenerated. Do not claim complete chapter coverage from page batches.
+
+Latest verified core/audit application: 5709c8149dc3f9630ee14baf57e868f337ccff80; production dpl_5DXpeE9CtSuBFVNk8zqDcbzQwZKx READY and configured. Cosmetic application 2ec7c2f530f9dc54b17af104279f44cae09fc551 passed build/preview. It adds an early PDF import button, source page labels rather than misleading artificial chapter numbers, larger bottom-nav labels and sticky tabs below the mobile header. 56 tests and production build pass for local 0.4.2. No new dependency or database migration.
+
+Exact next task: deploy and verify v3 source-extract practice using the actual supplied Biology PDF, preserve local books/attempts, record final deployment; then source teacher review, Biology XI and an official current-year pairing scheme.

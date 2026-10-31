@@ -1,3 +1,10 @@
+# 0.4.2 — 2026-10-31
+
+- Require practice answer keys to match the selected source verbatim; a matching quote and model audit alone proved insufficient in live QA. Original generated questions retain review-pending status.
+- Keep answer extracts in the book's language; question language and separately labelled AI simplification/translation remain available.
+- Withhold older generated policies while preserving their stored records and backup.
+- Shell v13; no cloud migration or new dependency.
+
 # 0.4.1 — 2026-10-31
 
 - Add an independent model source-support audit after quote checks; withhold unsupported questions. Long-answer generation requires fuller source text. This reduces unsupported expansion, without claiming educator verification.
