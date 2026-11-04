@@ -25,8 +25,17 @@ import type { LocalBook, BookPage, BookContext } from "./book-library";
 import ChapterPreparation from "./chapter-preparation";
 import BookExamPlan from "./book-exam-plan";
 import BookPassageSearch from "./book-passage-search";
+import SubjectTests from "./subject-tests";
+import UrinaryAdventure from "./urinary-adventure";
+import {
+  URINARY_CHAPTER,
+  urinaryMission,
+  urinaryWritten,
+} from "@/lib/urinary-mission.mjs";
+import type { PracticeItem } from "@/lib/paper-practice.mjs";
+import { BISE_MODEL_PAPERS, PECTAA_CATALOGUE } from "@/lib/publisher-books.mjs";
 import { chapterAtPage } from "@/lib/book-retrieval.mjs";
-import { schemeForBook } from "@/lib/exam-schemes.mjs";
+import { packMeta } from "@/lib/catalog.mjs";
 export type StudyFocus = { grade: "XI" | "XII"; subject: string };
 type Card = {
   id: string;
@@ -196,7 +205,11 @@ export default function StudyHub({
         if (v) {
           if (typeof v.bookChoice === "string") setBookChoice(v.bookChoice);
           if (typeof v.chapter === "string") setChapter(v.chapter);
-          if (["short", "mcq", "long", "pdf", "ai"].includes(String(v.mode)))
+          if (
+            ["short", "mcq", "long", "pdf", "ai", "play", "test"].includes(
+              String(v.mode),
+            )
+          )
             setMode(String(v.mode));
           if (["English", "Roman Urdu", "Urdu"].includes(String(v.language)))
             setLanguage(String(v.language));
@@ -280,6 +293,7 @@ export default function StudyHub({
     sourceKind,
   ]);
   const base = packs.find((p) => p.subject === focus?.subject);
+  const baseMeta = base && packMeta(base.id);
   const scopeBook = sourceKind === "foundation" ? base?.id : local?.id;
   const scopeChapter =
     sourceKind === "foundation"
@@ -299,6 +313,20 @@ export default function StudyHub({
     .sort((a, b) => a.page - b.page || a.at - b.at);
   const matchingSets = scopedSets.filter((s) => s.policy === STUDY_POLICY);
   const legacySets = scopedSets.filter((s) => s.policy !== STUDY_POLICY);
+  const urinaryBook =
+    sourceKind === "book" && catalog?.id === "biology-xii-supplied";
+  const urinaryChapter = urinaryBook && selectedChapter?.id === URINARY_CHAPTER;
+  const urinaryCards = urinaryMission.map((item) => ({
+    ...item,
+    id: "urinary:" + item.id,
+    answer: item.options[item.correct],
+  }));
+  const builtIn: Card[] =
+    urinaryChapter && language === "English"
+      ? mode === "mcq"
+        ? urinaryCards
+        : urinaryWritten.filter((item) => item.type === mode)
+      : [];
   const original: Card[] =
     sourceKind !== "foundation" || !base
       ? []
@@ -315,6 +343,7 @@ export default function StudyHub({
             .filter((q) => q.type === mode)
             .map((q) => ({ id: q.id, question: q.prompt, answer: q.answer }));
   const cards = [
+    ...builtIn,
     ...original,
     ...matchingSets.flatMap((s) =>
       s.questions.map((q) => ({
@@ -324,6 +353,57 @@ export default function StudyHub({
       })),
     ),
   ];
+  const testChapters = (catalog?.chapters || []).flatMap((item, i) => [
+    {
+      id: item.id,
+      number: item.number ?? i + 1,
+      title: item.title,
+    },
+  ]);
+  const practiceBank: PracticeItem[] = urinaryBook
+    ? [
+        ...urinaryCards.map((q) => ({ ...q, kind: "mcq", chapter: 14 })),
+        ...urinaryWritten.map((q) => ({ ...q, kind: q.type, chapter: 14 })),
+      ]
+    : [];
+  if (mode === "test" && sourceKind === "book" && local) {
+    const chapterNumbers = new Map(
+      testChapters.map((item) => [item.id, item.number]),
+    );
+    for (const set of sets) {
+      const number = chapterNumbers.get(set.chapter);
+      if (
+        number === undefined ||
+        set.bookId !== local.id ||
+        set.policy !== STUDY_POLICY ||
+        set.language !== language ||
+        !Array.isArray(set.questions) ||
+        chapterAtPage(catalog, set.page)?.id !== set.chapter
+      )
+        continue;
+      for (const q of set.questions) {
+        if (
+          typeof q.question !== "string" ||
+          !q.question.trim() ||
+          typeof q.answer !== "string" ||
+          !q.answer.trim() ||
+          (set.mode === "mcq" &&
+            (!Array.isArray(q.options) ||
+              !q.options.every((option) => typeof option === "string") ||
+              !Number.isInteger(q.correct) ||
+              q.correct! < 0 ||
+              q.correct! >= q.options.length))
+        )
+          continue;
+        practiceBank.push({
+          ...q,
+          id: set.id + ":" + q.id,
+          kind: set.mode,
+          chapter: number,
+        });
+      }
+    }
+  }
   async function sourceText(atPage = page, allowInsufficient = false) {
     if (sourceKind === "foundation" && base)
       return {
@@ -673,9 +753,7 @@ export default function StudyHub({
         <section className="add-study-book">
           <BookOpen size={35} />
           <div>
-            <h2>
-              Add your {subject?.name} {focus.grade} PDF once
-            </h2>
+            <h2>Read your {subject?.name} book offline</h2>
             <p>
               Your saved copy opens offline.{" "}
               {catalog
@@ -683,7 +761,7 @@ export default function StudyHub({
                 : "A matching supplied textbook file is not registered yet."}
             </p>
             <button className="primary" onClick={() => navigate("/books")}>
-              Add / open my PDF <Download size={17} />
+              Open book gallery <Download size={17} />
             </button>
             {base && (
               <button
@@ -696,18 +774,11 @@ export default function StudyHub({
           </div>
         </section>
       )}
-      {sourceKind === "book" && catalog && (
-        <BookExamPlan
-          bookId={catalog.id}
-          chapterId={selectedChapter?.id}
-          busy={busy}
-          onChapter={setChapter}
-          navigate={navigate}
-        />
-      )}
       <nav className="study-tabs" aria-label="Chapter learning mode">
         {[
-          ["short", "Short Q&A"],
+          ["short", "Learn"],
+          ["test", "Test"],
+          ["play", "Play"],
           ["mcq", "MCQs"],
           ["long", "Long answers"],
           ["pdf", "Read PDF"],
@@ -735,7 +806,67 @@ export default function StudyHub({
         </p>
       )}
       <section className="study-content">
-        {mode === "pdf" ? (
+        {mode === "test" ? (
+          catalog && sourceKind === "book" && testChapters.length ? (
+            <SubjectTests
+              key={catalog.id + ":" + (selectedChapter?.id || "")}
+              bookId={catalog.id}
+              chapters={testChapters}
+              chapter={
+                testChapters.find((item) => item.id === selectedChapter?.id)
+                  ?.number
+              }
+              bank={practiceBank}
+            />
+          ) : (
+            <div className="study-empty">
+              <Target size={38} />
+              <h2>Practice for this subject</h2>
+              <p>
+                Scope-based tests need a checked chapter map. You can still
+                practise the basics if a starter pack is available.
+              </p>
+              {baseMeta && (
+                <button
+                  className="primary"
+                  onClick={() =>
+                    navigate(
+                      `/challenge/${baseMeta.subject}/${baseMeta.chapterSlug}`,
+                    )
+                  }
+                >
+                  Open basics challenge
+                </button>
+              )}
+            </div>
+          )
+        ) : mode === "play" ? (
+          urinaryBook ? (
+            <UrinaryAdventure />
+          ) : (
+            <div className="study-empty">
+              <Target size={38} />
+              <h2>Play and remember</h2>
+              {baseMeta ? (
+                <>
+                  <p>Try the offline foundations challenge for this subject.</p>
+                  <button
+                    className="primary"
+                    onClick={() =>
+                      navigate(
+                        `/challenge/${baseMeta.subject}/${baseMeta.chapterSlug}`,
+                      )
+                    }
+                  >
+                    Play foundations challenge
+                  </button>
+                </>
+              ) : (
+                <p>There’s no saved game for this subject yet.</p>
+              )}
+            </div>
+          )
+        ) : mode === "pdf" ? (
           <div className="study-empty">
             <BookOpen size={44} />
             <h2>Your saved PDF, ready offline.</h2>
@@ -838,7 +969,9 @@ export default function StudyHub({
                 <span className="eyebrow">
                   {sourceKind === "foundation"
                     ? "ORIGINAL BASICS · UNMAPPED"
-                    : "FROM YOUR SELECTED BOOK"}
+                    : builtIn.length
+                      ? "ORIGINAL PRACTICE · CHAPTER 14"
+                      : "FROM YOUR SELECTED BOOK"}
                 </span>
                 <h2>
                   {mode === "short"
@@ -1025,10 +1158,9 @@ export default function StudyHub({
               />
             )}
             <p className="fineprint">
-              Questions are AI-generated. Answer keys quote your selected
-              source; they are not official board answers or educator-reviewed.
-              Use Ask AI for a simpler explanation or translation. Page batches
-              do not cover a whole chapter.
+              {builtIn.length
+                ? "Original practice for Human Urinary System. Online sets have their own source page and quote."
+                : "Generated sets use answer extracts from the selected source. Use Ask AI for a simpler explanation or translation."}
             </p>
           </>
         )}
@@ -1037,72 +1169,88 @@ export default function StudyHub({
             {notice}
           </p>
         )}
-        {local && sourceKind === "book" && mode !== "pdf" && (
-          <div className="study-page-controls">
-            <label className="field">
-              Source PDF page
-              <input
-                type="number"
-                disabled={busy}
-                min={firstPage}
-                max={lastPage}
-                value={page}
-                onChange={(e) =>
-                  setPage(
-                    Math.max(
-                      firstPage,
-                      Math.min(lastPage, Number(e.target.value) || 1),
-                    ),
-                  )
-                }
-              />
-            </label>
-            <button className="secondary" onClick={readPdf}>
-              <BookOpen size={17} /> Read this page
-            </button>
-            <button
-              className="secondary"
-              disabled={busy || page >= lastPage}
-              onClick={() => setPage((p) => p + 1)}
+        {local &&
+          sourceKind === "book" &&
+          !["pdf", "play", "test"].includes(mode) && (
+            <div className="study-page-controls">
+              <label className="field">
+                Source PDF page
+                <input
+                  type="number"
+                  disabled={busy}
+                  min={firstPage}
+                  max={lastPage}
+                  value={page}
+                  onChange={(e) =>
+                    setPage(
+                      Math.max(
+                        firstPage,
+                        Math.min(lastPage, Number(e.target.value) || 1),
+                      ),
+                    )
+                  }
+                />
+              </label>
+              <button className="secondary" onClick={readPdf}>
+                <BookOpen size={17} /> Read this page
+              </button>
+              <button
+                className="secondary"
+                disabled={busy || page >= lastPage}
+                onClick={() => setPage((p) => p + 1)}
+              >
+                Next page <ArrowRight size={16} />
+              </button>
+            </div>
+          )}
+        {!["pdf", "play"].includes(mode) && (
+          <label className="field study-language">
+            Question language
+            <select
+              value={language}
+              disabled={busy}
+              onChange={(e) => setLanguage(e.target.value)}
             >
-              Next page <ArrowRight size={16} />
-            </button>
-          </div>
+              <option>English</option>
+              <option>Roman Urdu</option>
+              <option>Urdu</option>
+            </select>
+          </label>
         )}
-        <label className="field study-language">
-          Question language
-          <select
-            value={language}
-            disabled={busy}
-            onChange={(e) => setLanguage(e.target.value)}
-          >
-            <option>English</option>
-            <option>Roman Urdu</option>
-            <option>Urdu</option>
-          </select>
-        </label>
       </section>
       <details className="exam-source-details">
         <summary>Exam pairing scheme & sources</summary>
         <p>
-          {catalog && schemeForBook(catalog.id)
-            ? "A paper pattern was inspected in this supplied book. Use the source-linked book plan above; current board confirmation remains pending."
-            : "No mapped paper pattern is available for this selected resource yet."}
+          Use the notification for your board and exam year. Book appendices can
+          help you plan while you check the current board source.
         </p>
-        <p>
-          Select the scheme for your actual examination year. A textbook edition
-          does not establish the current pairing scheme. The official PECTAA
-          listing includes Grade XI Annual 2026; the linked board PDF currently
-          could not be retrieved, and 2027 has not been verified here. No
-          chapter is removed or marked “important” on an unverified scheme.
-        </p>
-        <a
-          href="https://pectaa.edu.pk/curriculum-compliance/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Open official PECTAA source ↗
-        </a>
+        {sourceKind === "book" && catalog && (
+          <BookExamPlan
+            bookId={catalog.id}
+            chapterId={selectedChapter?.id}
+            busy={busy}
+            onChapter={setChapter}
+            navigate={navigate}
+          />
+        )}
+        <div className="row">
+          <a
+            className="secondary"
+            href={PECTAA_CATALOGUE}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            PECTAA textbooks
+          </a>
+          <a
+            className="secondary"
+            href={BISE_MODEL_PAPERS}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            BISE Lahore model papers
+          </a>
+        </div>
       </details>
     </div>
   );

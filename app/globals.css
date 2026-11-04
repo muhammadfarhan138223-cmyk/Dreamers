@@ -6361,3 +6361,97 @@ hr {
     padding: 0.5rem;
   }
 }
+
+.adventure-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: clamp(0.85rem, 3vw, 1.5rem);
+  border-radius: 1rem;
+  color: #f4fffb;
+  background: linear-gradient(125deg, #154b42, #29575f);
+  margin-bottom: 0.85rem;
+}
+.adventure-banner svg {
+  flex: none;
+}
+.adventure-banner h2 {
+  color: inherit;
+  margin: 0.2rem 0;
+}
+.adventure-banner p,
+.adventure-banner .eyebrow {
+  color: #e2f8ef;
+  margin-bottom: 0;
+}
+.adventure-banner.test-banner {
+  background: linear-gradient(125deg, #432f69, #584273);
+}
+.chapter-adventure progress {
+  width: 100%;
+  height: 0.55rem;
+  accent-color: #3fae88;
+}
+.adventure-stage,
+.subject-test-details,
+.subject-test-question,
+.test-chapters {
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  padding: 0.85rem;
+  margin: 0.75rem 0;
+}
+.adventure-stage h3 {
+  margin: 0.35rem 0 0.8rem;
+}
+.adventure-stage .study-mcq-options button {
+  min-height: 48px;
+}
+.adventure-feedback {
+  margin-top: 0.75rem;
+}
+.subject-tests > .field {
+  max-width: 34rem;
+}
+.test-chapters,
+.subject-test-question {
+  display: grid;
+  gap: 0.3rem;
+}
+.test-chapters label,
+.subject-test-question label {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+}
+.test-chapters input,
+.subject-test-question input {
+  flex: none;
+  accent-color: #4b67d6;
+}
+.subject-test-details details,
+.paper-item {
+  margin-top: 0.65rem;
+}
+.subject-test-details summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding-block: 0.3rem;
+}
+.subject-test-question legend {
+  padding-inline: 0.35rem;
+}
+@media (max-width: 650px) {
+  .study-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.35rem;
+  }
+  .study-tabs button {
+    min-width: 0;
+    min-height: 44px;
+    padding: 0.35rem 0.2rem;
+    white-space: normal;
+  }
+}

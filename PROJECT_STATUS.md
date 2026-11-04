@@ -1,23 +1,21 @@
 # DREAMERS project status
 
-Updated: 2026-10-31. Release 0.5.0 — source-linked book plans and resumable chapter preparation. Automated/build and live UI checks passed; live batch generation paused on the real shared-network quota. Read this file and the roadmap/architecture/deployment/changelog before editing.
+Updated: 2026-11-04. Current checkpoint is 0.5.2, offline subject games and scoped tests. Read the roadmap, architecture, deployment and changelog before changing code.
 
-## 0.5.1 release candidate
+## Current checkpoint
 
-- Cover gallery, publisher links, local first-page previews, highlighted cross-book search, selected-book tutor retrieval and basic SEO built. 68 automated tests and production build pass.
-- No source PDFs, answer sheets, textbook cover images or credentials are hosted. Readiness requires a local saved PDF and reader setup. Image-only pages still need OCR for search.
-- On November 4 the existing production deployment returned a fresh AI search result for the Class XII kidney/nephron question. AI and Upstash variable presence was checked by name and target without retrieving values.
-- No schema or environment changes. Next task is an offline chapter game and scope-based test preparation from the material actually available.
+- 0.5.1 gallery/search release verified on the production alias. GitHub 1ba17633d6690da7712db7f6abe040df75c326d8. Protected preview dpl_2JBxqZSe9m2zh7ZGhTBDtiKdqLKt and production dpl_J1DWgfgYn9aWtWny6SF7vpAhc9sY were READY.
+- 0.5.2 adds offline Kidney Courier (eight scenes, progress and missed-scene replay), Chapter 14 original short and long answers, and timed sampled MCQ quizzes with local last score. The full-book blueprint reports uncovered slots until all required questions are available.
+- Mobile cover gallery links to publisher editions; they are saved individually via the local file chooser. PECTAA’s Drive publisher download prompted browser verification during QA. Cloud-browser file transfer returned no readable bytes, so fresh-browser real PDF import and disconnect testing are pending for this release.
+- Public health returned configured, and a fresh production AI search found Biology XII Chapter 14 for kidney/nephron. All six AI/Upstash metadata entries were production scoped. No credentials changed.
+- Shell v16, IndexedDB v3, no cloud migration, no new runtime dependency.
 
-## Verified application
+## Deployment
 
-Latest verified application commit: f6a6c2542399f8e3c12275479035085683d24abe.
-Application tree: 8b52ccf838088f3dd92e4252132f848f2b877b9c.
-Preview: dpl_GjYWcdMPiSe7MB99XWhzs5TrHmM9 — READY.
-Production: dpl_8pLfgjkQtbouureyDP8J3hGFfDaM — READY, stable alias assigned.
 Live: https://dreamers-sooty.vercel.app
 Repository: https://github.com/muhammadfarhan138223-cmyk/Dreamers
-Vercel project: dreamers / prj_ol5nVtQ2DprVqMgNY140bM86Lsvu / team_jwuAswY9vD3bNmcKQM2LqjoF. Never deploy to the unused dreamers-learning project. Documentation-only checkpoint commits may deploy identical application code.
+Vercel project: dreamers / prj_ol5nVtQ2DprVqMgNY140bM86Lsvu / team_jwuAswY9vD3bNmcKQM2LqjoF.
+Use the linked production project and keep the existing preview protection.
 
 ## Completed in this release
 
@@ -60,7 +58,7 @@ Database migration status: IndexedDB v3 unchanged; no cloud migration. Existing 
 
 ## Exact next task
 
-Obtain the missing Biology XI PDF and a retrievable official pairing scheme for the student's actual examination year. Review one complete source chapter, add teacher-reviewed Q&A/MCQs and explicit multi-page coverage tracking. Evaluate v3 question relevance and long extracts against sources. Then implement whole-book retrieval and the dedicated authenticated Supabase/RLS/sync milestone while preserving all local work.
+Obtain a usable official Biology XI copy and confirm chapter headings against that edition. Then add educator-reviewed content and enough diverse questions for all Biology XII pairing slots. Continue to track official board/session confirmation separately from book appendices. Test PDF indexing and offline reload with a fresh mobile browser using a known local PDF. Accounts and sync remain planned.
 
 ## 0.5.0 prepared checkpoint — 2026-10-31
 

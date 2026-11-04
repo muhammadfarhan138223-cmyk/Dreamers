@@ -40,3 +40,8 @@ Implemented locally: colorful one-subject workspace, simplified navigation, sour
 0.5.0 local checkpoint: four observed book patterns, appendix separation and resumable chapter-page preparation implemented/tested. Official board/year confirmation remains pending. Whole-chapter question generation now supports resumable passes with explicit gaps; it still cannot claim complete concept coverage. Next: live browser QA, then indexed whole-book retrieval, source-based revision/flashcards and dedicated cloud accounts/sync.
 
 0.5.0 live plan/pair/source and persisted-view checks passed; real batch quota-pause persistence passed. Next: scoped indexed-book retrieval inside focused Ask AI, then remaining source-review/account/sync/revision work.
+
+
+## 0.5.2 checkpoint
+
+The offline gallery, cross-book literal text evidence, and subject Test/Play entry points are in place. Next expand original content by one checked chapter at a time and verify real-device offline reading and search. Full scheme coverage requires sufficient chapter-specific questions and independent official verification for the target examination session.

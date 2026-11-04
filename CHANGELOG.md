@@ -1,3 +1,10 @@
+# 0.5.2 — 2026-11-04
+
+- Add a resumable original eight-checkpoint Kidney Courier mission for Class XII Biology and Chapter 14 practice with eight MCQs, three short answers and one long answer.
+- Add offline chapter, custom term, custom half and full mapped-book scopes, timed sampled MCQs with a saved latest score, and written self-check.
+- Assemble a book-appendix mock only if every offered chapter slot and long-question part has a saved question. Show the missing question slots otherwise.
+- Put Learn, Test and Play first, with the pairing source under a disclosure. Shell v16.
+
 # 0.5.1 — 2026-11-04
 
 - Put supplied textbook entries and private saved copies in one mobile cover gallery with class and offline filters.

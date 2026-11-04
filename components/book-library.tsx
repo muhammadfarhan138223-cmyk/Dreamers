@@ -149,6 +149,7 @@ export default function BookLibrary({
   }
   useEffect(() => {
     refresh().catch(() => setError("Device book storage is unavailable."));
+    if (navigator.onLine) void import("./global-search").catch(() => {});
   }, []);
   async function importFiles(files: File[]) {
     setBusy(true);
@@ -281,6 +282,38 @@ export default function BookLibrary({
           Search book text <ArrowRight size={17} />
         </button>
       </header>
+      <div className="shelf-setup panel">
+        <div>
+          <b>Have a downloaded PDF?</b>
+          <p>
+            Save it on this device once. Files stay private and open offline.
+          </p>
+        </div>
+        <button
+          className="primary"
+          disabled={busy}
+          onClick={() => input.current?.click()}
+        >
+          <Download size={17} /> {busy ? "Saving…" : "Save from device"}
+        </button>
+        <button
+          className="text-link"
+          aria-expanded={showImport}
+          onClick={() => setShowImport((v) => !v)}
+        >
+          File options
+        </button>
+      </div>
+      {error && (
+        <p className="error-banner" role="alert">
+          {error}
+        </p>
+      )}
+      {notice && (
+        <p className="panel notice" role="status">
+          {notice}
+        </p>
+      )}
       <div className="gallery-toolbar">
         <div className="gallery-filters" aria-label="Filter books">
           {[
@@ -348,6 +381,11 @@ export default function BookLibrary({
                     href={source}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => {
+                      setSubject(book.subject);
+                      if (book.class === "XI" || book.class === "XII")
+                        setGrade(book.class);
+                    }}
                   >
                     Publisher PDF <ExternalLink size={14} />
                   </a>
@@ -416,38 +454,6 @@ export default function BookLibrary({
               : "Try All books or Show every subject."}
           </p>
         </div>
-      )}
-      <div className="shelf-setup panel">
-        <div>
-          <b>Have a downloaded PDF?</b>
-          <p>
-            Save it on this device once. Files stay private and open offline.
-          </p>
-        </div>
-        <button
-          className="primary"
-          disabled={busy}
-          onClick={() => input.current?.click()}
-        >
-          <Download size={17} /> {busy ? "Saving…" : "Save from device"}
-        </button>
-        <button
-          className="text-link"
-          aria-expanded={showImport}
-          onClick={() => setShowImport((v) => !v)}
-        >
-          File options
-        </button>
-      </div>
-      {error && (
-        <p className="error-banner" role="alert">
-          {error}
-        </p>
-      )}
-      {notice && (
-        <p className="panel notice" role="status">
-          {notice}
-        </p>
       )}
       <div id="book-details">
         {activeBook?.appendices?.length ? (
