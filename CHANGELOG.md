@@ -1,3 +1,9 @@
+# 0.5.3 — 2026-11-04
+
+- Add the official PECTAA Biology XI Annual 2026 paper reference under Test, with per-chapter objective and short-question counts, timing, long pairs, and a direct board link.
+- Keep the reference session-specific and separate from Biology XII book appendices and 2027 preparation.
+- Shell v17. No database migration, account or secret changes.
+
 # 0.5.2 — 2026-11-04
 
 - Add a resumable original eight-checkpoint Kidney Courier mission for Class XII Biology and Chapter 14 practice with eight MCQs, three short answers and one long answer.

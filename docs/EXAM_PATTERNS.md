@@ -20,3 +20,8 @@ Biology scheme was checked visually against the full two-page table. Chemistry c
 ## Board source checked 2026-11-04
 
 [BISE Lahore intermediate model papers](https://biselahore.com/model-papers/hssc) links a Class XII combined booklet. The downloaded PDF has 57 pages, its metadata is dated January 2024, and several paper headings identify 2024. Its older content is a historical reference, so no 2027 pattern or term boundaries were imported from it. [PECTAA’s e-books catalogue](https://pectaa.edu.pk/curriculum-compliance/) lists current editions, while [its model paper page](https://pectaa.edu.pk/model-papers/) lists Grade 8. Keep board, session and book appendix evidence separate.
+
+
+## Verified Punjab Biology XI Annual 2026
+
+PECTAA notification C&C Unit/2025/399 of 19 November 2025 applies to Annual 2026. [BISE Sargodha's live copy of Annex A](https://www.bisesargodha.edu.pk/uploads/news/8d142bec-6c0d-4c71-b39f-6b65390b766d_SmartSyllabus_11th_ALP_2025.pdf#page=55) was retrieved. The exam-pattern tables are on PDF pages 55–56 and the Biology ALP begins on PDF page 52. This profile uses 85 marks over 180 minutes, 17 objective marks, 44 short marks and 24 long marks. Only the numeric structure is reproduced. Chapter 7 is excluded for this session only, and the app applies no automatic topic deletion.

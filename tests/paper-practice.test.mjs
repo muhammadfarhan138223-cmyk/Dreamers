@@ -79,3 +79,33 @@ test("the offline mission ships eight distinct playable checkpoints and written 
     [2, 2, 2, 4],
   );
 });
+
+test("official Biology XI 2026 ALP counts and exclusions are session specific", async () => {
+  const { biologyXi2026: scheme } =
+    await import("../lib/board-exam-patterns.mjs");
+  const sum = (list) => list.reduce((a, b) => a + b, 0);
+  assert.equal(scheme.session, "Annual Exam 2026");
+  assert.equal(sum(Object.values(scheme.objective.byChapter)), 17);
+  assert.ok(!Object.hasOwn(scheme.objective.byChapter, 7));
+  for (const group of scheme.shortGroups) {
+    assert.equal(sum(Object.values(group.chapters)), group.offered);
+    assert.ok(!Object.hasOwn(group.chapters, 7));
+  }
+  assert.equal(scheme.long.pairs.length, 5);
+  assert.deepEqual(
+    scheme.long.pairs.map((p) => p.chapters),
+    [
+      [1, 11],
+      [3, 9],
+      [6, 10],
+      [2, 12],
+      [4, 8],
+    ],
+  );
+  assert.equal(
+    scheme.objective.marks +
+      sum(scheme.shortGroups.map((g) => g.attempt * g.marksEach)) +
+      scheme.long.attempt * 2 * scheme.long.partMarks,
+    scheme.totalMarks,
+  );
+});

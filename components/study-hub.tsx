@@ -24,6 +24,7 @@ import type { Pack, RecordValue } from "@/lib/types";
 import type { LocalBook, BookPage, BookContext } from "./book-library";
 import ChapterPreparation from "./chapter-preparation";
 import BookExamPlan from "./book-exam-plan";
+import BiologyBoardPattern from "./biology-board-pattern";
 import BookPassageSearch from "./book-passage-search";
 import SubjectTests from "./subject-tests";
 import UrinaryAdventure from "./urinary-adventure";
@@ -807,7 +808,30 @@ export default function StudyHub({
       )}
       <section className="study-content">
         {mode === "test" ? (
-          catalog && sourceKind === "book" && testChapters.length ? (
+          focus.grade === "XI" && focus.subject === "biology" ? (
+            <>
+              <BiologyBoardPattern />
+              <div className="study-empty">
+                <p>
+                  Use the 2026 pattern as a reference. A checked Biology XI
+                  textbook map and question bank are still needed for
+                  chapter-based mocks.
+                </p>
+                {baseMeta && (
+                  <button
+                    className="primary"
+                    onClick={() =>
+                      navigate(
+                        `/challenge/${baseMeta.subject}/${baseMeta.chapterSlug}`,
+                      )
+                    }
+                  >
+                    Practise the basics
+                  </button>
+                )}
+              </div>
+            </>
+          ) : catalog && sourceKind === "book" && testChapters.length ? (
             <SubjectTests
               key={catalog.id + ":" + (selectedChapter?.id || "")}
               bookId={catalog.id}

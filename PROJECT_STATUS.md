@@ -1,14 +1,16 @@
 # DREAMERS project status
 
-Updated: 2026-11-04. Current checkpoint is 0.5.2, offline subject games and scoped tests. Read the roadmap, architecture, deployment and changelog before changing code.
+Updated: 2026-11-04. Current checkpoint is 0.5.3, official Biology XI Annual 2026 reference. Read the roadmap, architecture, deployment and changelog before changing code.
 
 ## Current checkpoint
 
 - 0.5.1 gallery/search release verified on the production alias. GitHub 1ba17633d6690da7712db7f6abe040df75c326d8. Protected preview dpl_2JBxqZSe9m2zh7ZGhTBDtiKdqLKt and production dpl_J1DWgfgYn9aWtWny6SF7vpAhc9sY were READY.
+- 0.5.2 is live at GitHub 4f27cd62b2983e2ba52d20b72d52fee2d65d026f, preview dpl_99Wu2EpsqGoFU8M6JsDviy94Gd8S and production dpl_F8PohCrwwkBUJjPeTbcx5sx8SUN9 (READY). Browser checks covered mission feedback and reload persistence, quiz score and full-paper gaps.
 - 0.5.2 adds offline Kidney Courier (eight scenes, progress and missed-scene replay), Chapter 14 original short and long answers, and timed sampled MCQ quizzes with local last score. The full-book blueprint reports uncovered slots until all required questions are available.
 - Mobile cover gallery links to publisher editions; they are saved individually via the local file chooser. PECTAA’s Drive publisher download prompted browser verification during QA. Cloud-browser file transfer returned no readable bytes, so fresh-browser real PDF import and disconnect testing are pending for this release.
 - Public health returned configured, and a fresh production AI search found Biology XII Chapter 14 for kidney/nephron. All six AI/Upstash metadata entries were production scoped. No credentials changed.
-- Shell v16, IndexedDB v3, no cloud migration, no new runtime dependency.
+- 0.5.3 adds the official Biology XI Annual 2026 chapter counts and long pairs under Test, verified against BISE Sargodha PDF pp. 55–56. The app applies no exclusions to other sessions.
+- Shell v17, IndexedDB v3, no cloud migration, no new runtime dependency.
 
 ## Deployment
 
@@ -44,7 +46,7 @@ Quality finding: matching quotations and a second model audit still accepted uns
 ## Partial / pending
 
 - Complete chapter question banks/coverage tracking: current generation is page-sized, not a whole chapter or full syllabus. Teacher-reviewed questions and source correctness remain pending.
-- Biology XI copy, exact publisher editions and current official board pairing scheme/exclusions. PECTAA listing references XI Annual 2026; linked scheme could not be retrieved, and 2027 is not verified. No scheme-based deletion, weightage or readiness claim has been applied.
+- Biology XI copy, exact publisher editions and current official board pairing scheme/exclusions. XI Biology Annual 2026 is verified and labelled as historical. The applicable 2027 scheme is not verified. No scheme-based deletion, weightage or readiness claim has been applied.
 - Nine scan/support/legacy maps need review. OCR, whole-book AI retrieval and reliable exam-scope mapping remain pending.
 - Accounts, dedicated Supabase/RLS migrations, authenticated cloud sync/guest migration, secure administration, full readiness/adaptive plans and advanced media remain pending. No public chat or insecure admin operations enabled.
 

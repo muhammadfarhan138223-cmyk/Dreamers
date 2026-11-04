@@ -6455,3 +6455,18 @@ hr {
     white-space: normal;
   }
 }
+
+.board-pattern-table {
+  overflow-x: auto;
+  margin-block: 0.65rem;
+}
+.board-pattern-table table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+.board-pattern-table th,
+.board-pattern-table td {
+  padding: 0.45rem;
+  border-bottom: 1px solid var(--line);
+}
