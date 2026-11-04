@@ -1,8 +1,12 @@
 # DREAMERS project status
 
-Updated: 2026-11-04. Current checkpoint is 0.5.3, official Biology XI Annual 2026 reference. Read the roadmap, architecture, deployment and changelog before changing code.
+Updated: 2026-11-04. Current checkpoint is 0.5.4, sequential offline Biology XII practice and loading fixes. Read the roadmap, architecture, deployment and changelog before changing code.
 
 ## Current checkpoint
+
+- 0.5.4 adds an original offline Biology XII bank for all 13 chapters, with selectable topic notes and source-page mapping. Available content covers selected topics rather than every textbook paragraph or possible exam question. Other books retain checked chapter maps where available and can use saved practice or page-grounded generation.
+- MCQ → short → long → next chapter with one question at a time, local answer/review progress and mock assembly from the registered book’s appendix. The applicable 2027 official scheme is unverified.
+- Main loading releases the app before optional network pack setup. The tutor accepts general questions without a PDF and preserves strict evidence for selected passages. Source PDFs remain device-local.
 
 - 0.5.1 gallery/search release verified on the production alias. GitHub 1ba17633d6690da7712db7f6abe040df75c326d8. Protected preview dpl_2JBxqZSe9m2zh7ZGhTBDtiKdqLKt and production dpl_J1DWgfgYn9aWtWny6SF7vpAhc9sY were READY.
 - 0.5.2 is live at GitHub 4f27cd62b2983e2ba52d20b72d52fee2d65d026f, preview dpl_99Wu2EpsqGoFU8M6JsDviy94Gd8S and production dpl_F8PohCrwwkBUJjPeTbcx5sx8SUN9 (READY). Browser checks covered mission feedback and reload persistence, quiz score and full-paper gaps.
@@ -10,7 +14,7 @@ Updated: 2026-11-04. Current checkpoint is 0.5.3, official Biology XI Annual 202
 - Mobile cover gallery links to publisher editions; they are saved individually via the local file chooser. PECTAA’s Drive publisher download prompted browser verification during QA. Cloud-browser file transfer returned no readable bytes, so fresh-browser real PDF import and disconnect testing are pending for this release.
 - Public health returned configured, and a fresh production AI search found Biology XII Chapter 14 for kidney/nephron. All six AI/Upstash metadata entries were production scoped. No credentials changed.
 - 0.5.3 adds the official Biology XI Annual 2026 chapter counts and long pairs under Test, verified against BISE Sargodha PDF pp. 55–56. The app applies no exclusions to other sessions.
-- Shell v17, IndexedDB v3, no cloud migration, no new runtime dependency.
+- Shell v18, IndexedDB v3, no cloud migration, no new runtime dependency.
 
 ## Deployment
 

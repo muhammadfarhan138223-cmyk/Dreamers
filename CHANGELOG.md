@@ -1,3 +1,11 @@
+# 0.5.4 — 2026-11-04
+
+- Add 74 original MCQs, 74 short answers and 13 long-answer models across the 13 Biology XII chapters. Topic notes link to pages in the registered copy. The existing Chapter 14 mission and practice remain available.
+- Present one question at a time, retain local progress, and offer MCQs → short answers → long answers → next chapter. The available bank fills the Biology XII book-appendix mock.
+- Open the chosen book and page from the subject workspace. General tutor questions can be sent immediately, and a reader-selected excerpt keeps strict evidence mode.
+- Separate optional starter downloads from app startup, and show consistent loading and recovery states for device storage, PDF reading and online AI.
+- Shell v18. No database migration or publisher PDF bytes in the release.
+
 # 0.5.3 — 2026-11-04
 
 - Add the official PECTAA Biology XI Annual 2026 paper reference under Test, with per-chapter objective and short-question counts, timing, long pairs, and a direct board link.

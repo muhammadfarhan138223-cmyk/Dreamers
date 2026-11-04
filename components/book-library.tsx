@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import LoadingState from "./loading-state";
 import {
   BookOpen,
   Download,
@@ -26,11 +27,7 @@ import {
 } from "@/lib/publisher-books.mjs";
 const PdfReader = dynamic(() => import("./pdf-reader"), {
   ssr: false,
-  loading: () => (
-    <div className="panel empty">
-      <p>Preparing PDF reader…</p>
-    </div>
-  ),
+  loading: () => <LoadingState>Opening PDF reader…</LoadingState>,
 });
 export type LocalBook = {
   id: string;
@@ -86,6 +83,7 @@ export default function BookLibrary({
     [grade, setGrade] = useState(focus?.grade || "XII"),
     [edition, setEdition] = useState(""),
     [busy, setBusy] = useState(false),
+    [loadingBooks, setLoadingBooks] = useState(true),
     [error, setError] = useState(""),
     [targetPage, setTargetPage] = useState(1),
     [removeId, setRemoveId] = useState(""),
@@ -148,7 +146,9 @@ export default function BookLibrary({
     setBooks((await db.list<LocalBook>("books")).sort((a, b) => b.at - a.at));
   }
   useEffect(() => {
-    refresh().catch(() => setError("Device book storage is unavailable."));
+    void refresh()
+      .catch(() => setError("Device book storage is unavailable."))
+      .finally(() => setLoadingBooks(false));
     if (navigator.onLine) void import("./global-search").catch(() => {});
   }, []);
   async function importFiles(files: File[]) {
@@ -284,7 +284,11 @@ export default function BookLibrary({
       </header>
       <div className="shelf-setup panel">
         <div>
-          <b>Have a downloaded PDF?</b>
+          <b>
+            {activeBook
+              ? `${activeBook.title} · Class ${activeBook.class}`
+              : "Have a downloaded PDF?"}
+          </b>
           <p>
             Save it on this device once. Files stay private and open offline.
           </p>
@@ -296,6 +300,16 @@ export default function BookLibrary({
         >
           <Download size={17} /> {busy ? "Saving…" : "Save from device"}
         </button>
+        {activeBook && publisherUrl(activeBook.id) && (
+          <a
+            className="secondary"
+            href={publisherUrl(activeBook.id)!}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Publisher PDF <ExternalLink size={15} />
+          </a>
+        )}
         <button
           className="text-link"
           aria-expanded={showImport}
@@ -304,6 +318,10 @@ export default function BookLibrary({
           File options
         </button>
       </div>
+      {loadingBooks && <LoadingState>Checking saved books…</LoadingState>}
+      {busy && (
+        <LoadingState>Saving your selected PDFs on this device…</LoadingState>
+      )}
       {error && (
         <p className="error-banner" role="alert">
           {error}

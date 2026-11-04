@@ -25,6 +25,12 @@ import type { LocalBook, BookPage, BookContext } from "./book-library";
 import ChapterPreparation from "./chapter-preparation";
 import BookExamPlan from "./book-exam-plan";
 import BiologyBoardPattern from "./biology-board-pattern";
+import LoadingState from "./loading-state";
+import {
+  BIOLOGY_XII,
+  biologyChapterCards,
+  biologyChapterTopics,
+} from "@/lib/biology-xii.mjs";
 import BookPassageSearch from "./book-passage-search";
 import SubjectTests from "./subject-tests";
 import UrinaryAdventure from "./urinary-adventure";
@@ -46,6 +52,8 @@ type Card = {
   correct?: number;
   sourceQuote?: string;
   explanation?: string;
+  sourcePage?: number;
+  topic?: string;
 };
 export type SavedSet = RecordValue & {
   grade: string;
@@ -148,7 +156,7 @@ export default function StudyHub({
 }) {
   const [choosing, setChoosing] = useState(!focus),
     [grade, setGrade] = useState<"XI" | "XII">(focus?.grade || "XI"),
-    [mode, setMode] = useState("short"),
+    [mode, setMode] = useState("mcq"),
     [sourceKind, setSourceKind] = useState("book"),
     [books, setBooks] = useState<LocalBook[]>([]),
     [sets, setSets] = useState<SavedSet[]>([]),
@@ -163,7 +171,9 @@ export default function StudyHub({
     [question, setQuestion] = useState(""),
     [reply, setReply] = useState(""),
     [allowStory, setAllowStory] = useState(false),
-    [questionGroup, setQuestionGroup] = useState(0),
+    [cursor, setCursor] = useState<number | null>(null),
+    [reviews, setReviews] = useState<Set<string>>(new Set()),
+    [loadingLibrary, setLoadingLibrary] = useState(true),
     [loadedView, setLoadedView] = useState(""),
     [sourcePassage, setSourcePassage] = useState<BookContext | null>(null);
   async function refresh() {
@@ -173,6 +183,13 @@ export default function StudyHub({
     ]);
     setBooks(b);
     setSets(s.filter((x) => x.id.startsWith("study-set:")));
+    setReviews(
+      new Set(
+        s
+          .filter((x) => x.id.startsWith("study-review:"))
+          .map((x) => x.id.slice(13)),
+      ),
+    );
     setAnswers(
       Object.fromEntries(
         s
@@ -185,9 +202,11 @@ export default function StudyHub({
     );
   }
   useEffect(() => {
-    void refresh().catch(() =>
-      setNotice("Your saved books could not be loaded. Reload to retry."),
-    );
+    void refresh()
+      .catch(() =>
+        setNotice("Your saved books could not be loaded. Reload to retry."),
+      )
+      .finally(() => setLoadingLibrary(false));
   }, []);
   useEffect(() => {
     if (focus) {
@@ -216,10 +235,21 @@ export default function StudyHub({
             setLanguage(String(v.language));
           if (v.sourceKind === "book" || v.sourceKind === "foundation")
             setSourceKind(v.sourceKind);
+        } else {
+          setBookChoice("");
+          setChapter("");
+          setMode("mcq");
+          setLanguage("English");
+          setSourceKind("book");
         }
         setLoadedView(viewId);
       })
-      .catch(() => setNotice("Study preferences could not be loaded."));
+      .catch(() => {
+        if (current) {
+          setNotice("Study preferences could not be loaded.");
+          setLoadedView(viewId);
+        }
+      });
     return () => {
       current = false;
     };
@@ -278,12 +308,11 @@ export default function StudyHub({
     ),
   );
   useEffect(() => {
-    setPage(selectedChapter?.page || local?.lastPage || 1);
     setReply("");
     setAllowStory(false);
     setSourcePassage(null);
     setRevealed({});
-    setQuestionGroup(0);
+    setCursor(null);
   }, [
     selectedChapter?.id,
     local?.id,
@@ -291,6 +320,15 @@ export default function StudyHub({
     focus?.subject,
     mode,
     language,
+    sourceKind,
+  ]);
+  useEffect(() => {
+    setPage(selectedChapter?.page || local?.lastPage || 1);
+  }, [
+    selectedChapter?.id,
+    local?.id,
+    focus?.grade,
+    focus?.subject,
     sourceKind,
   ]);
   const base = packs.find((p) => p.subject === focus?.subject);
@@ -323,10 +361,19 @@ export default function StudyHub({
     answer: item.options[item.correct],
   }));
   const builtIn: Card[] =
-    urinaryChapter && language === "English"
-      ? mode === "mcq"
-        ? urinaryCards
-        : urinaryWritten.filter((item) => item.type === mode)
+    sourceKind === "book"
+      ? [
+          ...biologyChapterCards(catalog?.id, selectedChapter?.number, mode),
+          ...(urinaryChapter
+            ? mode === "mcq"
+              ? urinaryCards
+              : urinaryWritten.filter((item) => item.type === mode)
+            : []),
+        ]
+      : [];
+  const chapterTopics =
+    sourceKind === "book"
+      ? biologyChapterTopics(catalog?.id, selectedChapter?.number)
       : [];
   const original: Card[] =
     sourceKind !== "foundation" || !base
@@ -343,7 +390,7 @@ export default function StudyHub({
         : base.written
             .filter((q) => q.type === mode)
             .map((q) => ({ id: q.id, question: q.prompt, answer: q.answer }));
-  const cards = [
+  const cards: Card[] = [
     ...builtIn,
     ...original,
     ...matchingSets.flatMap((s) =>
@@ -354,6 +401,25 @@ export default function StudyHub({
       })),
     ),
   ];
+  function reviewed(card: Card) {
+    return card.options ? answers[card.id] !== undefined : reviews.has(card.id);
+  }
+  const firstPending = cards.findIndex((card) => !reviewed(card));
+  const index = Math.max(
+    0,
+    Math.min(
+      cards.length - 1,
+      cursor ?? (firstPending < 0 ? cards.length - 1 : firstPending),
+    ),
+  );
+  const currentCard = cards[index];
+  const completeSet = cards.length > 0 && firstPending < 0;
+  const nextChapter = catalog?.chapters[chapterIndex + 1];
+  function goToStage(stage: string) {
+    setMode(stage);
+    setCursor(null);
+    setNotice("");
+  }
   const testChapters = (catalog?.chapters || []).flatMap((item, i) => [
     {
       id: item.id,
@@ -363,6 +429,15 @@ export default function StudyHub({
   ]);
   const practiceBank: PracticeItem[] = urinaryBook
     ? [
+        ...testChapters.flatMap(({ number }) =>
+          ["mcq", "short", "long"].flatMap((kind) =>
+            biologyChapterCards(BIOLOGY_XII, number, kind).map((q) => ({
+              ...q,
+              kind,
+              chapter: number,
+            })),
+          ),
+        ),
         ...urinaryCards.map((q) => ({ ...q, kind: "mcq", chapter: 14 })),
         ...urinaryWritten.map((q) => ({ ...q, kind: q.type, chapter: 14 })),
       ]
@@ -378,6 +453,7 @@ export default function StudyHub({
         set.bookId !== local.id ||
         set.policy !== STUDY_POLICY ||
         set.language !== language ||
+        !["mcq", "short", "long"].includes(set.mode) ||
         !Array.isArray(set.questions) ||
         chapterAtPage(catalog, set.page)?.id !== set.chapter
       )
@@ -454,6 +530,7 @@ export default function StudyHub({
   }): Promise<boolean> {
     const response = await fetch("/api/study", {
       method: "POST",
+      signal: AbortSignal.timeout(35_000),
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ source, mode, language }),
     });
@@ -529,38 +606,45 @@ export default function StudyHub({
     }
     setBusy(true);
     try {
-      const source =
-        sourceKind === "book" && sourcePassage
+      const general = sourceKind === "book" && !local && !!selectedChapter;
+      const source = general
+        ? null
+        : sourceKind === "book" && sourcePassage
           ? sourcePassage
           : await sourceText();
       const referenceChapter =
         sourceKind === "book" && catalog
-          ? chapterAtPage(catalog, source.page)
+          ? source
+            ? chapterAtPage(catalog, source.page)
+            : selectedChapter
           : null;
-      const known = sourceKind === "book" && local?.catalogId;
+      const known =
+        sourceKind === "book" &&
+        (local?.catalogId || (general ? catalog?.id : undefined));
       const body =
         sourceKind === "foundation"
           ? { packId: base!.id, topic: "pack-overview" }
           : {
               ...(known
                 ? {
-                    textbookId: local!.catalogId,
+                    textbookId: known,
                     topic: referenceChapter?.id || "pdf-page",
                   }
                 : { contextKind: "pdf", topic: "pdf-page" }),
             };
       const response = await fetch("/api/ai", {
         method: "POST",
+        signal: AbortSignal.timeout(35_000),
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...body,
           question,
           language,
           mode: "Friendly Teacher",
-          referenceOnly: !allowStory,
+          referenceOnly: !allowStory && !general,
           allowEnrichment: allowStory,
           bookContext:
-            sourceKind === "book"
+            sourceKind === "book" && source
               ? { ...source, text: source.text.slice(0, 2000) }
               : undefined,
         }),
@@ -574,7 +658,7 @@ export default function StudyHub({
         title: question,
         text: data.answer,
         sourceBookId: sourceKind === "book" ? local?.id : base?.id,
-        sourcePage: source.page,
+        sourcePage: source?.page,
         at: Date.now(),
       });
     } catch (e) {
@@ -586,9 +670,9 @@ export default function StudyHub({
     }
   }
   function readPdf() {
-    if (local)
+    if (local || catalog)
       navigate(
-        `/books/${encodeURIComponent(local.catalogId || local.id)}/${page}`,
+        `/books/${encodeURIComponent(local?.catalogId || local?.id || catalog!.id)}/${page}`,
       );
     else navigate("/books");
   }
@@ -637,7 +721,7 @@ export default function StudyHub({
                   setBookChoice("");
                   setChapter("");
                   setPage(1);
-                  setMode("short");
+                  setMode("mcq");
                   setNotice("");
                 }}
               >
@@ -648,6 +732,14 @@ export default function StudyHub({
               </button>
             ))}
         </div>
+      </div>
+    );
+  if (loadingLibrary || loadedView !== viewId)
+    return (
+      <div className="study-hub">
+        <LoadingState>
+          Opening this subject and its saved progress…
+        </LoadingState>
       </div>
     );
   return (
@@ -761,8 +853,8 @@ export default function StudyHub({
                 ? "Your chapter links are ready."
                 : "A matching supplied textbook file is not registered yet."}
             </p>
-            <button className="primary" onClick={() => navigate("/books")}>
-              Open book gallery <Download size={17} />
+            <button className="primary" onClick={readPdf}>
+              Find this book <Download size={17} />
             </button>
             {base && (
               <button
@@ -777,12 +869,12 @@ export default function StudyHub({
       )}
       <nav className="study-tabs" aria-label="Chapter learning mode">
         {[
-          ["short", "Learn"],
+          ["pdf", "Read"],
+          ["mcq", "1 · MCQs"],
+          ["short", "2 · Short answers"],
+          ["long", "3 · Long answers"],
           ["test", "Test"],
           ["play", "Play"],
-          ["mcq", "MCQs"],
-          ["long", "Long answers"],
-          ["pdf", "Read PDF"],
           ["ai", "Ask AI"],
         ].map(([id, label]) => (
           <button
@@ -891,17 +983,69 @@ export default function StudyHub({
             </div>
           )
         ) : mode === "pdf" ? (
-          <div className="study-empty">
-            <BookOpen size={44} />
-            <h2>Your saved PDF, ready offline.</h2>
-            <p>
-              {local
-                ? `${local.title} · ${local.pageCount || "?"} PDF pages · saved on this device`
-                : "Add your PDF once to read without internet."}
-            </p>
-            <button className="primary" onClick={readPdf}>
-              {local ? "Open PDF reader" : "Add my PDF"}{" "}
-              <ArrowRight size={17} />
+          <div className="chapter-reading">
+            <h2>{selectedChapter?.title || "Read your textbook"}</h2>
+            <div className="row">
+              <button className="primary" onClick={readPdf}>
+                {local
+                  ? "Read this chapter in PDF"
+                  : "Open book & download options"}{" "}
+                <BookOpen size={17} />
+              </button>
+              {local && (
+                <button
+                  className="secondary"
+                  onClick={() =>
+                    navigate(
+                      `/books/${encodeURIComponent(local.catalogId || local.id)}/1`,
+                    )
+                  }
+                >
+                  Open full book
+                </button>
+              )}
+            </div>
+            {!!chapterTopics.length && (
+              <>
+                <h3>Topic notes · available offline</h3>
+                <p>
+                  Open any topic for a short explanation, or read the full
+                  chapter in the PDF.
+                </p>
+                {chapterTopics.map(([topicPage, title, , , , explanation]) => (
+                  <details className="subject-test-details" key={title}>
+                    <summary>{title}</summary>
+                    <p>{explanation}</p>
+                    <div className="row">
+                      {local && (
+                        <button
+                          className="text-link"
+                          onClick={() =>
+                            navigate(
+                              `/books/${encodeURIComponent(local.catalogId || local.id)}/${topicPage}`,
+                            )
+                          }
+                        >
+                          Read PDF page {topicPage}
+                        </button>
+                      )}
+                      <button
+                        className="text-link"
+                        onClick={() => {
+                          setQuestion(`Explain ${title} in simple words.`);
+                          setPage(topicPage);
+                          goToStage("ai");
+                        }}
+                      >
+                        Ask AI about this topic <Sparkles size={15} />
+                      </button>
+                    </div>
+                  </details>
+                ))}
+              </>
+            )}
+            <button className="secondary" onClick={() => goToStage("mcq")}>
+              Start chapter MCQs <ArrowRight size={17} />
             </button>
           </div>
         ) : mode === "ai" ? (
@@ -911,7 +1055,9 @@ export default function StudyHub({
             <p>
               {sourcePassage
                 ? `AI will use your chosen passage from PDF page ${sourcePassage.page}.`
-                : "AI uses the selected readable page / original lesson."}{" "}
+                : sourceKind === "book" && !local
+                  ? "Ask for a general explanation of the selected chapter. Save the PDF for passage-based answers."
+                  : "AI uses the selected readable page or original lesson."}{" "}
               You can search indexed pages below to find a different topic. The
               full book is not uploaded.
             </p>
@@ -972,13 +1118,19 @@ export default function StudyHub({
                 busy ||
                 !online ||
                 !question.trim() ||
-                (sourceKind === "book" && !local)
+                (sourceKind === "book" && !local && !selectedChapter)
               }
               onClick={() => void ask()}
             >
               <Sparkles size={18} />{" "}
               {busy ? "Checking the source…" : "Explain simply"}
             </button>
+            {busy && <LoadingState>Getting your explanation…</LoadingState>}
+            {!online && (
+              <p className="fineprint">
+                Reconnect to ask AI. Read and practice still work offline.
+              </p>
+            )}
             {reply && (
               <div className="study-reply" dir="auto">
                 <b>AI explanation · check against your source</b>
@@ -994,7 +1146,7 @@ export default function StudyHub({
                   {sourceKind === "foundation"
                     ? "ORIGINAL BASICS · UNMAPPED"
                     : builtIn.length
-                      ? "ORIGINAL PRACTICE · CHAPTER 14"
+                      ? "TEXTBOOK-MAPPED OFFLINE PRACTICE"
                       : "FROM YOUR SELECTED BOOK"}
                 </span>
                 <h2>
@@ -1010,118 +1162,197 @@ export default function StudyHub({
                 </p>
               </div>
             </div>
-            <div className="study-cards">
-              {cards
-                .slice(questionGroup * 5, questionGroup * 5 + 5)
-                .map((q, i) => (
-                  <article className="study-question" key={q.id}>
-                    <span className="question-number">
-                      {String(questionGroup * 5 + i + 1).padStart(2, "0")}
-                    </span>
-                    <div>
-                      <h3>{q.question}</h3>
-                      {q.options ? (
-                        <div className="study-mcq-options">
-                          {q.options.map((option, n) => (
-                            <button
-                              key={n}
-                              className={
-                                answers[q.id] === n
-                                  ? n === q.correct
-                                    ? "correct"
-                                    : "retry"
-                                  : ""
-                              }
-                              onClick={() => {
-                                setAnswers((a) => ({ ...a, [q.id]: n }));
-                                void db
-                                  .put("settings", {
-                                    id: `study-answer:${q.id}`,
-                                    choice: n,
-                                    at: Date.now(),
-                                  })
-                                  .catch(() =>
-                                    setNotice(
-                                      "This answer could not be saved. Please try again.",
-                                    ),
-                                  );
-                              }}
-                            >
-                              <span>{String.fromCharCode(65 + n)}</span>
-                              {option}
-                            </button>
-                          ))}
-                          {answers[q.id] !== undefined && (
-                            <p className="answer-feedback">
-                              {answers[q.id] === q.correct
-                                ? "Correct — well understood."
-                                : `Try again. The answer is: ${q.answer}`}{" "}
-                              {q.explanation}
-                            </p>
-                          )}
-                        </div>
-                      ) : (
-                        <>
+            {currentCard && (
+              <>
+                <div
+                  className="chapter-progress"
+                  aria-label="Practice progress"
+                >
+                  <span>
+                    Question {index + 1} of {cards.length}
+                  </span>
+                  <progress
+                    max={cards.length}
+                    value={cards.filter(reviewed).length}
+                  />
+                </div>
+                <article
+                  className="study-question practice-step"
+                  key={currentCard.id}
+                >
+                  <span className="question-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    {currentCard.topic && (
+                      <span className="eyebrow">{currentCard.topic}</span>
+                    )}
+                    <h3>{currentCard.question}</h3>
+                    {currentCard.options ? (
+                      <div className="study-mcq-options">
+                        {currentCard.options.map((option, choice) => (
                           <button
-                            className="answer-toggle"
-                            onClick={() =>
-                              setRevealed((v) => ({ ...v, [q.id]: !v[q.id] }))
+                            key={choice}
+                            aria-pressed={answers[currentCard.id] === choice}
+                            className={
+                              answers[currentCard.id] === choice
+                                ? choice === currentCard.correct
+                                  ? "correct"
+                                  : "retry"
+                                : ""
                             }
+                            onClick={() => {
+                              setCursor(index);
+                              setAnswers((values) => ({
+                                ...values,
+                                [currentCard.id]: choice,
+                              }));
+                              void db
+                                .put("settings", {
+                                  id: `study-answer:${currentCard.id}`,
+                                  choice,
+                                  at: Date.now(),
+                                })
+                                .catch(() =>
+                                  setNotice(
+                                    "This answer could not be saved. Please try again.",
+                                  ),
+                                );
+                            }}
                           >
-                            {revealed[q.id] ? "Hide answer" : "Show answer"}{" "}
-                            <ChevronRight size={15} />
+                            <span>{String.fromCharCode(65 + choice)}</span>
+                            {option}
                           </button>
-                          {revealed[q.id] && (
-                            <p className="study-answer" dir="auto">
-                              {q.answer}
-                            </p>
-                          )}
-                        </>
-                      )}
-                      {"sourcePage" in q && (
+                        ))}
+                        {answers[currentCard.id] !== undefined && (
+                          <p role="status" className="answer-feedback">
+                            {answers[currentCard.id] === currentCard.correct
+                              ? "Correct."
+                              : `Answer: ${currentCard.answer}.`}{" "}
+                            {currentCard.explanation}
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          className="answer-toggle"
+                          aria-expanded={!!revealed[currentCard.id]}
+                          onClick={() => {
+                            setCursor(index);
+                            setRevealed((values) => ({
+                              ...values,
+                              [currentCard.id]: !values[currentCard.id],
+                            }));
+                            if (!reviews.has(currentCard.id)) {
+                              setReviews((values) =>
+                                new Set(values).add(currentCard.id),
+                              );
+                              void db
+                                .put("settings", {
+                                  id: `study-review:${currentCard.id}`,
+                                  at: Date.now(),
+                                })
+                                .catch(() =>
+                                  setNotice(
+                                    "Review progress could not be saved.",
+                                  ),
+                                );
+                            }
+                          }}
+                        >
+                          {revealed[currentCard.id]
+                            ? "Hide answer"
+                            : "Show answer"}{" "}
+                          <ChevronRight size={15} />
+                        </button>
+                        {revealed[currentCard.id] && (
+                          <p className="study-answer" dir="auto">
+                            {currentCard.answer}
+                          </p>
+                        )}
+                      </>
+                    )}
+                    {currentCard.sourcePage &&
+                      (local ? (
+                        <button
+                          className="text-link"
+                          onClick={() =>
+                            navigate(
+                              `/books/${encodeURIComponent(local.catalogId || local.id)}/${currentCard.sourcePage}`,
+                            )
+                          }
+                        >
+                          Read PDF page {currentCard.sourcePage}
+                        </button>
+                      ) : (
                         <small className="fineprint">
-                          Source PDF page {Number(q.sourcePage)}
+                          Source PDF page {currentCard.sourcePage}
                         </small>
-                      )}
-                      {q.sourceQuote && (
-                        <details className="source-reference">
-                          <summary>Check source quote</summary>
-                          <p dir="auto">“{q.sourceQuote}”</p>
-                          <small>
-                            Answer text matched the source. Check that it fully
-                            answers the question.
-                          </small>
-                        </details>
-                      )}
-                    </div>
-                  </article>
-                ))}
-            </div>
-            {cards.length > 5 && (
-              <nav
-                className="question-paging"
-                aria-label="Practice question pages"
-              >
-                <button
-                  className="secondary"
-                  disabled={questionGroup === 0}
-                  onClick={() => setQuestionGroup((p) => p - 1)}
+                      ))}
+                    {currentCard.sourceQuote && (
+                      <details className="source-reference">
+                        <summary>Check source quote</summary>
+                        <p dir="auto">“{currentCard.sourceQuote}”</p>
+                      </details>
+                    )}
+                  </div>
+                </article>
+                <nav
+                  className="question-paging"
+                  aria-label="Practice questions"
                 >
-                  Previous
-                </button>
-                <span>
-                  Questions {questionGroup * 5 + 1}–
-                  {Math.min(cards.length, questionGroup * 5 + 5)} of{" "}
-                  {cards.length}
-                </span>
-                <button
-                  className="secondary"
-                  disabled={(questionGroup + 1) * 5 >= cards.length}
-                  onClick={() => setQuestionGroup((p) => p + 1)}
-                >
-                  Next
-                </button>
-              </nav>
+                  <button
+                    className="secondary"
+                    disabled={index === 0}
+                    onClick={() => setCursor(index - 1)}
+                  >
+                    Previous
+                  </button>
+                  {index < cards.length - 1 ? (
+                    <button
+                      className="primary"
+                      disabled={!reviewed(currentCard)}
+                      onClick={() => setCursor(index + 1)}
+                    >
+                      Next question <ArrowRight size={16} />
+                    </button>
+                  ) : completeSet ? (
+                    mode === "mcq" || mode === "short" ? (
+                      <button
+                        className="primary"
+                        onClick={() =>
+                          goToStage(mode === "mcq" ? "short" : "long")
+                        }
+                      >
+                        {mode === "mcq"
+                          ? "Go to short answers"
+                          : "Go to long answers"}{" "}
+                        <ArrowRight size={16} />
+                      </button>
+                    ) : nextChapter ? (
+                      <button
+                        className="primary"
+                        onClick={() => {
+                          setChapter(nextChapter.id);
+                          goToStage("mcq");
+                        }}
+                      >
+                        Next chapter <ArrowRight size={16} />
+                      </button>
+                    ) : (
+                      <span className="pill">End of saved practice</span>
+                    )
+                  ) : (
+                    <button
+                      className="secondary"
+                      onClick={() => setCursor(firstPending)}
+                    >
+                      Go to first unanswered
+                    </button>
+                  )}
+                </nav>
+              </>
             )}
             {!cards.length && (
               <div className="study-empty">
@@ -1183,7 +1414,7 @@ export default function StudyHub({
             )}
             <p className="fineprint">
               {builtIn.length
-                ? "Original practice for Human Urinary System. Online sets have their own source page and quote."
+                ? "Original practice mapped to this textbook chapter. Completion tracks available questions."
                 : "Generated sets use answer extracts from the selected source. Use Ask AI for a simpler explanation or translation."}
             </p>
           </>

@@ -1,10 +1,11 @@
 "use client";
 import dynamic from "next/dynamic";
+import LoadingState from "./loading-state";
 import StudyHub, { type StudyFocus } from "./study-hub";
 import { chapterAtPage } from "@/lib/book-retrieval.mjs";
 const GlobalSearch = dynamic(() => import("./global-search"), {
   ssr: false,
-  loading: () => <div className="panel empty">Opening cross-book search…</div>,
+  loading: () => <LoadingState>Opening book search…</LoadingState>,
 });
 import {
   TEXTBOOKS,
@@ -15,11 +16,7 @@ import {
 import type { BookContext } from "./book-library";
 const BookLibrary = dynamic(() => import("./book-library"), {
   ssr: false,
-  loading: () => (
-    <div className="panel empty">
-      <p>Opening your textbook shelf…</p>
-    </div>
-  ),
+  loading: () => <LoadingState>Opening your textbook shelf…</LoadingState>,
 });
 import PackDownloads from "@/components/pack-downloads";
 import PackWorkspace from "@/components/pack-workspace";
@@ -290,7 +287,6 @@ export default function DreamersApp() {
     }),
     [online, setOnline] = useState(true),
     [ready, setReady] = useState(false),
-    [initPhase, setInitPhase] = useState("Preparing your learning universe…"),
     [error, setError] = useState(""),
     [toast, setToast] = useState(""),
     [menu, setMenu] = useState(false),
@@ -318,7 +314,7 @@ export default function DreamersApp() {
       textbook(DEFAULT_TEXTBOOK)!.chapters[0].id,
     ),
     [allowEnrichment, setAllowEnrichment] = useState(false),
-    [referenceOnly, setReferenceOnly] = useState(true);
+    [referenceOnly, setReferenceOnly] = useState(false);
   const [bookContext, setBookContext] = useState<BookContext | null>(null),
     [aiPack, setAiPack] = useState("cells-starter"),
     [aiTopic, setAiTopic] = useState("cell-basics"),
@@ -426,7 +422,7 @@ export default function DreamersApp() {
     setAiTextbook(id);
     setAiChapter(topic);
     setAllowEnrichment(extra);
-    setReferenceOnly(true);
+    setReferenceOnly(false);
     setBookContext(null);
     setAiInput(
       extra
@@ -471,24 +467,18 @@ export default function DreamersApp() {
       setInstall(e as InstallEvent);
     };
     window.addEventListener("beforeinstallprompt", installHandler);
+    const bootDeadline = window.setTimeout(() => {
+      setError(
+        "Device storage is taking longer than expected. You can keep browsing and try again.",
+      );
+      setReady(true);
+    }, 7000);
     (async () => {
       try {
-        setInitPhase("Opening your device learning storage…");
-        await refresh();
-        setInitPhase("Preparing the starter learning pack…");
-        if (
-          !(await db.list<RecordValue>("settings")).some(
-            (s) => s.id === "starter-initialized",
-          )
-        ) {
-          await db.installPack();
-          await db.put("settings", {
-            id: "starter-initialized",
-            at: Date.now(),
-          });
-        }
-        await refresh();
-        const settings = await db.list<RecordValue>("settings");
+        const [, settings] = await Promise.all([
+          refresh(),
+          db.list<RecordValue>("settings"),
+        ]);
         setShortAnswers(
           Object.fromEntries(
             settings
@@ -503,7 +493,21 @@ export default function DreamersApp() {
             : "Offline storage is unavailable. Please enable browser storage.",
         );
       } finally {
+        window.clearTimeout(bootDeadline);
         setReady(true);
+      }
+      // A slow pack download must never keep the rest of the app behind a spinner.
+      try {
+        if (!(await db.get("settings", "starter-initialized"))) {
+          await db.installPack();
+          await db.put("settings", {
+            id: "starter-initialized",
+            at: Date.now(),
+          });
+          await refresh();
+        }
+      } catch {
+        // Downloads exposes a manual retry. Saved books and progress are still usable.
       }
     })();
     if ("serviceWorker" in navigator)
@@ -532,7 +536,10 @@ export default function DreamersApp() {
         );
     const checkAi = () => {
       if (!navigator.onLine) return;
-      void fetch("/api/health", { cache: "no-store" })
+      void fetch("/api/health", {
+        cache: "no-store",
+        signal: AbortSignal.timeout(8000),
+      })
         .then((r) => (r.ok ? r.json() : Promise.reject()))
         .then((v) => setAiConfigured(v.aiConfigured === true))
         .catch(() => {});
@@ -541,6 +548,7 @@ export default function DreamersApp() {
     window.addEventListener("focus", checkAi);
     window.addEventListener("online", checkAi);
     return () => {
+      window.clearTimeout(bootDeadline);
       window.removeEventListener("focus", checkAi);
       window.removeEventListener("online", checkAi);
       window.removeEventListener("online", sync);
@@ -698,18 +706,26 @@ export default function DreamersApp() {
       );
       return;
     }
-    if (aiContextKind === "textbook" && referenceOnly && !bookContext) {
+    if (
+      (aiContextKind === "textbook" || aiContextKind === "pdf") &&
+      referenceOnly &&
+      !bookContext
+    ) {
       say(
         "Open the selected PDF and choose a readable passage first, or explicitly turn off book evidence mode for a general explanation.",
       );
       return;
     }
+    const useBook =
+      aiContextKind === "textbook" &&
+      (aiChapter !== "pdf-page" || !!bookContext);
     setChat((c) => [...c, { role: "user", text: input }]);
     setAiInput("");
     setAiBusy(true);
     try {
       const r = await fetch("/api/ai", {
         method: "POST",
+        signal: AbortSignal.timeout(35_000),
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           question: input,
@@ -717,10 +733,16 @@ export default function DreamersApp() {
           mode: selectedMode,
           bookContext: bookContext || undefined,
           packId: aiPack,
-          textbookId: aiContextKind === "textbook" ? aiTextbook : undefined,
+          textbookId: useBook ? aiTextbook : undefined,
+          contextKind:
+            aiContextKind === "pdf" && bookContext ? "pdf" : undefined,
           allowEnrichment,
           referenceOnly,
-          topic: aiContextKind === "textbook" ? aiChapter : aiTopic,
+          topic: useBook
+            ? aiChapter
+            : aiContextKind === "textbook"
+              ? "pack-overview"
+              : aiTopic,
           previous:
             chat
               .filter((c) => c.role === "assistant")
@@ -735,23 +757,30 @@ export default function DreamersApp() {
         ...c,
         { role: "assistant", text: value.answer, enriched: allowEnrichment },
       ]);
-      await db.put("notes", {
-        id: crypto.randomUUID(),
-        kind: "ai",
-        text: value.answer,
-        title: input,
-        at: Date.now(),
-      });
-      await refresh();
+      void db
+        .put("notes", {
+          id: crypto.randomUUID(),
+          kind: "ai",
+          text: value.answer,
+          title: input,
+          at: Date.now(),
+        })
+        .then(refresh)
+        .catch(() =>
+          say("Answer received. It could not be saved on this device."),
+        );
     } catch (e) {
+      setAiInput((draft) => draft || input);
       setChat((c) => [
         ...c,
         {
           role: "status",
           text:
-            e instanceof Error
-              ? e.message
-              : "Connection failed. Please try again.",
+            e instanceof Error && e.name === "TimeoutError"
+              ? "The AI teacher took too long. Your question is ready to send again."
+              : e instanceof Error
+                ? e.message
+                : "Connection failed. Please try again.",
         },
       ]);
     } finally {
@@ -797,13 +826,12 @@ export default function DreamersApp() {
   if (!ready)
     content = (
       <div className="empty">
-        <div className="loading-orbit" />
         <h1>Dreamers · FSc study, anywhere</h1>
         <p>
           Punjab Board Class 11 and 12 textbook reading, chapter practice and
           offline learning.
         </p>
-        <p role="status">{initPhase}</p>
+        <LoadingState>Opening your study space…</LoadingState>
       </div>
     );
   else if (["/dashboard", "/", "/learn", "/subjects", "/study"].includes(path))
@@ -1575,7 +1603,7 @@ export default function DreamersApp() {
             setAiTextbook(catalogId);
             const book = textbook(catalogId)!;
             setAiChapter(chapterAtPage(book, context.page)?.id || "pdf-page");
-          } else setAiContextKind("foundation");
+          } else setAiContextKind("pdf");
           setAllowEnrichment(false);
           setReferenceOnly(true);
           setChat([]);
@@ -1629,7 +1657,7 @@ export default function DreamersApp() {
                   ? "Dreamers AI is offline. Your downloaded lessons and practice activities are still available."
                   : aiConfigured
                     ? "Online AI explanations can make mistakes. Check them against reviewed learning resources."
-                    : "AI teacher is awaiting owner configuration. Your lessons and saved explanations are available now."}
+                    : "You can send a question now. If the AI service is unavailable, the teacher will show why."}
               </p>
             </div>
             <div className="chat-log" aria-live="polite">
@@ -1700,7 +1728,7 @@ export default function DreamersApp() {
                 ))
               )}
               {aiBusy && (
-                <p className="muted">Finding a clearer way to explain…</p>
+                <LoadingState>Finding a clearer way to explain…</LoadingState>
               )}
             </div>
             <form
@@ -1725,14 +1753,43 @@ export default function DreamersApp() {
                   aiBusy ||
                   !online ||
                   !aiInput.trim() ||
-                  (aiContextKind === "textbook" &&
-                    (referenceOnly || !textbook(aiTextbook)!.chapters.length) &&
+                  ((aiContextKind === "textbook" || aiContextKind === "pdf") &&
+                    referenceOnly &&
                     !bookContext)
                 }
               >
                 <Send size={19} />
               </button>
             </form>
+            {(aiContextKind === "textbook" || aiContextKind === "pdf") &&
+              referenceOnly &&
+              !bookContext && (
+                <div className="notice tutor-source-help">
+                  <p>PDF answers need a readable passage.</p>
+                  {aiContextKind === "textbook" && (
+                    <button
+                      className="secondary"
+                      onClick={() =>
+                        navigate(
+                          `/books/${aiTextbook}/${textbookTopic(aiTextbook, aiChapter)?.page || 1}`,
+                        )
+                      }
+                    >
+                      Choose PDF passage
+                    </button>
+                  )}
+                  <button
+                    className="secondary"
+                    onClick={() => {
+                      setReferenceOnly(false);
+                      if (aiContextKind === "pdf")
+                        setAiContextKind("foundation");
+                    }}
+                  >
+                    Switch to general explanation
+                  </button>
+                </div>
+              )}
             <button
               className="understand-button"
               disabled={aiBusy || !chat.some((c) => c.role === "assistant")}
@@ -1777,12 +1834,15 @@ export default function DreamersApp() {
                 value={aiContextKind}
                 onChange={(e) => {
                   setAiContextKind(e.target.value);
-                  setReferenceOnly(true);
+                  setReferenceOnly(e.target.value === "foundation");
                   setBookContext(null);
                   setChat([]);
                 }}
               >
-                <option value="textbook">Supplied textbooks / resources</option>
+                <option value="textbook">Textbook topic</option>
+                {aiContextKind === "pdf" && (
+                  <option value="pdf">Selected PDF passage</option>
+                )}
                 <option value="foundation">
                   Original foundation practice (unmapped)
                 </option>
@@ -1798,7 +1858,7 @@ export default function DreamersApp() {
                     onChange={(e) => {
                       const id = e.target.value;
                       setAiTextbook(id);
-                      setReferenceOnly(true);
+                      setReferenceOnly(!textbook(id)!.chapters.length);
                       setChat([]);
                       setAiChapter(textbook(id)!.chapters[0]?.id || "pdf-page");
                       setBookContext(null);
@@ -1900,32 +1960,11 @@ export default function DreamersApp() {
               <span>
                 <b>Answer from provided text only</b>
                 <small>
-                  Default: require source text and a matching quotation. Turning
-                  this off allows a general AI explanation, not a verified
-                  textbook answer.
+                  Require a readable passage and a matching quotation. With this
+                  off, the teacher gives a general explanation.
                 </small>
               </span>
             </label>
-            {aiContextKind === "textbook" && referenceOnly && !bookContext && (
-              <div className="notice">
-                <div>
-                  <p>
-                    Choose a readable passage before asking. Scanned pages
-                    cannot supply text until OCR is available.
-                  </p>
-                  <button
-                    className="secondary"
-                    onClick={() =>
-                      navigate(
-                        `/books/${aiTextbook}/${textbookTopic(aiTextbook, aiChapter)?.page || 1}`,
-                      )
-                    }
-                  >
-                    Open selected book <BookOpen size={15} />
-                  </button>
-                </div>
-              </div>
-            )}
             <p className="fineprint">
               A matching quotation checks the reference, not every claim. AI
               explanations can still be wrong. No whole-book retrieval or
@@ -3043,7 +3082,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.5.3 · One subject at a time</span>
+              <span>v0.5.4 · One subject at a time</span>
             </div>
           </footer>
         </main>

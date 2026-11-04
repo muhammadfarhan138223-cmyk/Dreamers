@@ -23,7 +23,9 @@ export async function preparePdfEngine() {
   const cache = await caches.open("dreamers-pdf-engine-6.4.299");
   const manifestUrl = PDF_ASSETS + "assets.json";
   if (await cache.match(manifestUrl)) return;
-  const response = await fetch(manifestUrl);
+  const response = await fetch(manifestUrl, {
+    signal: AbortSignal.timeout(15_000),
+  });
   if (!response.ok) throw new Error("Reconnect to prepare the offline reader.");
   const manifest = (await response.clone().json()) as { files: string[] };
   if (
@@ -38,7 +40,7 @@ export async function preparePdfEngine() {
       manifest.files.slice(n, n + 6).map(async (file) => {
         const url = PDF_ASSETS + file;
         if (await cache.match(url)) return;
-        const asset = await fetch(url);
+        const asset = await fetch(url, { signal: AbortSignal.timeout(15_000) });
         if (!asset.ok)
           throw new Error(
             "PDF preparation interrupted; reconnect and reopen your book.",

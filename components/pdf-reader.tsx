@@ -16,6 +16,7 @@ import {
   meaningfulPdfText,
 } from "@/lib/books.mjs";
 import { excerptForQuestion } from "@/lib/book-retrieval.mjs";
+import LoadingState from "./loading-state";
 import PassageHighlight from "./passage-highlight";
 import * as db from "@/lib/db";
 import type { LocalBook, BookPage, BookContext } from "./book-library";
@@ -342,7 +343,11 @@ export default function PdfReader({
           OCR, which is not enabled. PDF page numbers may differ from printed
           page numbers.
         </p>
-        {loading && <p role="status">Preparing local PDF engine…</p>}
+        {loading ? (
+          <LoadingState>Opening your saved PDF…</LoadingState>
+        ) : (
+          rendering && <LoadingState>Rendering page {page}…</LoadingState>
+        )}
         <div className="pdf-canvas-wrap" aria-busy={rendering}>
           <canvas ref={canvas} aria-label={`${book.title}, PDF page ${page}`} />
         </div>
@@ -358,7 +363,7 @@ export default function PdfReader({
                 }
                 query={matchQuery}
               />
-            ) : rendering ? (
+            ) : loading || rendering ? (
               "Reading page text…"
             ) : (
               "This page has no selectable text. You can still read the page image."

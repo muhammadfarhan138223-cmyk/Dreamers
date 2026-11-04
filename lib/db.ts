@@ -16,34 +16,53 @@ const STORES = [
 type Store = (typeof STORES)[number];
 let connection: Promise<IDBDatabase> | undefined;
 function db() {
-  if (!connection)
-    connection = new Promise((resolve, reject) => {
-      const r = indexedDB.open("dreamers-local", 3);
-      r.onupgradeneeded = () => {
-        for (const store of STORES)
-          if (!r.result.objectStoreNames.contains(store))
-            r.result.createObjectStore(store, { keyPath: "id" });
-        const pages = r.transaction!.objectStore("bookPages");
-        if (!pages.indexNames.contains("bookId"))
-          pages.createIndex("bookId", "bookId");
+  if (connection) return connection;
+  const pending = new Promise<IDBDatabase>((resolve, reject) => {
+    const r = indexedDB.open("dreamers-local", 3);
+    let failed = false;
+    const deadline = setTimeout(
+      () => fail(new Error("Device storage is taking too long. Try again.")),
+      6500,
+    );
+    function fail(error: Error) {
+      clearTimeout(deadline);
+      failed = true;
+      reject(error);
+    }
+    r.onupgradeneeded = () => {
+      if (failed) {
+        r.transaction?.abort();
+        return;
+      }
+      for (const store of STORES)
+        if (!r.result.objectStoreNames.contains(store))
+          r.result.createObjectStore(store, { keyPath: "id" });
+      const pages = r.transaction!.objectStore("bookPages");
+      if (!pages.indexNames.contains("bookId"))
+        pages.createIndex("bookId", "bookId");
+    };
+    r.onsuccess = () => {
+      clearTimeout(deadline);
+      if (failed) {
+        r.result.close();
+        return;
+      }
+      r.result.onversionchange = () => {
+        r.result.close();
+        if (connection === pending) connection = undefined;
       };
-      r.onsuccess = () => {
-        r.result.onversionchange = () => {
-          r.result.close();
-          connection = undefined;
-        };
-        resolve(r.result);
-      };
-      r.onerror = () => {
-        connection = undefined;
-        reject(r.error);
-      };
-      r.onblocked = () =>
-        reject(
-          new Error("Close another Dreamers tab to upgrade offline storage."),
-        );
-    });
-  return connection;
+      resolve(r.result);
+    };
+    r.onerror = () =>
+      fail(r.error || new Error("Device storage could not be opened."));
+    r.onblocked = () =>
+      fail(new Error("Close another Dreamers tab to upgrade offline storage."));
+  });
+  connection = pending;
+  void pending.catch(() => {
+    if (connection === pending) connection = undefined;
+  });
+  return pending;
 }
 export async function list<T>(store: Store): Promise<T[]> {
   const d = await db();
@@ -113,7 +132,10 @@ export async function clearData() {
 export async function installPack(id = STARTER_PACK_ID) {
   const meta = packMeta(id);
   if (!meta) throw new Error("Unknown learning pack.");
-  const response = await fetch(meta.url, { cache: "no-cache" });
+  const response = await fetch(meta.url, {
+    cache: "no-cache",
+    signal: AbortSignal.timeout(20_000),
+  });
   if (!response.ok)
     throw new Error(
       "The learning pack could not be downloaded. Your existing content was preserved.",

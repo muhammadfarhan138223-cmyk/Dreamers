@@ -122,7 +122,10 @@ export default function GlobalSearch({
               await (
                 await fetch("/api/health", {
                   cache: "no-store",
-                  signal: controller.signal,
+                  signal: AbortSignal.any([
+                    controller.signal,
+                    AbortSignal.timeout(20_000),
+                  ]),
                 })
               ).json()
             ).aiConfigured === true;
@@ -142,7 +145,10 @@ export default function GlobalSearch({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query: q }),
-          signal: controller.signal,
+          signal: AbortSignal.any([
+            controller.signal,
+            AbortSignal.timeout(20_000),
+          ]),
         });
         const data = await response.json();
         if (!response.ok)
