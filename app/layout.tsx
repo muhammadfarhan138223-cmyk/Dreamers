@@ -1,9 +1,17 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 export const metadata: Metadata = {
-  title: "DREAMERS — Your next discovery awaits",
+  metadataBase: new URL("https://dreamers-sooty.vercel.app"),
+  title: "Dreamers — Offline FSc Study and Punjab Board Practice",
   description:
-    "Learn. Play. Understand. Achieve. An offline-first learning adventure for FSc students.",
+    "Study FSc Class 11 and 12 with an offline textbook library, chapter practice, learning games and an online AI tutor.",
+  openGraph: {
+    type: "website",
+    siteName: "Dreamers",
+    title: "Dreamers — Offline FSc Study",
+    description:
+      "Read Punjab textbooks, practise chapters and study on your phone.",
+  },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,

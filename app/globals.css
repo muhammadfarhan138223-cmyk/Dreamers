@@ -6135,3 +6135,229 @@ hr {
   color: var(--muted);
   font-size: 11px;
 }
+.book-passage-search {
+  margin: 17px 0;
+  padding: 17px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--bg);
+}
+.book-passage-search p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 10px 0;
+}
+.book-passage-search .between {
+  gap: 12px;
+}
+.selected-passage {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  flex-wrap: wrap;
+  background: var(--card2);
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.selected-passage > svg {
+  color: #26a677;
+  flex: none;
+}
+.passage-hits {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
+}
+.passage-hits > button {
+  display: grid;
+  gap: 8px;
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--text);
+  padding: 14px;
+  min-height: 48px;
+}
+.passage-hits > button.selected {
+  border: 2px solid var(--blue);
+}
+.passage-hits b {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--blue);
+  font-size: 13px;
+}
+.passage-hits span {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.passage-hits small {
+  color: var(--blue);
+}
+.book-passage-search .text-link {
+  font-size: 12px;
+  margin-top: 9px;
+}
+@media (max-width: 760px) {
+  .book-passage-search {
+    padding: 13px;
+  }
+  .book-passage-search .between {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .book-passage-search .secondary {
+    width: 100%;
+  }
+}
+
+/* The reading shelf keeps book artwork separate from the reading controls. */
+.shelf-hero {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: clamp(1rem, 4vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: 1.35rem;
+  background: linear-gradient(120deg, #183b38, #273662);
+  color: #fff;
+}
+.shelf-hero h1 {
+  margin: 0.3rem 0;
+  color: inherit;
+}
+.shelf-hero .eyebrow,
+.shelf-hero p {
+  color: #e1f5ee;
+  margin-bottom: 0;
+}
+.shelf-hero .secondary {
+  color: #fff;
+  background: #132d34;
+  border-color: #8cbab7;
+}
+.gallery-toolbar,
+.gallery-filters,
+.shelf-setup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+.gallery-toolbar {
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+.gallery-filters button {
+  padding: 0.45rem 0.75rem;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.gallery-filters button[aria-pressed="true"] {
+  background: #27554b;
+  color: #fff;
+}
+.reading-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 155px), 1fr));
+  gap: clamp(0.55rem, 2vw, 1rem);
+}
+.gallery-card.panel {
+  overflow: hidden;
+  padding: 0;
+  min-width: 0;
+}
+.gallery-cover {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.4rem;
+  height: clamp(112px, 18vw, 160px);
+  overflow: hidden;
+  color: #fff;
+  background: radial-gradient(circle at 20% 10%, #6f51b9, #30285c 72%);
+}
+.gallery-cover.mint {
+  background: radial-gradient(circle at 20% 10%, #388876, #16463e 72%);
+}
+.gallery-cover.peach {
+  background: radial-gradient(circle at 20% 10%, #be694f, #75371c 72%);
+}
+.gallery-cover span {
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+}
+.gallery-cover img {
+  max-width: 100%;
+  width: auto;
+  height: clamp(112px, 18vw, 160px);
+  object-fit: contain;
+}
+.gallery-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.65rem;
+}
+.gallery-card h2 {
+  font-size: 0.98rem;
+  line-height: 1.25;
+  margin: 0 0 0.25rem;
+  overflow-wrap: anywhere;
+}
+.gallery-card .primary,
+.gallery-card .secondary {
+  min-height: 44px;
+  padding: 0.4rem;
+  justify-content: center;
+  font-size: 0.78rem;
+}
+.gallery-card .text-link {
+  min-height: 40px;
+  justify-content: center;
+  font-size: 0.76rem;
+}
+.gallery-status {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+.shelf-setup.panel {
+  margin: 1rem 0;
+  gap: 0.75rem;
+}
+.shelf-setup div {
+  flex: 1 1 215px;
+}
+.shelf-setup p {
+  margin: 0.15rem 0 0;
+}
+.shelf-manage .book-shelf {
+  margin-top: 0.8rem;
+}
+#book-details {
+  scroll-margin-top: 5rem;
+}
+.passage-mark {
+  background: #ffdf76;
+  color: #211806;
+  padding-inline: 0.08em;
+  border-radius: 0.15em;
+}
+@media (max-width: 400px) {
+  .reading-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .gallery-card-body {
+    padding: 0.5rem;
+  }
+}

@@ -112,7 +112,7 @@ export default function BookExamPlan({
                   {facts.short
                     .map(
                       (x) =>
-                        `Q${x.question}: ${x.count} short questions offered`,
+                        `Q${x.question}: ${x.count} short question${x.count === 1 ? "" : "s"} offered`,
                     )
                     .join(" · ")}
                 </p>
@@ -124,7 +124,7 @@ export default function BookExamPlan({
                             `Long Q${p.number}: chapters ${p.chapters.join(" + ")} (${scheme.long!.parts === 1 ? scheme.long!.partMarks : `${scheme.long!.partMarks}+${scheme.long!.partMarks}`} marks)`,
                         )
                         .join(" · ")
-                    : "No long pair listed for this chapter. Keep preparing its MCQs and short questions."}
+                    : "No long question listed for this chapter. Keep preparing its MCQs and short questions."}
                 </p>
                 {facts.pairs
                   .flatMap((p) =>

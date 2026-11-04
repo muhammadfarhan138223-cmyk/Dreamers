@@ -79,3 +79,8 @@ Live model auditing still accepted extra inferred facts. Practice policy v3 ther
 `study-run:*` settings journals use the current study policy and exact book/chapter/mode/language/range. `prepareChapter` persists question sets before advancing its journal and checks saved sets on resume, preventing duplicate provider requests after an interrupted journal write. Empty/scan/exercise-only pages are recorded as gaps; errors pause. Requests are spaced by 22 seconds, and quota errors remain server-enforced. User pause, hidden screen, offline state or unmount stops after the in-flight result is saved. No autonomous closed-app work. View preferences are keyed by class/subject with a loaded-key guard to avoid writing another subject's stale state. Coverage counts pages with stored practice, not learning mastery. No IndexedDB/cloud migration.
 
 0.5.0 live source plan/pairing/view restoration and real429 journal pause were verified. Local preview hydration remains an environment limitation; production UI hydrated normally. No cloud migration or deployment-protection change.
+
+
+## Local reading gallery and retrieval
+
+Publisher links point to PECTAA catalogue destinations; they can be different editions from the supplied hashes. The local chooser reads files directly into IndexedDB. The cover gallery uses original cover illustrations and a small first-page thumbnail rendered on the device when available. Literal search renders escaped text segments and maps a page to a chapter only for a checked file; source excerpts are sent only on explicit online tutoring submission. No new database migrations are required.

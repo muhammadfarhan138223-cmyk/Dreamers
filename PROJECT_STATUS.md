@@ -2,6 +2,13 @@
 
 Updated: 2026-10-31. Release 0.5.0 — source-linked book plans and resumable chapter preparation. Automated/build and live UI checks passed; live batch generation paused on the real shared-network quota. Read this file and the roadmap/architecture/deployment/changelog before editing.
 
+## 0.5.1 release candidate
+
+- Cover gallery, publisher links, local first-page previews, highlighted cross-book search, selected-book tutor retrieval and basic SEO built. 68 automated tests and production build pass.
+- No source PDFs, answer sheets, textbook cover images or credentials are hosted. Readiness requires a local saved PDF and reader setup. Image-only pages still need OCR for search.
+- On November 4 the existing production deployment returned a fresh AI search result for the Class XII kidney/nephron question. AI and Upstash variable presence was checked by name and target without retrieving values.
+- No schema or environment changes. Next task is an offline chapter game and scope-based test preparation from the material actually available.
+
 ## Verified application
 
 Latest verified application commit: f6a6c2542399f8e3c12275479035085683d24abe.

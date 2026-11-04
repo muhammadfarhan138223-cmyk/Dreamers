@@ -7,6 +7,8 @@ import {
   findFoundation,
   matchesSearchFilters,
 } from "@/lib/global-search.mjs";
+import { chapterAtPage } from "@/lib/book-retrieval.mjs";
+import PassageHighlight from "./passage-highlight";
 import { searchTopics } from "@/lib/ai-search.mjs";
 import { TEXTBOOKS, textbook } from "@/lib/textbooks.mjs";
 import type { BookPage, LocalBook } from "./book-library";
@@ -461,6 +463,10 @@ export default function GlobalSearch({
           <div className="lesson-list">
             {shownPages.map((t) => {
               const book = bookFor(t.bookId)!;
+              const chapter = chapterAtPage(textbook(book.catalogId), t.page);
+              const matchQuery = [submitted, ...keywords]
+                .join(" ")
+                .slice(0, 300);
               return (
                 <article className="panel search-result" key={t.id}>
                   <div>
@@ -468,14 +474,22 @@ export default function GlobalSearch({
                       LOCAL PDF · {book.title} · {book.class} · PDF page{" "}
                       {t.page}
                     </span>
-                    <p dir="auto">{t.snippet}</p>
+                    {chapter && (
+                      <h3>
+                        {chapter.number ? `Chapter ${chapter.number} · ` : ""}
+                        {chapter.title}
+                      </h3>
+                    )}
+                    <p dir="auto">
+                      <PassageHighlight text={t.snippet} query={matchQuery} />
+                    </p>
                   </div>
                   <button
                     className="circle-button"
                     aria-label={`Read ${book.title} page ${t.page}`}
                     onClick={() =>
                       navigate(
-                        `/books/${encodeURIComponent(book.catalogId || book.id)}/${t.page}`,
+                        `/books/${encodeURIComponent(book.catalogId || book.id)}/${t.page}?match=${encodeURIComponent(matchQuery)}`,
                       )
                     }
                   >

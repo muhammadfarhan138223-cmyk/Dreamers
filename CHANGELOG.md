@@ -1,3 +1,11 @@
+# 0.5.1 — 2026-11-04
+
+- Put supplied textbook entries and private saved copies in one mobile cover gallery with class and offline filters.
+- Link to PECTAA's published editions, including Biology XI. The publisher download and private save steps are separate. Chapter maps still require a matching supplied file hash.
+- Highlight literal local search matches, name the mapped chapter, and open its exact PDF page with the highlighted excerpt ready for the online tutor.
+- Add scoped passage selection in the subject tutor and basic public-home SEO metadata, robots and sitemap.
+- Shell v15. No database migration or textbook PDF bytes in the deployment.
+
 # 0.5.0 — 2026-10-31
 
 - Add four source-linked book paper plans with actual chapter groups, attempt rules and source/year/verification labels; preserve all chapters.

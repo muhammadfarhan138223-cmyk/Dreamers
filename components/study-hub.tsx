@@ -21,9 +21,11 @@ import { TEXTBOOKS, textbook } from "@/lib/textbooks.mjs";
 import * as db from "@/lib/db";
 import { STUDY_POLICY } from "@/lib/study-practice.mjs";
 import type { Pack, RecordValue } from "@/lib/types";
-import type { LocalBook, BookPage } from "./book-library";
+import type { LocalBook, BookPage, BookContext } from "./book-library";
 import ChapterPreparation from "./chapter-preparation";
 import BookExamPlan from "./book-exam-plan";
+import BookPassageSearch from "./book-passage-search";
+import { chapterAtPage } from "@/lib/book-retrieval.mjs";
 import { schemeForBook } from "@/lib/exam-schemes.mjs";
 export type StudyFocus = { grade: "XI" | "XII"; subject: string };
 type Card = {
@@ -152,7 +154,8 @@ export default function StudyHub({
     [reply, setReply] = useState(""),
     [allowStory, setAllowStory] = useState(false),
     [questionGroup, setQuestionGroup] = useState(0),
-    [loadedView, setLoadedView] = useState("");
+    [loadedView, setLoadedView] = useState(""),
+    [sourcePassage, setSourcePassage] = useState<BookContext | null>(null);
   async function refresh() {
     const [b, s] = await Promise.all([
       db.list<LocalBook>("books"),
@@ -264,6 +267,7 @@ export default function StudyHub({
     setPage(selectedChapter?.page || local?.lastPage || 1);
     setReply("");
     setAllowStory(false);
+    setSourcePassage(null);
     setRevealed({});
     setQuestionGroup(0);
   }, [
@@ -444,15 +448,24 @@ export default function StudyHub({
     }
     setBusy(true);
     try {
-      const source = await sourceText();
-      const known =
-        sourceKind === "book" && local?.catalogId && selectedChapter;
+      const source =
+        sourceKind === "book" && sourcePassage
+          ? sourcePassage
+          : await sourceText();
+      const referenceChapter =
+        sourceKind === "book" && catalog
+          ? chapterAtPage(catalog, source.page)
+          : null;
+      const known = sourceKind === "book" && local?.catalogId;
       const body =
         sourceKind === "foundation"
           ? { packId: base!.id, topic: "pack-overview" }
           : {
               ...(known
-                ? { textbookId: local!.catalogId, topic: selectedChapter!.id }
+                ? {
+                    textbookId: local!.catalogId,
+                    topic: referenceChapter?.id || "pdf-page",
+                  }
                 : { contextKind: "pdf", topic: "pdf-page" }),
             };
       const response = await fetch("/api/ai", {
@@ -479,6 +492,8 @@ export default function StudyHub({
         kind: "ai",
         title: question,
         text: data.answer,
+        sourceBookId: sourceKind === "book" ? local?.id : base?.id,
+        sourcePage: source.page,
         at: Date.now(),
       });
     } catch (e) {
@@ -739,20 +754,46 @@ export default function StudyHub({
             <span className="eyebrow">ASK ABOUT YOUR SELECTED SOURCE</span>
             <h2>What would you like explained?</h2>
             <p>
-              AI uses your selected readable page
-              {sourceKind === "foundation" ? " / original lesson" : ""}. It does
-              not have the whole book in context.
+              {sourcePassage
+                ? `AI will use your chosen passage from PDF page ${sourcePassage.page}.`
+                : "AI uses the selected readable page / original lesson."}{" "}
+              You can search indexed pages below to find a different topic. The
+              full book is not uploaded.
             </p>
             <label className="field">
               Your question
               <textarea
                 value={question}
-                onChange={(e) => setQuestion(e.target.value)}
+                disabled={busy}
+                onChange={(e) => {
+                  setQuestion(e.target.value);
+                  setSourcePassage(null);
+                  setReply("");
+                }}
                 maxLength={1500}
                 rows={3}
                 placeholder="Explain this concept in simple words…"
               />
             </label>
+            {sourceKind === "book" && local && (
+              <BookPassageSearch
+                book={local}
+                query={question}
+                busy={busy}
+                selectedPage={sourcePassage?.page}
+                onSelect={(s) => {
+                  setSourcePassage(s);
+                  setReply("");
+                  setNotice("");
+                }}
+                onClear={() => {
+                  setSourcePassage(null);
+                  setReply("");
+                  setNotice("");
+                }}
+                onOpen={readPdf}
+              />
+            )}
             <label className="enrichment-control">
               <input
                 type="checkbox"

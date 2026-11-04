@@ -15,3 +15,8 @@ Biology model249–252, Chemistry model263–266 (last page effectively blank), 
 Physics last12 pages contained chapter material/exercises; Mathematics last4 rendered pages were answer tables. Other textless scans were visually sampled. This does not establish absence of a scheme elsewhere in those books. Urdu/Tarjuma/Pak Studies/legacy reference maps still need review/OCR.
 
 Biology scheme was checked visually against the full two-page table. Chemistry chapter numbers17–33 were also checked against each chapter opening. The publicly indexed PECTAA curriculum listing was consulted, but no matching official current board scheme was verified. Inconsistent third-party schemes were not imported. Follow the student's actual board/year notification before treating an appendix as official.
+
+
+## Board source checked 2026-11-04
+
+[BISE Lahore intermediate model papers](https://biselahore.com/model-papers/hssc) links a Class XII combined booklet. The downloaded PDF has 57 pages, its metadata is dated January 2024, and several paper headings identify 2024. Its older content is a historical reference, so no 2027 pattern or term boundaries were imported from it. [PECTAA’s e-books catalogue](https://pectaa.edu.pk/curriculum-compliance/) lists current editions, while [its model paper page](https://pectaa.edu.pk/model-papers/) lists Grade 8. Keep board, session and book appendix evidence separate.

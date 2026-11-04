@@ -1,6 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import StudyHub, { type StudyFocus } from "./study-hub";
+import { chapterAtPage } from "@/lib/book-retrieval.mjs";
 const GlobalSearch = dynamic(() => import("./global-search"), {
   ssr: false,
   loading: () => <div className="panel empty">Opening cross-book search…</div>,
@@ -273,6 +274,7 @@ function CellDiagram() {
   );
 }
 export default function DreamersApp() {
+  const [locationSearch, setLocationSearch] = useState("");
   const [path, setPath] = useState("/dashboard"),
     [pack, setPack] = useState<Pack | null>(null),
     [installedPacks, setInstalledPacks] = useState<Pack[]>([]),
@@ -436,6 +438,7 @@ export default function DreamersApp() {
   const navigate = useCallback((url: string) => {
     history.pushState({}, "", url);
     setPath(url.split("?")[0]);
+    setLocationSearch(location.search);
     setMenu(false);
     window.scrollTo({ top: 0, behavior: "instant" });
     setQuizIndex(0);
@@ -448,10 +451,12 @@ export default function DreamersApp() {
   }, []);
   useEffect(() => {
     setPath(location.pathname === "/" ? "/dashboard" : location.pathname);
+    setLocationSearch(location.search);
     setOnline(navigator.onLine);
     const sync = () => setOnline(navigator.onLine);
     const pop = () => {
       setPath(location.pathname === "/" ? "/dashboard" : location.pathname);
+      setLocationSearch(location.search);
       setQuizIndex(0);
       setChecked(false);
       setChoice(null);
@@ -793,7 +798,12 @@ export default function DreamersApp() {
     content = (
       <div className="empty">
         <div className="loading-orbit" />
-        <h2>{initPhase}</h2>
+        <h1>Dreamers · FSc study, anywhere</h1>
+        <p>
+          Punjab Board Class 11 and 12 textbook reading, chapter practice and
+          offline learning.
+        </p>
+        <p role="status">{initPhase}</p>
       </div>
     );
   else if (["/dashboard", "/", "/learn", "/subjects", "/study"].includes(path))
@@ -1554,6 +1564,9 @@ export default function DreamersApp() {
         focus={studyFocus}
         requestedId={path.split("/")[2]}
         requestedPage={Number(path.split("/")[3]) || 1}
+        matchQuery={
+          new URLSearchParams(locationSearch).get("match")?.slice(0, 300) || ""
+        }
         onNavigate={navigate}
         onAskTopic={askTextbook}
         onAsk={(context, subject, catalogId) => {
@@ -1561,12 +1574,7 @@ export default function DreamersApp() {
             setAiContextKind("textbook");
             setAiTextbook(catalogId);
             const book = textbook(catalogId)!;
-            setAiChapter(
-              [...book.chapters].reverse().find((t) => t.page <= context.page)
-                ?.id ||
-                book.chapters[0]?.id ||
-                "pdf-page",
-            );
+            setAiChapter(chapterAtPage(book, context.page)?.id || "pdf-page");
           } else setAiContextKind("foundation");
           setAllowEnrichment(false);
           setReferenceOnly(true);
@@ -3035,7 +3043,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.5.0 · One subject at a time</span>
+              <span>v0.5.1 · One subject at a time</span>
             </div>
           </footer>
         </main>

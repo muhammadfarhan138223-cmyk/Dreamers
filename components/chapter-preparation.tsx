@@ -53,6 +53,7 @@ export default function ChapterPreparation({
     return () => {
       mounted.current = false;
       stop.current = true;
+      if (lock.current) onBusy(false);
     };
   }, []);
   useEffect(() => {

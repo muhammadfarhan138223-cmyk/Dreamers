@@ -15,17 +15,21 @@ import {
   MAX_PAGE_TEXT,
   meaningfulPdfText,
 } from "@/lib/books.mjs";
+import { excerptForQuestion } from "@/lib/book-retrieval.mjs";
+import PassageHighlight from "./passage-highlight";
 import * as db from "@/lib/db";
 import type { LocalBook, BookPage, BookContext } from "./book-library";
 export default function PdfReader({
   book,
   requestedPage,
+  matchQuery,
   onSaved,
   onClose,
   onAsk,
 }: {
   book: LocalBook;
   requestedPage: number;
+  matchQuery: string;
   onSaved: () => Promise<void>;
   onClose: () => void;
   onAsk: (context: BookContext) => void;
@@ -143,6 +147,21 @@ export default function PdfReader({
         });
         render = task;
         await task.promise;
+        if (page === 1 && !book.cover && !cancelled) {
+          try {
+            const thumbnail = document.createElement("canvas");
+            thumbnail.width = 216;
+            thumbnail.height = Math.round((216 * c.height) / c.width);
+            thumbnail
+              .getContext("2d")
+              ?.drawImage(c, 0, 0, thumbnail.width, thumbnail.height);
+            await db.patch("books", book.id, {
+              cover: thumbnail.toDataURL("image/webp", 0.72),
+            });
+          } catch {
+            // Preview storage is optional; continue reading the PDF.
+          }
+        }
         const content = await view.getTextContent();
         const text = meaningfulPdfText(content.items);
         if (cancelled) return;
@@ -330,14 +349,30 @@ export default function PdfReader({
         <details className="pdf-text" open>
           <summary>Extracted text and AI reference</summary>
           <p dir="auto">
-            {pageText ||
-              "No selectable text was found on this page. You can still read the rendered PDF image."}
+            {pageText ? (
+              <PassageHighlight
+                text={
+                  matchQuery
+                    ? excerptForQuestion(pageText, matchQuery)
+                    : pageText
+                }
+                query={matchQuery}
+              />
+            ) : rendering ? (
+              "Reading page text…"
+            ) : (
+              "This page has no selectable text. You can still read the page image."
+            )}
           </p>
           <button
             className="primary"
             disabled={!pageText.trim()}
             onClick={() =>
-              onAsk({ title: book.title, page, text: pageText.slice(0, 2000) })
+              onAsk({
+                title: book.title,
+                page,
+                text: excerptForQuestion(pageText, matchQuery),
+              })
             }
           >
             <Sparkles size={17} />

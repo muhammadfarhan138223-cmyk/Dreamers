@@ -182,6 +182,28 @@ test("AI route gates source evidence and withholds malformed, invented or trunca
       JSON.parse(sent.messages[1].content).sourceText,
       /Diffusion is the net movement/,
     );
+    const kidneyText =
+      "The kidney filters blood through nephrons and helps maintain water balance.";
+    providerAnswer = JSON.stringify({
+      supported: true,
+      answer: "The kidney filters blood through nephrons.",
+      sourceQuote: kidneyText,
+    });
+    const retrieved = await POST(
+      request({
+        ...valid,
+        topic: "bio12-2",
+        bookContext: {
+          title: "Selected local book",
+          page: 12,
+          text: kidneyText,
+        },
+      }),
+    );
+    assert.equal(retrieved.status, 200);
+    assert.match(sent.messages[0].content, /Human Urinary System/);
+    assert.equal(JSON.parse(sent.messages[1].content).sourceText, kidneyText);
+    assert.match((await retrieved.json()).answer, /PDF page 12/);
     quota = 0;
     assert.equal((await POST(request(valid))).status, 429);
   } finally {
