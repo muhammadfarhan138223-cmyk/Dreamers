@@ -1,5 +1,5 @@
 /* Only public app assets are cached. AI, auth and account APIs never enter Cache Storage. */
-const VERSION = "dreamers-shell-v18";
+const VERSION = "dreamers-shell-v19";
 const CORE = [
   "/",
   "/manifest.webmanifest",

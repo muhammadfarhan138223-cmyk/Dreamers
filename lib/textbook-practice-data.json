@@ -1,0 +1,1553 @@
+{
+  "chemistry-xii-supplied": {
+    "17": {
+      "long": [
+        "Explain the group trends in reactions with water and carbonate decomposition.",
+        "Reactivity with water generally increases down Group 2 because the outer electrons are farther from the nucleus and easier to remove. The metal gives a hydroxide and hydrogen. Carbonate thermal stability also increases down the group, but for a different reason: larger cations distort the carbonate ion less, so decomposition to oxide and carbon dioxide requires stronger heating."
+      ],
+      "topics": [
+        [
+          5,
+          "Group 2 reactivity",
+          "Why does calcium lose its outer electrons more readily than magnesium?",
+          "Its valence electrons are farther from the nucleus",
+          [
+            "It has fewer occupied shells",
+            "It has fewer protons",
+            "Its outer electrons are in the same shell as magnesium’s"
+          ],
+          "Extra electron shells increase distance and shielding, so the two valence electrons are generally removed more easily down the group.",
+          "Explain the increase in reactivity down Group 2."
+        ],
+        [
+          8,
+          "Carbonate decomposition",
+          "Which products form on strong heating of calcium carbonate?",
+          "Calcium oxide and carbon dioxide",
+          [
+            "Calcium metal and oxygen",
+            "Calcium hydroxide and carbon monoxide",
+            "Calcium sulfate and water"
+          ],
+          "Calcium carbonate decomposes according to CaCO₃ → CaO + CO₂. Larger Group 2 cations generally give carbonates of greater thermal stability.",
+          "Write the products of thermal decomposition of calcium carbonate."
+        ],
+        [
+          10,
+          "Solubility",
+          "Which trend applies down Group 2?",
+          "Sulfates become less soluble",
+          [
+            "Sulfates become more soluble",
+            "Hydroxides become less soluble",
+            "Both sulfates and hydroxides have constant solubility"
+          ],
+          "Sulfate solubility decreases down Group 2, while hydroxide solubility generally increases.",
+          "Compare the solubility trends of Group 2 sulfates and hydroxides."
+        ]
+      ]
+    },
+    "18": {
+      "long": [
+        "Explain how transition metal ions form complexes and give two common geometries.",
+        "The metal ion acts as a Lewis acid, accepting a lone pair from each donor atom of a ligand. The ligand forms a coordinate bond. The coordination number counts donor atoms bonded directly to the metal. Six donor atoms usually give an octahedral arrangement, while four can give tetrahedral or square-planar arrangements depending on the metal and ligands."
+      ],
+      "topics": [
+        [
+          19,
+          "Oxidation states",
+          "Why can many transition metals have several oxidation states?",
+          "The energies of the outer s and nearby d electrons are close",
+          [
+            "All d electrons are permanently fixed in the core",
+            "Their atoms have no valence electrons",
+            "They always lose a complete outer shell"
+          ],
+          "The outer s and nearby d electrons have sufficiently similar energies for different numbers of them to participate in bonding.",
+          "Explain variable oxidation states in transition metals."
+        ],
+        [
+          23,
+          "Complex ions",
+          "What does coordination number count?",
+          "Ligand donor atoms directly bonded to the metal",
+          [
+            "The positive charge on the complex",
+            "All atoms present in the ligands",
+            "Electrons in the metal nucleus"
+          ],
+          "It is the number of donor atoms directly bonded to the central metal. A single ligand can supply more than one donor atom.",
+          "Define the coordination number of a complex."
+        ],
+        [
+          21,
+          "Catalysis",
+          "Which property helps a transition metal ion catalyse a redox reaction?",
+          "Access to more than one oxidation state",
+          [
+            "A fixed oxidation state in every compound",
+            "A complete absence of electrons",
+            "A permanently inert surface"
+          ],
+          "A transition metal ion can change oxidation state and then be regenerated. Metal surfaces can also adsorb reactants and bring them together.",
+          "Explain one reason transition metals or their compounds are useful catalysts."
+        ]
+      ]
+    },
+    "19": {
+      "long": [
+        "Compare chain isomerism with functional group isomerism, using examples.",
+        "Isomers have the same molecular formula and different structures. Chain isomers have different carbon skeletons, as in butane and 2-methylpropane. Functional group isomers have different functional groups, as in ethanol and methoxymethane. The skeleton and functional group affect the properties of each compound."
+      ],
+      "topics": [
+        [
+          39,
+          "Catenation",
+          "What does catenation mean for carbon?",
+          "Carbon atoms can bond to one another in chains or rings",
+          [
+            "Carbon atoms only bond to hydrogen",
+            "Carbon always has five bonds",
+            "Carbon cannot form rings"
+          ],
+          "Catenation is the ability of atoms of an element to join to one another. Strong carbon–carbon bonds allow many chain, branched and ring structures.",
+          "Define catenation and state why it matters in organic chemistry."
+        ],
+        [
+          40,
+          "Functional groups",
+          "Which group characterizes a carboxylic acid?",
+          "−COOH",
+          [
+            "−OH on an alkyl group",
+            "−CHO",
+            "−NH₂"
+          ],
+          "A functional group is an atom or group of atoms that gives an organic molecule characteristic reactions. The −COOH group identifies a carboxylic acid.",
+          "What is a functional group?"
+        ],
+        [
+          53,
+          "Isomerism",
+          "What must structural isomers have in common?",
+          "Their molecular formula",
+          [
+            "Their atom connectivity",
+            "Their chemical properties in every reaction",
+            "Their names"
+          ],
+          "Structural isomers have the same molecular formula but atoms are connected differently, so their properties can differ.",
+          "Distinguish structural isomers by formula and structure."
+        ]
+      ]
+    },
+    "20": {
+      "long": [
+        "Explain why benzene normally undergoes electrophilic substitution instead of addition.",
+        "Each carbon contributes a p electron to a delocalized ring system, giving extra stability. An electrophile reacts with the ring to give an intermediate. Loss of a proton restores the delocalized system. Addition would interrupt the aromatic system in the product, so substitution is generally favoured."
+      ],
+      "topics": [
+        [
+          60,
+          "Benzene structure",
+          "Why do the carbon–carbon bonds in benzene have equal lengths?",
+          "Its π electrons are delocalized around the ring",
+          [
+            "The ring contains fixed alternating bonds of two different lengths",
+            "Each carbon is sp³ hybridized",
+            "Its carbons are not bonded to each other"
+          ],
+          "The six p orbitals overlap around the ring. Delocalized π electrons make all six C−C bonds equivalent.",
+          "Explain equal carbon–carbon bond lengths in benzene."
+        ],
+        [
+          64,
+          "Aromatic substitution",
+          "Which reaction replaces a hydrogen atom on benzene with a nitro group?",
+          "Electrophilic substitution",
+          [
+            "Nucleophilic addition",
+            "Free-radical polymerization",
+            "β-elimination"
+          ],
+          "Benzene nitration is electrophilic aromatic substitution. The nitro group replaces a ring hydrogen, and the aromatic π system is restored.",
+          "Identify the reaction type in benzene nitration and state what is replaced."
+        ],
+        [
+          70,
+          "Side-chain oxidation",
+          "What is the usual product when the side chain of methylbenzene is strongly oxidized?",
+          "Benzoic acid",
+          [
+            "Phenol",
+            "Cyclohexane",
+            "Benzene without a side chain"
+          ],
+          "The methyl group is oxidized to a carboxyl group. The aromatic ring remains, giving benzoic acid.",
+          "Explain what happens to the side chain when methylbenzene is strongly oxidized."
+        ]
+      ]
+    },
+    "21": {
+      "long": [
+        "Compare substitution and elimination of a halogenoalkane using bromoethane.",
+        "In substitution, hydroxide replaces bromide, producing ethanol. Aqueous hydroxide favours this route. Under hot ethanolic hydroxide, base removes a hydrogen from an adjacent carbon while bromide leaves. A carbon–carbon double bond forms and the organic product is ethene."
+      ],
+      "topics": [
+        [
+          79,
+          "Substitution",
+          "Which product forms when bromide in bromoethane is replaced by hydroxide?",
+          "Ethanol",
+          [
+            "Ethene",
+            "Ethanal",
+            "Ethanoic acid"
+          ],
+          "Hydroxide attacks the carbon bonded to bromine and replaces bromide. The organic product is ethanol.",
+          "Explain nucleophilic substitution of bromoethane by hydroxide."
+        ],
+        [
+          81,
+          "Elimination",
+          "Which organic product forms by eliminating HBr from bromoethane?",
+          "Ethene",
+          [
+            "Ethane",
+            "Ethanol",
+            "Ethyne"
+          ],
+          "A base removes a hydrogen from the neighbouring carbon as the halide leaves. A double bond forms between the two carbon atoms.",
+          "Explain how elimination gives an alkene from a halogenoalkane."
+        ]
+      ]
+    },
+    "22": {
+      "long": [
+        "Explain oxidation of primary and secondary alcohols using ethanol and propan-2-ol.",
+        "Ethanol is primary. Controlled oxidation produces ethanal, which can be further oxidized to ethanoic acid. Propan-2-ol is secondary and oxidizes to propanone. Further oxidation of a ketone usually requires breaking carbon–carbon bonds, so it does not happen readily under the same conditions."
+      ],
+      "topics": [
+        [
+          90,
+          "Phenol acidity",
+          "Why is phenol more acidic than a typical aliphatic alcohol?",
+          "Its conjugate base is stabilized by delocalization",
+          [
+            "Its conjugate base cannot carry a charge",
+            "It contains a carbonyl group",
+            "It loses a proton from the aromatic carbon only"
+          ],
+          "After phenol loses H⁺, the negative charge on phenoxide can spread into the ring. The conjugate base of ethanol lacks this stabilization.",
+          "Explain why phenol is more acidic than ethanol."
+        ],
+        [
+          94,
+          "Alcohol oxidation",
+          "Which product forms on oxidizing propan-2-ol?",
+          "Propanone",
+          [
+            "Propanal",
+            "Propene",
+            "Propan-1-ol"
+          ],
+          "Primary alcohols can form aldehydes and then carboxylic acids. Secondary alcohols commonly form ketones, such as propanone from propan-2-ol.",
+          "Compare common oxidation products of primary and secondary alcohols."
+        ]
+      ]
+    },
+    "23": {
+      "long": [
+        "Explain why the carbonyl group undergoes nucleophilic addition and illustrate it with reduction.",
+        "Oxygen attracts the bonding electrons, making carbon partially positive and open to nucleophilic attack. A hydride donor adds to the carbonyl carbon and the π electrons move to oxygen. Protonation of the resulting alkoxide gives an alcohol. An aldehyde gives a primary alcohol, while a ketone gives a secondary alcohol."
+      ],
+      "topics": [
+        [
+          103,
+          "Carbonyl polarity",
+          "Which atom in a carbonyl group is attacked by a nucleophile?",
+          "The partially positive carbon",
+          [
+            "The partially negative oxygen",
+            "An oxygen atom in water only",
+            "Any carbon equally"
+          ],
+          "Oxygen is more electronegative than carbon, so it attracts electron density. The carbon becomes partially positive and attracts a nucleophile.",
+          "Explain the polarity of the carbonyl group."
+        ],
+        [
+          107,
+          "Aldehyde tests",
+          "What is the usual positive Tollens’ test for an aldehyde?",
+          "A silver mirror or silver deposit",
+          [
+            "A purple solution from iodine",
+            "A white barium sulfate precipitate",
+            "A green flame"
+          ],
+          "An aldehyde reduces silver ions to metallic silver, forming a mirror or deposit. Typical simple ketones do not give this result.",
+          "Describe a positive Tollens’ test and what it indicates."
+        ],
+        [
+          112,
+          "Carboxylic acids",
+          "What product class forms when a carboxylic acid reacts with an alcohol under acid catalysis?",
+          "Ester",
+          [
+            "Amine",
+            "Alkene",
+            "Halogenoalkane"
+          ],
+          "A carboxylic acid reacts with an alcohol to form an ester and water. The reaction is reversible and is usually catalysed by acid.",
+          "State the products of esterification."
+        ]
+      ]
+    },
+    "24": {
+      "long": [
+        "Compare the acid–base behaviour of an amine, an amide and an amino acid.",
+        "An amine can accept H⁺ at nitrogen using its lone pair. In an amide the nitrogen lone pair is delocalized toward the carbonyl, making it much less available for protonation. An amino acid contains a basic amino group and an acidic carboxyl group. It can exist as a zwitterion with both charges in the same molecule."
+      ],
+      "topics": [
+        [
+          122,
+          "Amine basicity",
+          "What allows an amine to accept a proton?",
+          "A lone pair on nitrogen",
+          [
+            "A positive charge on every carbon",
+            "A carboxyl group in every amine",
+            "A double bond to oxygen in every amine"
+          ],
+          "The nitrogen lone pair forms a bond with H⁺. Protonation converts the amine into an ammonium ion.",
+          "Explain why amines behave as bases."
+        ],
+        [
+          127,
+          "Amides",
+          "Why is an amide nitrogen generally less basic than an amine nitrogen?",
+          "Its lone pair is delocalized toward the carbonyl",
+          [
+            "It is bonded to no carbon atoms",
+            "It carries four bonds in every amide",
+            "Its lone pair is farther from every other atom"
+          ],
+          "The amide lone pair participates in resonance with the carbonyl, reducing availability to bind H⁺. An ordinary alkylamine has no adjacent carbonyl with this effect.",
+          "Compare the availability of the nitrogen lone pair in amides and amines."
+        ],
+        [
+          130,
+          "Amino acids",
+          "Which description fits an amino acid zwitterion?",
+          "It has both a positive and a negative group",
+          [
+            "It contains no charged group",
+            "Every atom carries a positive charge",
+            "It must have a net negative charge"
+          ],
+          "The amino group can accept a proton from the carboxyl group. The result has an ammonium group and a carboxylate group, often with zero net charge.",
+          "Explain how an amino acid can exist as a zwitterion."
+        ]
+      ]
+    },
+    "25": {
+      "long": [
+        "Outline how to plan a route to ethyl ethanoate using retrosynthesis and forward synthesis.",
+        "Identify the ester linkage and disconnect it into the acid and alcohol components. For ethyl ethanoate these are ethanoic acid and ethanol. In the forward route, esterification combines the two in the presence of an acid catalyst. Removing product or using excess reactant can help shift the equilibrium toward the ester."
+      ],
+      "topics": [
+        [
+          135,
+          "Retrosynthesis",
+          "In which direction does retrosynthesis begin?",
+          "From the target toward simpler possible starting materials",
+          [
+            "From any reagent toward a random product",
+            "From an unknown compound toward its boiling point only",
+            "From products toward higher temperatures only"
+          ],
+          "Retrosynthesis works backwards from a target to plausible precursors. Forward synthesis carries out reactions from starting materials to the target.",
+          "Distinguish retrosynthetic planning from forward synthesis."
+        ],
+        [
+          136,
+          "Disconnection",
+          "Which bond is a useful disconnection when planning an ester from an acid and an alcohol?",
+          "The acyl carbon–oxygen single bond in the ester group",
+          [
+            "A carbon–hydrogen bond in an alkyl chain",
+            "The carbonyl double bond itself",
+            "Every carbon–carbon bond simultaneously"
+          ],
+          "A functional group often suggests the reaction that made it. An ester can be traced back to an acid-derived part and an alcohol-derived part.",
+          "Why is the functional group useful when choosing a disconnection?"
+        ]
+      ]
+    },
+    "26": {
+      "long": [
+        "Compare addition and condensation polymerization using one example of each.",
+        "In addition polymerization, alkene double bonds open and monomers join without releasing a small molecule, as with ethene forming polyethene. Condensation polymerization uses multifunctional monomers. Joining their reactive groups commonly releases a small molecule such as water. A diamine and dicarboxylic acid can form a polyamide such as nylon."
+      ],
+      "topics": [
+        [
+          145,
+          "Addition polymers",
+          "What happens to the C=C bond of ethene during addition polymerization?",
+          "It opens to allow links between monomers",
+          [
+            "It becomes a triple bond",
+            "It remains a double bond in each repeat unit",
+            "It leaves the molecule as carbon dioxide"
+          ],
+          "The carbon–carbon double bond opens so the monomers can link. The chain contains carbon–carbon single bonds between repeating units.",
+          "Explain why ethene can form an addition polymer."
+        ],
+        [
+          146,
+          "Condensation polymers",
+          "Which linkage characterizes nylon as a polyamide?",
+          "An amide linkage",
+          [
+            "An alkene double bond",
+            "A glycosidic linkage",
+            "An ionic sodium–chloride pair"
+          ],
+          "Both monomers have two reactive groups. Repeated reactions between amino and carboxyl groups form amide links and release water.",
+          "Explain how a diamine and a dicarboxylic acid can form nylon."
+        ]
+      ]
+    },
+    "27": {
+      "long": [
+        "Explain how enzyme structure and conditions influence reaction rate.",
+        "An enzyme binds a suitable substrate at its active site and lowers the activation energy. Increasing temperature can speed reaction up to an optimum, but high temperature can disrupt the enzyme structure. Changing pH can also affect groups in the active site. A competitive inhibitor reduces access to that site by competing with substrate."
+      ],
+      "topics": [
+        [
+          164,
+          "Proteins",
+          "What type of bond links amino acids in a protein chain?",
+          "Peptide bond",
+          [
+            "Glycosidic bond",
+            "Phosphodiester bond",
+            "Ionic lattice bond"
+          ],
+          "A peptide bond is an amide link formed between the carboxyl group of one amino acid and the amino group of another.",
+          "Describe a peptide bond."
+        ],
+        [
+          168,
+          "Enzyme inhibitors",
+          "What does a competitive inhibitor compete with the substrate for?",
+          "The active site",
+          [
+            "The product’s boiling point",
+            "The cell wall",
+            "The DNA backbone"
+          ],
+          "It binds at the active site and competes with substrate. Fewer enzyme–substrate complexes form at a given substrate concentration.",
+          "Explain how a competitive inhibitor affects an enzyme reaction."
+        ],
+        [
+          171,
+          "Lipids",
+          "Which building blocks form a typical triglyceride?",
+          "Glycerol and three fatty acids",
+          [
+            "Glucose and three amino acids",
+            "A ribose sugar and three bases",
+            "Three glycerol molecules and one phosphate"
+          ],
+          "Three fatty acids are esterified to the three hydroxyl groups of glycerol. The resulting triglyceride is a common storage lipid.",
+          "Describe the basic structure of a triglyceride."
+        ]
+      ]
+    },
+    "28": {
+      "long": [
+        "Compare paper, thin-layer and gas chromatography.",
+        "All separate components by their different interactions with a stationary and a moving phase. Paper chromatography uses a paper support with a liquid solvent. Thin-layer chromatography uses a solid adsorbent layer, often silica, with a moving liquid. Gas chromatography uses an inert carrier gas and a stationary phase in a column. TLC can be compared by Rf under the same conditions, while gas chromatography commonly compares retention times."
+      ],
+      "topics": [
+        [
+          179,
+          "Paper chromatography",
+          "A spot travels 3 cm while the solvent front travels 6 cm. What is its Rf?",
+          "0.50",
+          [
+            "2.0",
+            "3.0",
+            "9.0"
+          ],
+          "Rf is distance travelled by the spot divided by distance travelled by the solvent front, both from the baseline. Here Rf = 3 ÷ 6 = 0.50.",
+          "Define and calculate Rf for distances of 3 cm and 6 cm."
+        ],
+        [
+          181,
+          "Thin-layer chromatography",
+          "Which material commonly forms the stationary layer in TLC?",
+          "Silica gel",
+          [
+            "Helium gas",
+            "The moving solvent",
+            "Distilled water flowing in a column"
+          ],
+          "A thin adsorbent layer such as silica is stationary. A liquid solvent travels up the plate as the mobile phase.",
+          "Name the stationary and mobile phases in a typical TLC separation."
+        ],
+        [
+          182,
+          "Gas chromatography",
+          "What is the mobile phase in gas chromatography?",
+          "A carrier gas",
+          [
+            "A solid silica plate",
+            "A strip of paper",
+            "A fixed liquid coating"
+          ],
+          "Retention time is the interval from sample injection until a component reaches the detector. It depends on the component and the operating conditions.",
+          "Explain retention time in gas chromatography."
+        ]
+      ]
+    },
+    "29": {
+      "long": [
+        "Explain how IR and mass spectrometry can provide complementary information.",
+        "IR absorptions indicate vibrations of particular bonds and help identify functional groups. A mass spectrum separates ions by mass-to-charge ratio. The molecular ion can indicate relative molecular mass when present, while fragments provide additional structural clues. Combining the results restricts the possible structures more than either alone."
+      ],
+      "topics": [
+        [
+          187,
+          "Unsaturation",
+          "What is the index of hydrogen deficiency of C₆H₆?",
+          "4",
+          [
+            "1",
+            "3",
+            "6"
+          ],
+          "For C₆H₆, use (2C + 2 − H) ÷ 2 = (12 + 2 − 6) ÷ 2 = 4. The ring contributes one unit and three double bonds contribute three.",
+          "Calculate the index of hydrogen deficiency of benzene from its formula."
+        ],
+        [
+          192,
+          "Infrared spectroscopy",
+          "What chiefly produces absorption bands in an IR spectrum?",
+          "Bond vibrations that change molecular dipole moment",
+          [
+            "Neutron emission",
+            "Chemical shifts of protons in a magnetic field",
+            "Movement of spots on paper"
+          ],
+          "Bonds vibrate at characteristic frequencies. Absorption bands, including the strong carbonyl stretch, can indicate particular functional groups.",
+          "Explain how IR spectra help identify functional groups."
+        ],
+        [
+          195,
+          "Mass spectrometry",
+          "What does the horizontal axis of a mass spectrum represent?",
+          "Mass-to-charge ratio",
+          [
+            "Infrared wavenumber",
+            "Solvent-front distance",
+            "Proton chemical shift only"
+          ],
+          "If the molecular ion is present and singly charged, its m/z can give the relative molecular mass. Other peaks can correspond to fragments.",
+          "Explain what information a molecular ion peak can give."
+        ]
+      ]
+    },
+    "30": {
+      "long": [
+        "Interpret the basic ¹H NMR pattern of an isolated ethyl group CH₃CH₂−.",
+        "The CH₃ and CH₂ protons form two different environments. Integration gives a 3:2 ratio. In a simple first-order spectrum, neighbouring CH₂ protons split the CH₃ signal into a triplet. The three neighbouring CH₃ protons split the CH₂ signal into a quartet. The exact shifts depend on the group attached to CH₂."
+      ],
+      "topics": [
+        [
+          204,
+          "Chemical shift",
+          "Which reference is commonly assigned 0 ppm in proton NMR?",
+          "Tetramethylsilane",
+          [
+            "Water",
+            "Sodium chloride",
+            "Silica gel"
+          ],
+          "Tetramethylsilane gives a reference signal defined as 0 ppm. Other chemical shifts are measured relative to it.",
+          "State the role of tetramethylsilane in NMR."
+        ],
+        [
+          207,
+          "Splitting",
+          "Under the simple n + 1 rule, what does a signal become with three equivalent neighbouring protons?",
+          "Quartet",
+          [
+            "Doublet",
+            "Triplet",
+            "Singlet"
+          ],
+          "For simple first-order coupling, n equivalent neighbouring protons split a signal into n + 1 lines. Three give a quartet.",
+          "Explain the n + 1 rule using three neighbours."
+        ]
+      ]
+    },
+    "31": {
+      "long": [
+        "Explain how crude oil is separated and why fractions have different uses.",
+        "Crude oil is heated and vapours rise through a column that is hot at the bottom and cooler at the top. Fractions with different boiling ranges condense at different levels. Lighter fractions with smaller molecules are generally more volatile and can serve as fuels or feedstocks. Heavier fractions contain larger molecules and may serve as lubricants or be processed further."
+      ],
+      "topics": [
+        [
+          218,
+          "Composites",
+          "What is a composite material?",
+          "A combination of distinct materials designed to achieve useful properties",
+          [
+            "A pure element with no other component",
+            "Any gas with a single atom",
+            "A solvent and solute that must be chemically identical"
+          ],
+          "Different components can contribute complementary properties. For example, strong fibres can reinforce a lighter matrix.",
+          "Explain why materials are combined in a composite."
+        ],
+        [
+          224,
+          "Oil refining",
+          "What property allows crude oil to be separated into fractions?",
+          "Different boiling ranges",
+          [
+            "Different proton chemical shifts only",
+            "Equal boiling points",
+            "Identical molecule sizes in each fraction"
+          ],
+          "As vapours rise through a temperature gradient, fractions condense at different heights according to their boiling ranges.",
+          "Explain the basis of fractional distillation of crude oil."
+        ]
+      ]
+    },
+    "32": {
+      "long": [
+        "Explain the purpose of a therapeutic window and why selectivity matters in drug design.",
+        "The therapeutic window is the range between concentrations that are effective and those likely to cause unacceptable harm. Dose and monitoring aim to maintain a suitable level. Selective drugs act preferentially at an intended target. For example, disrupting bacterial cell-wall synthesis can affect bacteria while human cells lack that wall."
+      ],
+      "topics": [
+        [
+          233,
+          "Therapeutic window",
+          "What does the therapeutic window describe?",
+          "A range of drug concentrations between effective and harmful levels",
+          [
+            "The time needed to manufacture any drug",
+            "The temperature at which a drug always melts",
+            "The pH of pure water"
+          ],
+          "It is the range of drug exposure where a useful effect is expected without unacceptable toxicity. The window can vary among drugs.",
+          "Define therapeutic window."
+        ],
+        [
+          237,
+          "Fertilizers",
+          "What do the letters N, P and K indicate on a fertilizer?",
+          "Nitrogen, phosphorus and potassium",
+          [
+            "Sodium, platinum and krypton",
+            "Nitrogen, potassium and calcium",
+            "Nickel, phosphorus and carbon"
+          ],
+          "They are essential plant nutrients. Fertilizers can replenish nutrients that are limiting crop growth, while excess application can pollute waterways.",
+          "Why are nitrogen, phosphorus and potassium commonly supplied in fertilizers?"
+        ]
+      ]
+    },
+    "33": {
+      "long": [
+        "Explain how wastewater treatment reduces solids, organic pollution and pathogens.",
+        "Initial screening removes large debris, and settling separates suspended solids. Biological treatment uses microorganisms to break down dissolved and fine organic material. Later treatment can remove remaining nutrients or particles, and disinfection reduces pathogens. The appropriate final steps depend on discharge or reuse requirements."
+      ],
+      "topics": [
+        [
+          253,
+          "Eutrophication",
+          "Which change can follow excess nitrate and phosphate entering a lake?",
+          "Algal growth followed by oxygen depletion",
+          [
+            "A permanent rise in dissolved oxygen at all depths",
+            "Removal of all nutrients without treatment",
+            "Immediate conversion of all nitrate to oxygen gas"
+          ],
+          "Excess nutrients promote algal blooms. Decomposition of dead organisms by microbes consumes oxygen, which can harm aquatic life.",
+          "Explain how nutrient pollution can reduce dissolved oxygen."
+        ],
+        [
+          256,
+          "Wastewater treatment",
+          "Which stage mainly uses microbes to break down organic waste?",
+          "Biological secondary treatment",
+          [
+            "Initial bar screening",
+            "Grit removal only",
+            "Final collection of settled sludge only"
+          ],
+          "Primary treatment physically separates suspended solids. Biological secondary treatment uses microorganisms to reduce organic matter left in the water.",
+          "Compare primary and biological secondary wastewater treatment."
+        ]
+      ]
+    }
+  },
+  "physics-xii-supplied": {
+    "1": {
+      "long": [
+        "Relate the ideal-gas equation to the kinetic model and explain the effect of heating at fixed volume.",
+        "In the ideal-gas model, gas particles are small, move randomly and collide elastically. Absolute temperature measures average translational kinetic energy per molecule. Heating increases this energy, leading to faster particles and a higher rate of momentum transfer to the walls. For a fixed amount and volume, PV = nRT gives pressure proportional to Kelvin temperature."
+      ],
+      "topics": [
+        [
+          9,
+          "Kinetic energy",
+          "Two ideal gases at the same absolute temperature have the same average what per molecule?",
+          "Translational kinetic energy",
+          [
+            "Mass",
+            "Speed",
+            "Momentum magnitude"
+          ],
+          "The average translational kinetic energy per molecule is 3kT/2. At the same Kelvin temperature the averages are equal, even when the molecules have different masses.",
+          "Explain how temperature relates to average translational kinetic energy."
+        ],
+        [
+          9,
+          "RMS speed",
+          "If the Kelvin temperature of an ideal gas becomes four times larger, what happens to its RMS speed?",
+          "It doubles",
+          [
+            "It quadruples",
+            "It halves",
+            "It stays the same"
+          ],
+          "RMS speed is proportional to the square root of the Kelvin temperature. Multiplying the temperature by four multiplies speed by two.",
+          "Relate RMS speed to temperature for molecules of a fixed mass."
+        ]
+      ]
+    },
+    "2": {
+      "long": [
+        "Describe the changes in displacement, velocity, acceleration and energy during one SHM cycle.",
+        "The restoring acceleration is proportional to and opposite displacement. At either extreme, speed is zero and acceleration magnitude and potential energy are greatest. At equilibrium acceleration is zero and speed and kinetic energy are greatest. For an ideal oscillator with no damping, total mechanical energy stays constant as kinetic and potential energy alternate."
+      ],
+      "topics": [
+        [
+          19,
+          "Restoring acceleration",
+          "At which point is acceleration zero in ideal SHM?",
+          "At equilibrium",
+          [
+            "At both extremes only",
+            "Everywhere",
+            "Where potential energy is greatest"
+          ],
+          "Acceleration is proportional to displacement and points towards equilibrium. It is zero at equilibrium and has greatest magnitude at the extremes.",
+          "State how acceleration varies with displacement in SHM."
+        ],
+        [
+          23,
+          "Oscillation energy",
+          "Where is an ideal spring oscillator fastest?",
+          "At the equilibrium position",
+          [
+            "At maximum positive displacement",
+            "At maximum negative displacement",
+            "At every position equally"
+          ],
+          "At equilibrium kinetic energy is greatest. At an extreme velocity is zero and the energy is stored as elastic potential energy.",
+          "Compare the energy at equilibrium and at an extreme."
+        ]
+      ]
+    },
+    "3": {
+      "long": [
+        "Explain Young’s double-slit experiment and predict how changing slit separation affects the fringes.",
+        "Coherent light from the slits overlaps. An integer-wavelength path difference gives a bright fringe, while an odd half-wavelength gives a dark fringe. For small angles the fringe spacing is λD/d, where D is screen distance and d is slit separation. Decreasing d increases the spacing if wavelength and screen distance stay fixed."
+      ],
+      "topics": [
+        [
+          50,
+          "Two-slit interference",
+          "Which path difference gives a bright fringe for sources in phase?",
+          "One whole wavelength",
+          [
+            "One half wavelength",
+            "One quarter wavelength",
+            "Three halves of a wavelength"
+          ],
+          "Bright fringes occur at an integer multiple of the wavelength. Dark fringes occur at an odd multiple of half a wavelength.",
+          "Give the conditions for bright and dark fringes for sources in phase."
+        ],
+        [
+          55,
+          "Diffraction grating",
+          "What is the grating equation for a principal maximum?",
+          "d sin θ = nλ",
+          [
+            "d cos θ = nλ",
+            "λ sin θ = nd",
+            "dλ = n sin θ"
+          ],
+          "d sin θ = nλ, with d the slit spacing, θ the angle from the central direction, n the order and λ the wavelength.",
+          "State the grating equation and identify its terms."
+        ]
+      ]
+    },
+    "4": {
+      "long": [
+        "Compare capacitors in series and in parallel and explain how a dielectric affects capacitance.",
+        "Series capacitors carry equal charge magnitudes and share the total potential difference. The reciprocals of their capacitances add. Parallel capacitors share the same voltage and their charges add, so their capacitances add. A dielectric between the plates increases capacitance by polarization, allowing more charge at the same voltage."
+      ],
+      "topics": [
+        [
+          65,
+          "Electric potential",
+          "Which quantity is electric potential difference?",
+          "Energy transferred per unit charge",
+          [
+            "Force per unit charge",
+            "Charge per unit time",
+            "Energy per unit mass"
+          ],
+          "Potential difference is energy transferred per unit charge. Electric field strength is force per unit positive test charge.",
+          "Distinguish electric potential difference from electric field strength."
+        ],
+        [
+          70,
+          "Capacitance combinations",
+          "What is the equivalent capacitance of two identical 6 μF capacitors connected in series?",
+          "3 μF",
+          [
+            "6 μF",
+            "12 μF",
+            "36 μF"
+          ],
+          "For series capacitors, 1/C = 1/6 + 1/6 in reciprocal microfarads. The result is C = 3 μF.",
+          "Calculate the series equivalent of two 6 μF capacitors."
+        ]
+      ]
+    },
+    "5": {
+      "long": [
+        "Compare the behaviour of an ideal resistor, inductor and capacitor in a sinusoidal AC circuit.",
+        "In a resistor, current and voltage are in phase. In an ideal inductor, current lags voltage by a quarter cycle and reactance increases with frequency. In an ideal capacitor, current leads voltage by a quarter cycle and reactance decreases with frequency. This frequency dependence lets the components select or suppress frequency ranges."
+      ],
+      "topics": [
+        [
+          94,
+          "Inductive reactance",
+          "What happens to inductive reactance as AC frequency increases?",
+          "It increases",
+          [
+            "It decreases",
+            "It always becomes zero",
+            "It remains independent of frequency"
+          ],
+          "X_L = 2πfL, so increasing frequency increases the opposition of an ideal inductor to sinusoidal AC.",
+          "State how inductive reactance depends on frequency."
+        ],
+        [
+          106,
+          "Rectification",
+          "What does a rectifier change alternating current into?",
+          "Unidirectional current",
+          [
+            "Alternating current at exactly twice the voltage",
+            "Current with no electrons",
+            "Current flowing equally in both directions"
+          ],
+          "A rectifier uses devices such as diodes to make current flow in one direction. Its output can still vary in magnitude until it is smoothed.",
+          "Explain what rectification does."
+        ]
+      ]
+    },
+    "6": {
+      "long": [
+        "Use the photon model to explain threshold frequency, intensity and maximum photoelectron kinetic energy.",
+        "Each photon carries energy hf. Electrons need at least the work function φ to escape, so frequencies below φ/h cannot cause ordinary one-photon emission. Above threshold, maximum kinetic energy is hf − φ. Greater intensity at the same frequency provides more photons, generally increasing emission rate while leaving the maximum kinetic energy unchanged."
+      ],
+      "topics": [
+        [
+          120,
+          "Photoelectric threshold",
+          "What is the minimum photon energy for photoelectric emission from a metal surface?",
+          "The work function",
+          [
+            "Twice the work function in every case",
+            "The stopping potential in volts",
+            "The speed of light"
+          ],
+          "It is the minimum energy needed to remove an electron from the metal surface.",
+          "Define the photoelectric work function."
+        ],
+        [
+          123,
+          "Compton scattering",
+          "At a nonzero scattering angle, how does a scattered X-ray photon’s wavelength change in the Compton effect?",
+          "It increases",
+          [
+            "It always halves",
+            "It decreases",
+            "It becomes zero"
+          ],
+          "The photon transfers energy and momentum to an electron. Its remaining energy is lower, so its wavelength is longer.",
+          "Explain why the scattered photon has a longer wavelength."
+        ]
+      ]
+    },
+    "7": {
+      "long": [
+        "Compare fission and fusion and explain how nuclear reactions can release energy.",
+        "Fission splits a heavy nucleus into smaller nuclei and may release neutrons that sustain a chain reaction. Fusion combines light nuclei and generally requires very high temperature to bring them close. In an energy-releasing reaction, the products have smaller total rest mass and are more tightly bound. The mass difference is associated with released energy according to E = Δmc²."
+      ],
+      "topics": [
+        [
+          145,
+          "Fusion",
+          "Which process powers stars during most of their active lifetimes?",
+          "Fusion of light nuclei",
+          [
+            "Splitting every hydrogen nucleus by fission",
+            "Combustion of oxygen with coal",
+            "Radioactive decay of all electrons"
+          ],
+          "Fusion combines light nuclei into heavier ones. Fission splits a heavy nucleus into smaller nuclei.",
+          "Distinguish fusion from fission."
+        ],
+        [
+          148,
+          "Half-life",
+          "What fraction of undecayed nuclei remains after three half-lives on average?",
+          "1/8",
+          [
+            "1/3",
+            "1/6",
+            "1/4"
+          ],
+          "The remaining fraction halves each time: 1 × 1/2 × 1/2 × 1/2 = 1/8.",
+          "Calculate the fraction remaining after three half-lives."
+        ]
+      ]
+    },
+    "8": {
+      "long": [
+        "Compare ultrasound imaging with PET in terms of the signal each detects.",
+        "Ultrasound sends sound pulses into the body and records echoes where tissues differ in acoustic properties. Echo times help locate boundaries. PET uses a positron-emitting tracer. Positron annihilation gives two nearly opposite gamma photons whose coincident detection helps locate tracer activity. The methods reveal different kinds of information."
+      ],
+      "topics": [
+        [
+          158,
+          "Ultrasound echoes",
+          "What lets an ultrasound machine estimate the depth of a reflecting boundary?",
+          "The time between pulse emission and echo reception",
+          [
+            "The colour of the probe",
+            "The patient’s electric charge",
+            "The brightness of a visible light beam"
+          ],
+          "The pulse travels to the boundary and back. Multiplying speed by time gives the full path length, so the depth is half that value.",
+          "Explain why echo distance uses half the round-trip distance."
+        ],
+        [
+          164,
+          "PET",
+          "What does PET detect from positron annihilation?",
+          "Two nearly opposite gamma photons",
+          [
+            "Two ultrasound pulses",
+            "A beam of visible photons only",
+            "A pair of protons leaving the body"
+          ],
+          "Detectors register the two nearly opposite gamma photons close together in time. This identifies a line along which annihilation likely occurred.",
+          "Explain coincidence detection in PET."
+        ]
+      ]
+    },
+    "9": {
+      "long": [
+        "Explain how luminosity, observed flux and stellar temperature differ and can be inferred.",
+        "Luminosity is the energy emitted per unit time by the star. Observed flux is the power arriving per unit area and decreases with the square of distance for isotropic emission. If luminosity is known, measured flux can help estimate distance. The wavelength of peak thermal emission estimates surface temperature using Wien’s law."
+      ],
+      "topics": [
+        [
+          171,
+          "Luminosity and flux",
+          "If distance from the same star doubles, what happens to its observed flux when absorption is negligible?",
+          "It becomes one quarter",
+          [
+            "It halves",
+            "It doubles",
+            "It stays unchanged"
+          ],
+          "Luminosity is total emitted power. Observed flux is power received per unit area and is proportional to 1/d².",
+          "Distinguish luminosity from observed flux."
+        ],
+        [
+          173,
+          "Wien’s law",
+          "How does the peak wavelength of thermal emission change as temperature rises?",
+          "It gets shorter",
+          [
+            "It gets longer",
+            "It stays fixed",
+            "It doubles for every temperature change"
+          ],
+          "The peak wavelength multiplied by absolute temperature is constant for a blackbody. Hotter surfaces peak at shorter wavelengths.",
+          "State the relationship in Wien’s displacement law."
+        ]
+      ]
+    }
+  },
+  "chemistry-xi-supplied": {
+    "1": {
+      "long": [
+        "Explain why atomic radius generally changes differently across a period and down a group.",
+        "Across a period, added protons increase nuclear attraction while electrons enter the same main shell. The outer electrons are generally pulled closer. Down a group, electrons occupy new shells farther from the nucleus, with more shielding, and radius generally increases."
+      ],
+      "topics": [
+        [
+          5,
+          "Modern periodic table",
+          "Which quantity orders elements in the modern periodic table?",
+          "Atomic number",
+          [
+            "Relative atomic mass alone",
+            "Number of neutrons",
+            "Density"
+          ],
+          "Elements are arranged in increasing atomic number, which is the number of protons in the nucleus.",
+          "What determines the order of elements in the modern periodic table?"
+        ],
+        [
+          13,
+          "Ionization energy",
+          "Which change usually makes the first electron easier to remove?",
+          "Increasing the distance of the valence electron from the nucleus",
+          [
+            "Increasing attraction to the nucleus",
+            "Removing all shielding",
+            "Keeping the electron in a closer shell"
+          ],
+          "It is the energy required to remove one electron from each atom in one mole of gaseous atoms to form singly positive gaseous ions.",
+          "Define first ionization energy."
+        ]
+      ]
+    },
+    "2": {
+      "long": [
+        "Explain how line spectra provide evidence for quantized energy levels.",
+        "An electron can occupy only certain energies in an atom. A transition between levels changes its energy by a definite amount. Emission releases a photon with that energy difference. Each allowed difference produces a particular frequency, so the spectrum contains separate lines."
+      ],
+      "topics": [
+        [
+          24,
+          "Isotopes",
+          "Which quantity is the same for all isotopes of an element?",
+          "Number of protons",
+          [
+            "Number of neutrons",
+            "Mass number",
+            "Relative isotopic mass"
+          ],
+          "Isotopes of an element have the same proton number and different neutron numbers, so their mass numbers differ.",
+          "Distinguish isotopes by their proton and neutron counts."
+        ],
+        [
+          35,
+          "Quantum numbers",
+          "Which quantum number identifies the main energy level?",
+          "Principal quantum number",
+          [
+            "Spin quantum number",
+            "Magnetic quantum number",
+            "Atomic number"
+          ],
+          "It labels the main electron shell. Larger values generally correspond to orbitals extending farther from the nucleus.",
+          "What does the principal quantum number tell us?"
+        ]
+      ]
+    },
+    "3": {
+      "long": [
+        "Explain how bond polarity and molecular shape together determine whether a molecule has a net dipole.",
+        "Different electronegativities cause unequal sharing and a bond dipole. Molecular dipole is the vector sum of these bond dipoles. In linear carbon dioxide the equal dipoles oppose and cancel. In bent water they do not cancel, so the molecule has a net dipole."
+      ],
+      "topics": [
+        [
+          48,
+          "Ionic bonding",
+          "What holds ions together in an ionic lattice?",
+          "Electrostatic attraction between opposite charges",
+          [
+            "Only London forces",
+            "Shared free neutrons",
+            "Attraction between ions of the same charge"
+          ],
+          "Ionic bonding is electrostatic attraction between positive and negative ions. This attraction acts in all directions within a lattice.",
+          "Describe ionic bonding."
+        ],
+        [
+          51,
+          "Coordinate bonding",
+          "In a coordinate covalent bond, where do the original shared electrons come from?",
+          "Both come from the donor atom",
+          [
+            "One must come from each atom",
+            "Both come from the acceptor atom",
+            "They originate in the nuclei"
+          ],
+          "One atom supplies the two electrons of the shared pair. The acceptor provides an available orbital.",
+          "Describe a coordinate covalent bond."
+        ]
+      ]
+    },
+    "4": {
+      "long": [
+        "Explain how to identify the limiting reactant and calculate theoretical yield.",
+        "Balance the chemical equation and convert each reactant quantity to moles. Compare the available moles per stoichiometric coefficient. The smallest ratio identifies the reactant consumed first. Use its amount and the balanced mole ratio to calculate the maximum amount of product."
+      ],
+      "topics": [
+        [
+          75,
+          "Moles",
+          "How many moles are in 36 g of water if its molar mass is 18 g mol⁻¹?",
+          "2 mol",
+          [
+            "0.5 mol",
+            "18 mol",
+            "648 mol"
+          ],
+          "Use n = mass ÷ molar mass. For water, 36 ÷ 18 = 2 mol.",
+          "Calculate the amount in 36 g of water."
+        ],
+        [
+          82,
+          "Limiting reactant",
+          "Which reactant determines the theoretical amount of product?",
+          "The one consumed first",
+          [
+            "The one with the greatest starting mass in every reaction",
+            "The one with the smallest molar mass in every reaction",
+            "The one remaining in excess"
+          ],
+          "Once it is consumed, the reaction cannot continue in the proportions specified by the balanced equation.",
+          "Why does the limiting reactant determine theoretical yield?"
+        ]
+      ]
+    },
+    "5": {
+      "long": [
+        "Explain why water’s intermolecular interactions influence boiling point and surface tension.",
+        "Polar O−H bonds allow hydrogen bonds between water molecules. Separating the molecules into vapour requires energy to overcome these attractions. At a surface, neighbouring molecules pull one another inward. This cohesion contributes to relatively high surface tension."
+      ],
+      "topics": [
+        [
+          97,
+          "Ideal-gas equation",
+          "If volume and amount are fixed, what happens to ideal gas pressure when Kelvin temperature doubles?",
+          "It doubles",
+          [
+            "It halves",
+            "It stays constant",
+            "It quadruples"
+          ],
+          "PV = nRT. At constant V and n, P/T is constant, so doubling Kelvin temperature doubles the pressure.",
+          "Relate pressure and absolute temperature at constant volume."
+        ],
+        [
+          102,
+          "Hydrogen bonding",
+          "Which interaction is especially important between water molecules?",
+          "Hydrogen bonding",
+          [
+            "Ionic lattice bonding",
+            "Metallic bonding",
+            "A permanent covalent bond between every pair of molecules"
+          ],
+          "A partially positive hydrogen covalently bonded to oxygen is attracted to a lone pair on the oxygen of a neighbouring molecule.",
+          "Describe a hydrogen bond between two water molecules."
+        ]
+      ]
+    },
+    "6": {
+      "long": [
+        "Explain Hess’s law and how to combine reaction enthalpies.",
+        "Enthalpy is a state function. The overall enthalpy change depends on initial and final states, so alternate pathways give the same total. Reverse an equation by reversing the sign of its enthalpy. Scale equations and enthalpies together, then add them so intermediates cancel."
+      ],
+      "topics": [
+        [
+          117,
+          "Enthalpy",
+          "What sign does ΔH have for an exothermic reaction?",
+          "Negative",
+          [
+            "Positive",
+            "Zero for every exothermic reaction",
+            "It has no sign"
+          ],
+          "Heat released at constant pressure gives negative ΔH. Heat absorbed gives positive ΔH.",
+          "Compare the signs of ΔH for exothermic and endothermic changes."
+        ],
+        [
+          130,
+          "Hess’s law",
+          "What happens to ΔH when a thermochemical equation is reversed?",
+          "Its sign reverses",
+          [
+            "It always becomes zero",
+            "Its magnitude doubles",
+            "Its value and sign both stay fixed"
+          ],
+          "For the same initial and final states, the total enthalpy change is independent of the route followed.",
+          "State Hess’s law."
+        ]
+      ]
+    },
+    "7": {
+      "long": [
+        "Use collision theory to explain effects of concentration, temperature and catalysis on rate.",
+        "Increasing concentration generally brings reactant particles together more often. Increasing temperature raises collision frequency and increases the fraction of collisions with enough energy. A catalyst offers a pathway with lower activation energy. Successful reactions also depend on suitable collision orientation."
+      ],
+      "topics": [
+        [
+          145,
+          "Effective collisions",
+          "Which collision condition is needed for many reactions?",
+          "Enough energy and suitable orientation",
+          [
+            "The particles must be identical",
+            "The particles must be stationary",
+            "Energy must always be below activation energy"
+          ],
+          "The reacting particles must collide with enough energy and, where required, with a suitable orientation to form products.",
+          "What makes a collision effective?"
+        ],
+        [
+          151,
+          "Catalysts",
+          "What does a catalyst change about the reaction pathway?",
+          "It lowers activation energy",
+          [
+            "It makes ΔH negative in every reaction",
+            "It changes the balanced mole ratio",
+            "It forces products to have zero energy"
+          ],
+          "A catalyst provides an alternative pathway with a lower activation energy and is regenerated overall.",
+          "Explain how a catalyst can increase reaction rate."
+        ]
+      ]
+    },
+    "8": {
+      "long": [
+        "Explain how a dynamic equilibrium responds to a concentration disturbance.",
+        "At equilibrium, the forward and reverse rates are equal, so macroscopic concentrations stay constant. Adding a reactant changes the reaction quotient and initially favours its consumption. The system shifts toward products until the forward and reverse rates match again. At the same temperature the equilibrium constant stays the same."
+      ],
+      "topics": [
+        [
+          169,
+          "Dynamic equilibrium",
+          "What is equal at dynamic equilibrium in a closed system?",
+          "Forward and reverse reaction rates",
+          [
+            "Reactant and product concentrations in every system",
+            "The masses of every substance",
+            "The activation energies in both directions"
+          ],
+          "Forward and reverse reactions continue at equal rates. The amounts appear constant because the two reactions balance each other.",
+          "Why is chemical equilibrium described as dynamic?"
+        ],
+        [
+          177,
+          "Equilibrium response",
+          "At fixed temperature, adding reactant generally shifts a reversible reaction which way?",
+          "Toward consumption of the added reactant",
+          [
+            "Always toward making more of the added reactant",
+            "It must permanently stop",
+            "It always changes the equilibrium constant"
+          ],
+          "Initially the system tends to consume some of the added reactant, then approaches a new equilibrium. The equilibrium constant is unchanged at fixed temperature.",
+          "Explain the response to adding a reactant at equilibrium."
+        ]
+      ]
+    },
+    "9": {
+      "long": [
+        "Explain how a weak acid and its conjugate base buffer added acid or base.",
+        "The conjugate base reacts with added H⁺ to form the weak acid. The weak acid reacts with added OH⁻ to form water and more conjugate base. These reactions reduce changes in hydrogen-ion concentration. The buffer has limited capacity and works best when both components are present in useful amounts."
+      ],
+      "topics": [
+        [
+          190,
+          "Brønsted–Lowry acids",
+          "What does a Brønsted–Lowry acid donate?",
+          "A proton",
+          [
+            "A neutron",
+            "An electron pair",
+            "A hydroxide ion in every reaction"
+          ],
+          "An acid donates a proton. A base accepts a proton, producing the corresponding conjugate species.",
+          "Define Brønsted–Lowry acid and base."
+        ],
+        [
+          194,
+          "pH",
+          "What is the pH of a dilute solution with [H₃O⁺] = 10⁻³ mol dm⁻³?",
+          "3",
+          [
+            "−3",
+            "7",
+            "11"
+          ],
+          "For a dilute solution, pH is approximately −log₁₀[H₃O⁺]. The stated concentration gives pH 3.",
+          "Calculate pH from a hydronium concentration of 10⁻³ mol dm⁻³."
+        ]
+      ]
+    },
+    "10": {
+      "long": [
+        "Explain oxidation and reduction at the electrodes of an electrolytic cell.",
+        "An external power supply drives a non-spontaneous reaction. Oxidation, the loss of electrons, occurs at the anode. Reduction, the gain of electrons, occurs at the cathode. Cations move toward the cathode and anions toward the anode, with the products depending on the electrolyte and electrode material."
+      ],
+      "topics": [
+        [
+          212,
+          "Redox",
+          "Which process occurs when a species gains electrons?",
+          "Reduction",
+          [
+            "Oxidation",
+            "Condensation only",
+            "Neutralization only"
+          ],
+          "Oxidation is loss of electrons. Reduction is gain of electrons. The two occur together in a redox reaction.",
+          "Distinguish oxidation from reduction in terms of electrons."
+        ],
+        [
+          225,
+          "Electrolysis",
+          "Where does oxidation occur during electrolysis?",
+          "At the anode",
+          [
+            "At the cathode",
+            "Only in the power supply",
+            "At both electrodes equally"
+          ],
+          "Oxidation takes place at the anode. Reduction takes place at the cathode.",
+          "Name the electrode at which oxidation occurs."
+        ]
+      ]
+    },
+    "11": {
+      "long": [
+        "Compare typical reactions of alkanes and alkenes.",
+        "Alkanes have only carbon–carbon single bonds. They can undergo free-radical substitution with a halogen under appropriate light. Alkenes contain a double bond whose π component reacts readily in addition reactions. Addition across the double bond converts it to a single bond and joins new groups to the carbon atoms."
+      ],
+      "topics": [
+        [
+          241,
+          "Hydrocarbon classes",
+          "Which compound is an alkene?",
+          "Ethene",
+          [
+            "Ethane",
+            "Methane",
+            "Propane"
+          ],
+          "An alkene contains a carbon–carbon double bond. An alkane is saturated and has only single bonds between carbons.",
+          "Distinguish an alkene from an alkane by bonding."
+        ],
+        [
+          248,
+          "Radical substitution",
+          "In chlorination of methane, what initiates chlorine radical formation?",
+          "Ultraviolet light breaks the Cl−Cl bond homolytically",
+          [
+            "The Cl−Cl bond always becomes a triple bond",
+            "Water converts both atoms to oxygen",
+            "Darkness releases neutrons"
+          ],
+          "UV light can split a chlorine molecule so each atom receives one bonding electron, forming two chlorine radicals.",
+          "Explain initiation in methane chlorination."
+        ]
+      ]
+    },
+    "12": {
+      "long": [
+        "Explain the relative unreactivity of nitrogen and how ammonia acts as a base.",
+        "Nitrogen molecules have a strong N≡N bond, so many reactions require substantial activation energy. In ammonia, nitrogen has a lone pair that can bond to H⁺. This forms NH₄⁺. In water the proton transfer is reversible, so ammonia is a weak base."
+      ],
+      "topics": [
+        [
+          270,
+          "Nitrogen molecule",
+          "Which bond is present in N₂?",
+          "A triple bond",
+          [
+            "A single ionic bond",
+            "A hydrogen bond",
+            "A carbon–nitrogen double bond"
+          ],
+          "The strong N≡N triple bond is difficult to break, creating a high activation barrier for many reactions.",
+          "Why is nitrogen gas relatively unreactive at room temperature?"
+        ],
+        [
+          271,
+          "Ammonia",
+          "Which ion forms when ammonia accepts a proton?",
+          "NH₄⁺",
+          [
+            "NO₃⁻",
+            "NH₂⁻",
+            "N₂⁺"
+          ],
+          "Nitrogen has a lone pair that can form a bond with H⁺. The product of protonation is the ammonium ion.",
+          "Explain why ammonia can act as a base."
+        ]
+      ]
+    },
+    "13": {
+      "long": [
+        "Explain changes in halogen volatility and oxidizing strength down the group.",
+        "Larger halogen molecules have more polarizable electron clouds, so London attractions generally strengthen and volatility decreases. The oxidizing strength generally decreases down the group. A stronger oxidizing halogen such as chlorine can accept electrons from bromide ions and displace bromine."
+      ],
+      "topics": [
+        [
+          288,
+          "Volatility",
+          "Which of chlorine, bromine and iodine is most volatile under comparable conditions?",
+          "Chlorine",
+          [
+            "Bromine",
+            "Iodine",
+            "All have the same volatility"
+          ],
+          "Larger molecules have more polarizable electron clouds and stronger London forces. More energy is needed to separate them into vapour.",
+          "Explain why volatility decreases down this part of Group 17."
+        ],
+        [
+          290,
+          "Displacement",
+          "What forms when chlorine oxidizes bromide ions?",
+          "Bromine and chloride ions",
+          [
+            "Chlorine and bromide ions only",
+            "Iodine and fluoride ions",
+            "Hydrogen and water"
+          ],
+          "Chlorine is the stronger oxidizing agent and gains electrons to form chloride. Bromide loses electrons to form bromine.",
+          "Explain why chlorine displaces bromine from bromide solution."
+        ]
+      ]
+    },
+    "14": {
+      "long": [
+        "Explain the difference between ground-level ozone pollution and the stratospheric ozone layer.",
+        "Near the ground, ozone can form when sunlight drives reactions involving nitrogen oxides and volatile organic compounds. It is an irritant and a component of photochemical smog. In the stratosphere, naturally occurring ozone absorbs much harmful ultraviolet radiation. The effects depend on where the ozone is present."
+      ],
+      "topics": [
+        [
+          302,
+          "Atmospheric layers",
+          "In which layer does most everyday weather occur?",
+          "Troposphere",
+          [
+            "Stratosphere",
+            "Mesosphere",
+            "Thermosphere"
+          ],
+          "The troposphere is the lowest main layer. It contains most of the atmosphere’s water vapour, and most weather occurs there.",
+          "Name the lowest main atmospheric layer and state one feature."
+        ],
+        [
+          306,
+          "Air pollutants",
+          "Which pollutant from incomplete combustion binds strongly to haemoglobin?",
+          "Carbon monoxide",
+          [
+            "Nitrogen gas",
+            "Water vapour",
+            "Argon"
+          ],
+          "It binds strongly to haemoglobin, reducing the blood’s ability to carry oxygen. Incomplete combustion can produce it.",
+          "Explain why carbon monoxide is harmful."
+        ]
+      ]
+    },
+    "15": {
+      "long": [
+        "Choose and explain suitable separation methods for sand, dissolved salt and water.",
+        "Filter to retain insoluble sand while the salt solution passes through. To recover salt, concentrate the solution and allow crystals to form. To recover water, distil the solution by boiling off water and condensing the vapour. The methods exploit particle size and differences in volatility."
+      ],
+      "topics": [
+        [
+          319,
+          "Filtration",
+          "Which method separates insoluble sand from water directly?",
+          "Filtration",
+          [
+            "Fractional distillation",
+            "Paper chromatography",
+            "Sublimation"
+          ],
+          "A porous barrier retains suspended solids while the liquid passes through as filtrate.",
+          "What is the principle of filtration?"
+        ],
+        [
+          323,
+          "Distillation",
+          "Which step recovers the vapour as a liquid during distillation?",
+          "Condensation",
+          [
+            "Filtration",
+            "Crystallization",
+            "Centrifugation"
+          ],
+          "Heat vaporizes the more volatile solvent, leaving most dissolved solid behind. Cooling the vapour condenses it as the distillate.",
+          "Explain how distillation separates a solvent from a dissolved solid."
+        ]
+      ]
+    },
+    "16": {
+      "long": [
+        "Outline a sound acid–base titration procedure and the purpose of repeat titres.",
+        "Use suitable protective equipment and rinse apparatus with the appropriate solutions. Measure a fixed aliquot into a flask, add a suitable indicator and deliver titrant from a burette while mixing. Near the end point add drops slowly. Record volumes and repeat for close results before using the balanced equation to calculate concentration."
+      ],
+      "topics": [
+        [
+          331,
+          "Lab safety",
+          "What should a student do first after noticing a chemical spill in a school laboratory?",
+          "Alert the teacher and follow the lab procedure",
+          [
+            "Mix it with an unknown reagent",
+            "Touch it to identify it",
+            "Ignore it until the experiment ends"
+          ],
+          "The teacher can identify the hazard and apply the laboratory’s cleanup procedure. Unplanned handling may increase exposure or create a reaction.",
+          "Why should an unknown spill be reported promptly?"
+        ],
+        [
+          338,
+          "Titration",
+          "Which apparatus accurately delivers variable measured volumes of titrant?",
+          "Burette",
+          [
+            "Beaker",
+            "Test tube",
+            "Evaporating dish"
+          ],
+          "A burette delivers a measured variable volume. A volumetric pipette transfers a specified fixed volume.",
+          "Distinguish the purpose of a burette and a volumetric pipette."
+        ]
+      ]
+    }
+  }
+}

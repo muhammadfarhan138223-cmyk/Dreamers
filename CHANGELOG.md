@@ -1,3 +1,10 @@
+# 0.5.5 — 2026-11-04
+
+- Add a separate Exercise MCQs tab that reads questions directly from the local textbook PDF, preserves page links and saves attempts. Use checked keys for three Biology XII chapters, with ungraded self-check for other extracted questions. Incomplete and image-only layouts may need the printed PDF.
+- Add mapped offline concept MCQs, short answers, long answers and topic notes to Chemistry XI, Chemistry XII and Physics XII. Chemistry XII now fills its book-appendix mock.
+- Expand the first Biology XII chapter from 7 to 21 concept MCQs and Human Reproductive Systems from 4 to 9. Existing IDs and saved progress are preserved.
+- Shell v19. Source PDF bytes and extracted text remain on the learner’s device.
+
 # 0.5.4 — 2026-11-04
 
 - Add 74 original MCQs, 74 short answers and 13 long-answer models across the 13 Biology XII chapters. Topic notes link to pages in the registered copy. The existing Chapter 14 mission and practice remain available.

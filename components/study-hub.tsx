@@ -27,10 +27,10 @@ import BookExamPlan from "./book-exam-plan";
 import BiologyBoardPattern from "./biology-board-pattern";
 import LoadingState from "./loading-state";
 import {
-  BIOLOGY_XII,
-  biologyChapterCards,
-  biologyChapterTopics,
-} from "@/lib/biology-xii.mjs";
+  chapterPracticeCards,
+  chapterPracticeTopics,
+} from "@/lib/textbook-practice.mjs";
+import ExercisePractice from "./exercise-practice";
 import BookPassageSearch from "./book-passage-search";
 import SubjectTests from "./subject-tests";
 import UrinaryAdventure from "./urinary-adventure";
@@ -226,9 +226,16 @@ export default function StudyHub({
           if (typeof v.bookChoice === "string") setBookChoice(v.bookChoice);
           if (typeof v.chapter === "string") setChapter(v.chapter);
           if (
-            ["short", "mcq", "long", "pdf", "ai", "play", "test"].includes(
-              String(v.mode),
-            )
+            [
+              "short",
+              "mcq",
+              "long",
+              "pdf",
+              "ai",
+              "play",
+              "test",
+              "exercise",
+            ].includes(String(v.mode))
           )
             setMode(String(v.mode));
           if (["English", "Roman Urdu", "Urdu"].includes(String(v.language)))
@@ -360,10 +367,11 @@ export default function StudyHub({
     id: "urinary:" + item.id,
     answer: item.options[item.correct],
   }));
+  const selectedNumber = selectedChapter?.number ?? chapterIndex + 1;
   const builtIn: Card[] =
     sourceKind === "book"
       ? [
-          ...biologyChapterCards(catalog?.id, selectedChapter?.number, mode),
+          ...chapterPracticeCards(catalog?.id, selectedNumber, mode),
           ...(urinaryChapter
             ? mode === "mcq"
               ? urinaryCards
@@ -373,7 +381,7 @@ export default function StudyHub({
       : [];
   const chapterTopics =
     sourceKind === "book"
-      ? biologyChapterTopics(catalog?.id, selectedChapter?.number)
+      ? chapterPracticeTopics(catalog?.id, selectedNumber)
       : [];
   const original: Card[] =
     sourceKind !== "foundation" || !base
@@ -427,21 +435,34 @@ export default function StudyHub({
       title: item.title,
     },
   ]);
-  const practiceBank: PracticeItem[] = urinaryBook
-    ? [
-        ...testChapters.flatMap(({ number }) =>
-          ["mcq", "short", "long"].flatMap((kind) =>
-            biologyChapterCards(BIOLOGY_XII, number, kind).map((q) => ({
-              ...q,
-              kind,
-              chapter: number,
-            })),
+  const practiceBank: PracticeItem[] =
+    mode === "test" && sourceKind === "book"
+      ? [
+          ...testChapters.flatMap(({ number }) =>
+            ["mcq", "short", "long"].flatMap((kind) =>
+              chapterPracticeCards(catalog?.id, number, kind).map((q) => ({
+                ...q,
+                kind,
+                chapter: number,
+              })),
+            ),
           ),
-        ),
-        ...urinaryCards.map((q) => ({ ...q, kind: "mcq", chapter: 14 })),
-        ...urinaryWritten.map((q) => ({ ...q, kind: q.type, chapter: 14 })),
-      ]
-    : [];
+          ...(urinaryBook
+            ? [
+                ...urinaryCards.map((q) => ({
+                  ...q,
+                  kind: "mcq",
+                  chapter: 14,
+                })),
+                ...urinaryWritten.map((q) => ({
+                  ...q,
+                  kind: q.type,
+                  chapter: 14,
+                })),
+              ]
+            : []),
+        ]
+      : [];
   if (mode === "test" && sourceKind === "book" && local) {
     const chapterNumbers = new Map(
       testChapters.map((item) => [item.id, item.number]),
@@ -871,6 +892,7 @@ export default function StudyHub({
         {[
           ["pdf", "Read"],
           ["mcq", "1 · MCQs"],
+          ["exercise", "Exercise MCQs"],
           ["short", "2 · Short answers"],
           ["long", "3 · Long answers"],
           ["test", "Test"],
@@ -899,7 +921,34 @@ export default function StudyHub({
         </p>
       )}
       <section className="study-content">
-        {mode === "test" ? (
+        {mode === "exercise" ? (
+          local && selectedChapter ? (
+            <ExercisePractice
+              key={local.id + ":" + selectedChapter.id}
+              book={local}
+              chapterId={selectedChapter.id}
+              first={firstPage}
+              last={lastPage}
+              onRead={(target) =>
+                navigate(
+                  `/books/${encodeURIComponent(local.catalogId || local.id)}/${target}`,
+                )
+              }
+            />
+          ) : (
+            <div className="study-empty">
+              <BookOpen size={32} />
+              <h2>Textbook exercise MCQs</h2>
+              <p>
+                Save the matching book PDF on this device to load readable
+                exercise questions. Chapter practice is available separately.
+              </p>
+              <button className="primary" onClick={readPdf}>
+                Find the textbook
+              </button>
+            </div>
+          )
+        ) : mode === "test" ? (
           focus.grade === "XI" && focus.subject === "biology" ? (
             <>
               <BiologyBoardPattern />
@@ -1157,7 +1206,8 @@ export default function StudyHub({
                       : "Long answers, when you need them."}
                 </h2>
                 <p>
-                  {cards.length} saved {mode === "mcq" ? "MCQs" : "questions"}{" "}
+                  {cards.length}{" "}
+                  {mode === "mcq" ? "chapter concept MCQs" : "questions"}{" "}
                   available offline.
                 </p>
               </div>
@@ -1343,13 +1393,17 @@ export default function StudyHub({
                     ) : (
                       <span className="pill">End of saved practice</span>
                     )
-                  ) : (
+                  ) : firstPending !== index ? (
                     <button
                       className="secondary"
                       onClick={() => setCursor(firstPending)}
                     >
                       Go to first unanswered
                     </button>
+                  ) : (
+                    <span className="pill">
+                      Review this question to continue
+                    </span>
                   )}
                 </nav>
               </>
