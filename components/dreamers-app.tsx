@@ -716,9 +716,7 @@ export default function DreamersApp() {
       );
       return;
     }
-    const useBook =
-      aiContextKind === "textbook" &&
-      (aiChapter !== "pdf-page" || !!bookContext);
+    const useBook = aiContextKind === "textbook";
     setChat((c) => [...c, { role: "user", text: input }]);
     setAiInput("");
     setAiBusy(true);
@@ -739,7 +737,9 @@ export default function DreamersApp() {
           allowEnrichment,
           referenceOnly,
           topic: useBook
-            ? aiChapter
+            ? aiChapter === "pdf-page" && !bookContext
+              ? "book-overview"
+              : aiChapter
             : aiContextKind === "textbook"
               ? "pack-overview"
               : aiTopic,
@@ -1858,9 +1858,11 @@ export default function DreamersApp() {
                     onChange={(e) => {
                       const id = e.target.value;
                       setAiTextbook(id);
-                      setReferenceOnly(!textbook(id)!.chapters.length);
+                      setReferenceOnly(false);
                       setChat([]);
-                      setAiChapter(textbook(id)!.chapters[0]?.id || "pdf-page");
+                      setAiChapter(
+                        textbook(id)!.chapters[0]?.id || "book-overview",
+                      );
                       setBookContext(null);
                     }}
                   >
@@ -1884,8 +1886,8 @@ export default function DreamersApp() {
                     }}
                   >
                     {!textbook(aiTextbook)!.chapters.length && (
-                      <option value="pdf-page">
-                        Selected PDF excerpt only (map pending)
+                      <option value="book-overview">
+                        Ask about a word or idea
                       </option>
                     )}
                     {textbook(aiTextbook)!.chapters.map((t) => (
@@ -1901,7 +1903,7 @@ export default function DreamersApp() {
                   exclusions remain unverified.{" "}
                   {textbook(aiTextbook)!.chapters.length
                     ? "Book evidence mode needs a readable PDF passage. A chapter title is not evidence for an answer."
-                    : "This source has no checked chapter map. Attach readable PDF text to ask a question. Image-only pages require OCR, which is not enabled."}
+                    : "This book has no checked chapter map yet. You can still ask general questions about a word or idea. AI cannot see scanned page images; type the line you want explained."}
                 </p>
               </>
             ) : (

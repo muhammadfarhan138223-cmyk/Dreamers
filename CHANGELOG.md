@@ -1,5 +1,6 @@
 ## 0.5.8 — 2026-11-04
 
+- Fix fullscreen tutor selection for unmapped books: allow general questions and retain the chosen book instead of substituting Biology.
 - Refine subject-specific beginner explanations and following requested everyday examples after live teaching-quality review.
 - Search literal common words without conversational stop-word filtering.
 - Search numeric years as text when they are not valid bare page numbers; retain explicit page bounds.
