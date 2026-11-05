@@ -1,3 +1,7 @@
+## 0.5.8 live verification — 2026-11-05
+
+Application033f4b916cc7e584612accbcb1c7cc6e26800000, tree98e0dad792d7866af264c765b7f81cb15920128d. Preview dpl_AvhwWezEqpk9VdAeD13p4nE466Ju and production dpl_5xx1ejpMYt7BhZsRcnYakwSKQbYV READY. Stable alias health200/0.5.8/16 books/AI configured. Genuine inline question/follow-up, saved conversation reload and fullscreen general/source-only controls passed browser QA. See current PROJECT_STATUS and docs/VERIFICATION. No credentials/services/migrations changed. Historical records follow.
+
 0.5.7 live verification:3301678dd74ee90d418f180be41e250958865767, preview dpl_EGBQkoogd2GBygkbWAM1wHEy8U1q and production dpl_5t4UdokvLJbndH4JG94D7PznE4nK READY. Health configured=true/16 books; actual scan-question and source-word search passed browser checks.0.5.8 QA refinements await deployment.
 
 ## 0.5.7 deployment notes

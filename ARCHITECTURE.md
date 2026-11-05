@@ -1,3 +1,7 @@
+## 0.5.8 search boundary
+
+Literal reader search uses the existing bookPages bookId index and bounded results, including common words/numeric years. Conversational global search retains its separate token/ranking behavior. Explicit page requests validate bounds; bare out-of-range numbers remain searchable text. Fullscreen and inline tutors both preserve the chosen unmapped book in general mode; neither silently substitutes a foundation pack. Strict source-only authorization/validation remains separate.
+
 ## 0.5.7 reader and inline teacher
 
 PDF rendering stays one page at a time. Pointer gestures reject predominantly vertical/slow/tiny movement, clamp page bounds and preserve vertical scroll/pinch zoom. Keyboard shortcuts skip editable controls. Search uses existing local bookPages and bounded cursor retrieval; preparation resumes existing indexedPages and never claims OCR or scan text support.

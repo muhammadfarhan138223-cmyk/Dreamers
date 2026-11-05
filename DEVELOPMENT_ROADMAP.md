@@ -1,3 +1,7 @@
+## 0.5.8 verified checkpoint — 2026-11-05
+
+Reader search, typed scan questions, genuine simpler follow-up, conversation reload and fullscreen unmapped-book controls verified live. Physical Android swipe/install/airplane-mode checks remain the next verification task. Missing First Year resources, reviewed question coverage and later account/admin milestones remain pending; read PROJECT_STATUS for exact boundaries. Historical implementation notes follow.
+
 ## 0.5.7 focused reader checkpoint
 
 Swipe/keyboard/bottom controls, integrated page/word search and inline simple AI questions are implemented. All existing books share the reader; scans allow typed questions but do not gain OCR. Pending: live QA, physical touch-device verification, then missing XI resources/reviewed chapter banks and accounts. Keep strict evidence distinct from general teaching.

@@ -1,3 +1,9 @@
+## 0.5.8 verification completed — 2026-11-05
+
+- Verified live typed question and simpler follow-up in the scanned Pakistan Studies reader; both answers persisted through reload.
+- Verified fullscreen general questions stay enabled for the selected unmapped book, while strict source-only mode blocks missing passages.
+- Recorded actual browser evidence and remaining physical-device/content-review limits; no application code changed in this documentation checkpoint.
+
 ## 0.5.8 — 2026-11-04
 
 - Fix fullscreen tutor selection for unmapped books: allow general questions and retain the chosen book instead of substituting Biology.

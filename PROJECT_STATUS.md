@@ -1,151 +1,44 @@
-# 0.5.8 QA refinement — 2026-11-04
-
-Current local checkpoint: 0.5.8, 88 tests/build pass. Readable-text results now stay in a compact scrollable list and disclose their 12-text-result cap. A bare year such as1969 is searched as text when outside the page range; explicit page requests retain bounds. The fullscreen tutor also defaults unmapped books to general questions, preserving that book instead of falling back to Biology, while strict source-only mode stays opt-in. Beginner prompts follow the student's requested analogy setting, use subject-specific meanings and avoid raw markdown.
-
-0.5.7 is live at3301678dd74ee90d418f180be41e250958865767 / production dpl_5t4UdokvLJbndH4JG94D7PznE4nK, preview dpl_EGBQkoogd2GBygkbWAM1wHEy8U1q READY. Health returned AI configured /16 books. Browser verified Pakistan Studies scanned PDF, Urdu numeral jump to11, keyboard turn to12, clear scan-search limitation, and a genuine Roman Urdu typed-question answer. The model used a household analogy when school was requested;0.5.8 tightens that instruction without claiming guaranteed adherence. Biology kidney search prepared252 pages, returned actual source snippets and opened page13. Physical touch/airplane-mode testing remains pending.
-
-Next: deploy/test0.5.8, repeat typed question and follow-up, verify saved conversation after reload, then continue missing books/reviewed curriculum. No new secret/service/dependency or migration; shell22 preserves books/progress.
-
----
-
-# Current checkpoint — 0.5.7 (2026-11-04)
-
-Literal reader search now also finds common words and numeric years without conversational stop-word filtering.
-
-Reader improvements: touch swipe between pages, keyboard arrows, bottom page navigation, page-number entry committed on Enter/blur, and integrated Find page / word. A word search prepares readable pages locally with progress/stop/resume; scanned-only books report their limitation and still allow page jumps. The confusing index-ready button has been removed.
-
-Inline Ask Dreamers works in every registered book, including books with no chapter map and scanned pages. Students type their word/line/question; Roman Urdu is the default, with five languages. Readable excerpts remain bounded to 2,000 characters, history to 2,000 characters per request. The AI cannot see scanned images and the UI states that. Answers are general AI explanations, not verified textbook answers. Saved book-specific conversations reopen offline. The main tutor's beginner/friendly prompts now start with a plain meaning and everyday example; specifically requested background is allowed without injecting unrequested syllabus topics. Strict evidence mode continues to reject missing source text.
-
-87 tests and production build pass; tests include swipe direction/bounds/vertical-scroll rejection, English/Urdu/Arabic page numbers, scanned/unmapped context and strict-evidence API rejection. Preview/live browser verification pending for this checkpoint. Previous verified application: 0.5.6 / fca9778bcb86e4deb8586d4498dc8d8d2a826c75; documentation head efc0d6af047f444fbb60f07d6b23162d6d62d0b5.
-
-No new service, secret or dependency. Shell v21; IndexedDB v3 unchanged; existing downloads/progress preserved. AI/Upstash env requirements unchanged. Next: deploy and verify search, page navigation, scanned-book question, follow-up answer and conversation reload; physical Android gesture/airplane-mode checks remain pending.
-
----
-
 # DREAMERS project status
 
-Updated: 2026-11-04. Current release checkpoint: **0.5.6 — owner-provided textbook library**.
+Updated: 2026-11-05. Current release: **0.5.8 — book reader, search and simple AI teacher**.
 
-## Current implementation
+## Verified release
 
-- Students open a book already supplied by Dreamers. No student PDF upload/file chooser is exposed in the library. Read automatically transfers only that book, verifies its exact SHA-256/size, writes the complete Blob to IndexedDB, prepares the offline reader and opens it inside the app. Optional Download PDF exports the original. Previously imported personal books remain preserved and readable under device management.
-- 16 exact owner-supplied resources (259 MB total): 11 catalogued textbooks, two grammar resources, two earlier editions and one reference workbook. This is not every Punjab XI/XII book. The app does not preload the collection or require students to manage files.
-- Build preparation materialises the vetted public-source copies under versioned same-origin /textbooks URLs. All 16 public copies were fetched and checked against the supplied attachments. The registry contains fixed source URLs, not an arbitrary proxy. Build fails on size/digest mismatch; generated PDFs are excluded from Git. Original publisher ownership is unchanged; no open licence is asserted.
-- 15 original cover/title-page thumbnails are present in the shelf and applicable subject cards. Biology XII's supplied chapter collection has no cover; it has an honest labelled fallback rather than an unrelated edition's artwork.
-- First-year/second-year/device-copy filters, progress/cancel/retry during transfer, optional PDF download and storage removal. Read-first subject entry avoids presenting an unavailable question bank as complete. Existing original science practice, exercises, games and AI page explanations remain available.
-- English XII chapter page offsets corrected against rendered headings. Shell v20 caches cover assets as encountered and preserves IndexedDB books/learning progress and the separate PDF engine cache.
+- Latest verified application commit: `033f4b916cc7e584612accbcb1c7cc6e26800000`, exact tree `98e0dad792d7866af264c765b7f81cb15920128d`.
+- Live: https://dreamers-sooty.vercel.app/books
+- Repository: https://github.com/muhammadfarhan138223-cmyk/Dreamers
+- Vercel project `dreamers` / `prj_ol5nVtQ2DprVqMgNY140bM86Lsvu`, team `team_jwuAswY9vD3bNmcKQM2LqjoF`. Preview `dpl_AvhwWezEqpk9VdAeD13p4nE466Ju` and production `dpl_5xx1ejpMYt7BhZsRcnYakwSKQbYV` READY. Stable health returned 0.5.8, 16 hosted books and AI configured. Preserve preview protection.
+- 88 automated tests, TypeScript and production build passed. The resumed session changed documentation/screenshot only, so these checks were not unnecessarily repeated.
 
-## Verification and deployment checkpoint
+## Completed
 
-83 tests, TypeScript and the final production build passed. Coverage includes exact catalogue identities, failed/truncated/changed/oversized transfers, cancellation, worker offline behavior and existing question/progress flows.
-Latest verified application commit: fca9778bcb86e4deb8586d4498dc8d8d2a826c75 (0.5.6), exact tree 11784428279fff96a353d3b11eb163fc6918bb77. Preview dpl_HYCF1cD4rBmkZPmjyhbXvUCdVHdZ and production dpl_8ch1wiP68iiMiSYRsMzs9CaQBfhV READY. Stable alias health returned version 0.5.6, hostedBooks 16, aiConfigured true. Browser on a fresh shelf opened the hosted English XII PDF with no file input, rendered page 85 (A Letter to God), then reloaded/reopened the retained copy at page 85. Dashboard English XII entered Read mode with corrected chapter links. Screenshot: docs/screenshots/textbook-library-0.5.6.png. Full network-disconnected physical-device testing remains pending.
-Live: https://dreamers-sooty.vercel.app
-Repository: https://github.com/muhammadfarhan138223-cmyk/Dreamers
-Vercel: dreamers / prj_ol5nVtQ2DprVqMgNY140bM86Lsvu / team_jwuAswY9vD3bNmcKQM2LqjoF. Keep preview protection.
+- Direct in-app reading of 16 exact supplied PDF resources: 11 catalogued textbooks, two grammar resources, two earlier editions and a reference workbook (259 MB total). Students do not upload files. Opening a book transfers only that exact copy, verifies SHA/size, saves its Blob in IndexedDB and prepares the reader for offline reuse. Optional PDF export, existing personal copies and progress remain intact.
+- Reproducible build preparation from vetted sources; generated PDFs excluded from Git. Fifteen genuine cover/title-page previews. Biology XII supplied collection lacks a cover. This is not every Punjab XI/XII book.
+- One-page PDF rendering, horizontal touch swipe, keyboard arrows, bottom controls and page-number entry on Enter/blur. Vertical/pinch reading gestures are preserved by implementation; physical Android gesture testing remains pending.
+- Integrated Find page / word replaces index-ready jargon. Local readable-text preparation has progress/stop/resume. Literal search supports common words and numeric years; page requests accept English/Urdu/Arabic digits. Up to12 text results plus matching chapter headings appear in a compact list. Scanned-only books clearly report no OCR rather than pretending their image text is searchable.
+- Inline Ask Dreamers in every book: typed words/lines/questions, five languages, Roman Urdu default, simpler follow-up button, bounded relevant passage/recent conversation and book-specific saved answers. Saved answers reopen on the device. New AI answers require internet; the AI does not see scanned page images.
+- Fullscreen teacher accepts general questions in unmapped books without substituting Biology. Strict source-only mode continues to require a readable passage. Beginner/friendly prompts start with simpler wording/examples and allow explicitly requested related background separately from exam scope.
+- Earlier offline packs/practice/XP, original science chapter banks, local exercise extraction, games, notes/bookmarks, flashcards/revision, assessment history, source appendices and local backups preserved. Their coverage/review limits remain; see CHANGELOG and roadmap.
 
-## Outstanding
+## Browser verification
 
-- Missing First Year textbook copies and additional subjects, reviewed maps for remaining resources, Biology XII original cover. Do not describe the 16 resources as all Punjab textbooks.
-- Full question-bank/subtopic coverage and teacher-reviewed exercise keys in every subject. No guarantee of every possible MCQ. 2027 official pairing remains unverified; older board notices and book appendices retain their labels.
-- Accounts, dedicated Supabase/RLS/cloud synchronization and secured administration remain planned. No migrations applied; IndexedDB v3 unchanged.
-- AI remains online only; production AI and Upstash configuration were verified in 0.5.5 and are unchanged. Required: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN; optional AI_BASE_URL. No secrets committed/retrieved. Guest durable quotas preserved.
-- First book opening requires internet to transfer bytes and reader assets. Browser eviction or device clearing can remove downloaded copies. Physical Android airplane-mode testing is still pending.
+- 0.5.7/0.5.8: Pakistan Studies PDF opened directly; Urdu page query jumped to11, keyboard advanced to12; scanned-word search showed its actual limitation. Biology kidney search prepared252 pages, returned original-text snippets and opened result page13.
+- 2026-11-05: genuine configured-provider question about aain received a Roman Urdu school-classroom analogy. I still don't understand produced a different school-canteen analogy. Both replies and their questions survived closing/reloading/reopening the saved book. This tests interaction/persistence, not factual completeness.
+- Fullscreen teacher: Pakistan Studies selection showed Ask about a word or idea, enabled general Send, blocked Send when source-only was selected without a passage, then re-enabled it when general mode was restored. No extra provider call was needed for this boundary check.
+- Screenshot: `docs/screenshots/reader-tutor-0.5.8.png`. Full disconnected-browser and physical Android installation/airplane-mode testing remain unverified; worker-disconnection/IndexedDB/gesture-boundary tests pass.
 
-## Exact next task
+## Partial features and known limitations
 
-Expand the missing First Year collection from authorised publisher resources and review its exact editions/chapter maps. Test installation/airplane mode on physical Android, then continue question-bank coverage and accounts. The no-student-upload book flow is verified live.
+- Missing First Year books, remaining exact-edition chapter maps, Biology XII cover, comprehensive reviewed question banks and current official board pairing remain outstanding. Do not call the current bank every possible MCQ or all syllabus coverage.
+- AI replies are general generated explanations, not verified textbook answers. They can over-simplify or show raw Markdown despite style instructions; educator review remains needed. Source-quotation checks do not prove every claim.
+- Scanned PDFs need OCR before literal word search/automatic passage extraction; students can type a word/line into the teacher now. No image interpretation is claimed.
+- Accounts, dedicated Supabase/RLS, authenticated cloud sync/guest migration, secured admin, complete adaptive/readiness workflows and advanced media remain planned. Guest events stay local and are never called cloud-synced.
+- First opening needs internet for the chosen PDF/reader assets. Browser storage clearing/eviction can remove local copies. Progress JSON excludes full PDF bytes/indexes.
 
----
+## Database and configuration
 
-## Historical checkpoints (superseded where noted above)
-
-
-Updated: 2026-11-04. Current checkpoint is 0.5.5, textbook exercise extraction and expanded science practice. Read the roadmap, architecture, deployment and changelog before changing code.
-
-## Current checkpoint
-
-- 0.5.5 adds locally extracted textbook exercise MCQs and topic practice for all mapped chapters in Chemistry XI, Chemistry XII and Physics XII. Biology XII Chapters 13 and 17 have more original questions.
-- Real-PDF extraction found 134 Biology XII, 143 Chemistry XI, 144 Chemistry XII and 71 Physics XII readable exercise items. OCR-damaged and scanned pages may not yield questions. Checked exercise answers cover Biology XII Chapters 13, 14 and 17. Remaining extracted questions save choices without grading.
-- Other subjects and unreviewed exercise keys remain outstanding. These banks do not establish complete subtopic or 2027 board coverage.
-
-- 0.5.4 adds an original offline Biology XII bank for all 13 chapters, with selectable topic notes and source-page mapping. Available content covers selected topics rather than every textbook paragraph or possible exam question. Other books retain checked chapter maps where available and can use saved practice or page-grounded generation.
-- MCQ → short → long → next chapter with one question at a time, local answer/review progress and mock assembly from the registered book’s appendix. The applicable 2027 official scheme is unverified.
-- Main loading releases the app before optional network pack setup. The tutor accepts general questions without a PDF and preserves strict evidence for selected passages. Source PDFs remain device-local.
-
-- 0.5.1 gallery/search release verified on the production alias. GitHub 1ba17633d6690da7712db7f6abe040df75c326d8. Protected preview dpl_2JBxqZSe9m2zh7ZGhTBDtiKdqLKt and production dpl_J1DWgfgYn9aWtWny6SF7vpAhc9sY were READY.
-- 0.5.2 is live at GitHub 4f27cd62b2983e2ba52d20b72d52fee2d65d026f, preview dpl_99Wu2EpsqGoFU8M6JsDviy94Gd8S and production dpl_F8PohCrwwkBUJjPeTbcx5sx8SUN9 (READY). Browser checks covered mission feedback and reload persistence, quiz score and full-paper gaps.
-- 0.5.2 adds offline Kidney Courier (eight scenes, progress and missed-scene replay), Chapter 14 original short and long answers, and timed sampled MCQ quizzes with local last score. The full-book blueprint reports uncovered slots until all required questions are available.
-- Mobile cover gallery links to publisher editions; they are saved individually via the local file chooser. PECTAA’s Drive publisher download prompted browser verification during QA. Cloud-browser file transfer returned no readable bytes, so fresh-browser real PDF import and disconnect testing are pending for this release.
-- Public health returned configured, and a fresh production AI search found Biology XII Chapter 14 for kidney/nephron. All six AI/Upstash metadata entries were production scoped. No credentials changed.
-- 0.5.3 adds the official Biology XI Annual 2026 chapter counts and long pairs under Test, verified against BISE Sargodha PDF pp. 55–56. The app applies no exclusions to other sessions.
-- Shell v19, IndexedDB v3, no cloud migration, no new runtime dependency.
-
-## Deployment
-
-Live: https://dreamers-sooty.vercel.app
-Repository: https://github.com/muhammadfarhan138223-cmyk/Dreamers
-Vercel project: dreamers / prj_ol5nVtQ2DprVqMgNY140bM86Lsvu / team_jwuAswY9vD3bNmcKQM2LqjoF.
-Use the linked production project and keep the existing preview protection.
-
-## Completed in this release
-
-- New class → one subject → chapter workspace, saved focus, colorful cards, light default for new devices, dark/light/system settings, short Q&A first and five learning tabs. Four-item mobile bottom navigation; optional tools collapsed. Sticky mobile tabs account for the header. Physical-device testing is pending.
-- PDF shelf follows selected subject/class with an all-books option and an early Add PDF button. Private full-PDF import, SHA-256 duplicate prevention, auto-classification, offline Blob reader, selectable-text indexing/search, page resume/export/removal remain working. Existing private imports are not automatically shared with other devices or students.
-- Sixteen canonical supplied PDF identities, seven checked maps and 86 headings. Biology XI was not supplied; Biology XII is a chapter collection without a cover/edition page. Unmatched private imports do not inherit checked chapter maps. Chapter labels use heading/page rather than invented ordinal chapter numbers.
-- Online `/api/study` creates up to three short questions/statement MCQs or one long question per selected readable page. Policy v3 requires exact contiguous source-extract answer keys, quote/key checks and a separate model support audit. Short/MCQ keys have ≥20 characters; long keys have 300–1800 characters and need ≥600 source characters. Source keys retain book language; question wording may be translated. Simplification/translation/stories use separately labelled AI explanations.
-- Saved question sets and MCQ choices work locally and survive reload/update and JSON backup. Content revision IDs prevent changed questions inheriting old answers. Earlier policy sets remain stored/exportable, but are withheld until regenerated. Generating questions does not award XP.
-- AI configuration now refreshes on window focus/reconnection. Search checks health again before reporting missing setup. Tutor explicitly receives original lesson text; private unmatched PDF references have their own context rather than default Biology grounding. Optional related-story mode is off by default.
-- Owner AI/Upstash configuration is present in production and genuine teacher/search/practice calls succeeded. Metadata was checked without decrypting credentials. Secret rather than Config types work; no key re-entry is needed.
-
-## Earlier working scope preserved
-
-Three original foundation science packs: 12 lessons, 36 MCQs, nine written self-checks, diagrams and light simulations. Offline attempts/drafts, resumable scored challenges, deduplicated XP, levels/achievements, notes/bookmarks, flashcards/revision, evidence summaries, backups and deletion. Global search covers checked headings, downloaded lessons and indexed private PDF passages, with subject/class/book/result filters and online AI topic discovery. Full PDF word search needs selectable text and indexing. No OCR is implied.
-
-PWA manifest/icons, HTTPS, standalone shell v13, separate preserved PDF.js engine cache and IndexedDB v3. Queued guest events remain local and are never described as cloud-synced. No cloud migration or unrelated project change.
-
-## Verification
-
-56 tests pass; production build includes successful TypeScript checks. Tests cover source-answer expansion rejection, malformed quotes/keys/audits, exact long extracts, shared quota, API origin/body bounds, worker network failures, storage upgrade, backup of source sets/choices/focus and existing progression/search behavior. Initial corrupted generated Turbopack cache was resolved by deleting only .next and rebuilding.
-
-Live 0.4.2: health configured=true, manifest standalone, shell v13 and deployment/alias READY. Browser imported and rendered the actual supplied 252-page Biology XII PDF privately. Genuine v3 generation produced three short questions and two statement MCQs with exact source keys. Answers were inspected; selected MCQ feedback survived reload, and short sets persisted through shell update. Both themes inspected; dark secondary-button computed contrast verified after transitions. Earlier live checks covered original-source tutor, private-PDF tutor, AI topic search, profile link, global filters and all main HTTPS routes/assets/API boundaries.
-
-Quality finding: matching quotations and a second model audit still accepted unsupported expansion (long answers and a definition inferred from an outcome list). V3 therefore checks answer keys deterministically as source extracts. Questions still need educator review for relevance/ambiguity; the source itself is not independently verified. Generated AI tutoring is not hallucination-free. See docs/VERIFICATION.md for history. Positive live v3 long generation, physical Android installation/airplane mode and mobile viewport emulation were not verified; browser tools exposed no network/viewport controls.
-
-## Partial / pending
-
-- Complete chapter question banks/coverage tracking: current generation is page-sized, not a whole chapter or full syllabus. Teacher-reviewed questions and source correctness remain pending.
-- Biology XI copy, exact publisher editions and current official board pairing scheme/exclusions. XI Biology Annual 2026 is verified and labelled as historical. The applicable 2027 scheme is not verified. No scheme-based deletion, weightage or readiness claim has been applied.
-- Nine scan/support/legacy maps need review. OCR, whole-book AI retrieval and reliable exam-scope mapping remain pending.
-- Accounts, dedicated Supabase/RLS migrations, authenticated cloud sync/guest migration, secure administration, full readiness/adaptive plans and advanced media remain pending. No public chat or insecure admin operations enabled.
-
-## Privacy, environment and known limits
-
-Restricted supplied PDF bytes are absent from public Git/Vercel. Students import permitted copies once on each device; JSON progress backups exclude PDF bytes/indexes, so keep/export originals separately. Browser eviction remains possible. Original attachments unchanged.
-
-No environment needed for guest offline learning. Production AI: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN; AI_BASE_URL optional. All six currently target production as sensitive variables. No secrets retrieved/printed/committed. Preview has no AI credentials by design. Tutor/search/practice share durable guest-network limits (12 actions/day, 3/minute); practice generation may use two bounded provider calls. Provider exhaustion fails gracefully. Students never enter keys.
-
-Database migration status: IndexedDB v3 unchanged; no cloud migration. Existing unrelated Supabase resources untouched. Existing Vercel SSO retained. No paid resource created. No known blocking production error; browser/device coverage and educator review remain incomplete.
+IndexedDB v3, shell v22 and preserved PDF engine cache6.4.299. No cloud migration or new service/dependency. Existing settings store holds latest12 reader-chat messages per book. Owner-only server env: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN; AI_BASE_URL optional. Production keys/quotas unchanged; no secrets retrieved or committed. Students supply no keys. Shared durable guest-network allowance remains12/day and3/minute.
 
 ## Exact next task
 
-Obtain a usable official Biology XI copy and confirm chapter headings against that edition. Then add educator-reviewed content and enough diverse questions for all Biology XII pairing slots. Continue to track official board/session confirmation separately from book appendices. Test PDF indexing and offline reload with a fresh mobile browser using a known local PDF. Accounts and sync remain planned.
-
-## 0.5.0 prepared checkpoint — 2026-10-31
-
-At the user's suggestion, PDF endings were inspected with text extraction and rendered-page checks. Found Biology scheme at PDF 247–248 (printed label 2026–27), Chemistry instructions at PDF 262, Computer Science instructions at PDF 141–142, English instructions at PDF 160–161. Chemistry/Computer/English pages do not state an exam year; filenames do not establish one. No official board confirmation has been obtained. Urdu has a partial instruction page at PDF 153 (starts at Q3) and model paper 154–156; no complete Urdu scheme was invented. Scheme/model appendices are linked in the private PDF shelf.
-
-Four opt-in book-based study plans show actual marks, question groups and chapter relationships with source-page links and board-pending status. Biology/Chemistry two-chapter long pairs and Computer single-chapter long questions are distinguished. English unit/grammar sections are mapped as observed. Long-omitted chapters remain available for short/MCQ study. Biology chapters 13–25 and Chemistry 17–33 were checked; Computer 1–9 matches its inspected map.
-
-Last chapter ends now exclude appendix/model pages (Biology246, Chemistry261, English159, Computer140). Chapter preparation saves one page at a time with pause/manual resume, cached-set reuse, 22-second request spacing, visible gaps for scans/exercise-only/unsupported pages, and fail-safe quota/network/storage interruption handling. No closed-app background work or full concept mastery is implied. Preparation journals, selected chapter/mode/language and question choices remain local and backed up. Five questions per screen reduce long scrolling.
-
-64 tests, TypeScript/production build pass. New cases cover interrupted journals after successful question writes, replay without duplicate provider calls, pause/offline state, exercise gaps, language/policy coverage, scheme totals/source bounds and retained non-long chapters. Local preview rendered SSR but did not hydrate, matching the prior environment issue; it was stopped. Live browser verification pending. Shell v14, IndexedDB v3 unchanged; no new service, secret, dependency or cloud migration.
-
-Next: push/test preview, release and verify scheme enable/pair navigation, private source links, chapter journal failure/resume and persisted view on production. Then add indexed whole-book retrieval and remaining account/sync/revision milestones.
-
-## 0.5.0 live verification
-
-Production f6a6c2542399f8e3c12275479035085683d24abe / dpl_8pLfgjkQtbouureyDP8J3hGFfDaM READY; protected preview dpl_GjYWcdMPiSe7MB99XWhzs5TrHmM9 READY. Browser preserved a privately imported actual Biology PDF through upgrade, enabled the book plan, showed Ch13 MCQ1/Q2-short3/long13+25 (4+4), navigated to Ecology and correctly bounded it to 19 pages (228–246), then restored chapter/plan through shell update. Source link opened the actual saved PDF247 and rendered/extracted the printed scheme. Chemistry showed Ch17/long17+21; Computer showed75 total and8-mark single-chapter long questions; English showed20+80 and source-defined unit/grammar sections.
-
-Real chapter request returned429 shared-network quota. Journal paused with0/11 (no fake saved pages), exposed manual Resume and retained that state after reload without auto-running. No quota reset/bypass was attempted. Positive multi-page generation, request spacing and interruption recovery are tested with isolated fixtures, not claimed live. Five appendix-bearing source files' SHA256/byte sizes match canonical identities.
-
-Exact next feature: local indexed-book passage retrieval inside focused Ask AI, with explicit chosen source and bounded excerpt. New live AI calls are blocked by this QA network's daily allowance; preserve rate limits. Broader teacher review, official board confirmation, missing Biology XI and dedicated accounts/sync remain pending.
+Test touch swipe, install and airplane-mode reading on physical Android; address actual device failures. Then expand missing authorised First Year resources and educator-reviewed question coverage. Preserve direct Read/no-student-upload, verified-vs-generated separation and source-only safeguards. Read this file, architecture, deployment, changelog and roadmap before continuing; do not regenerate the app.
