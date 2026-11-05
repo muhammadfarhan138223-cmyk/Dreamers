@@ -3,7 +3,7 @@ export function GET() {
   return Response.json(
     {
       status: "ok",
-      version: "0.5.6",
+      version: "0.5.7",
       storage: "device-local",
       hostedBooks: HOSTED_BOOKS.length,
       aiConfigured: !!(

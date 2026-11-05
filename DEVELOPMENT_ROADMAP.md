@@ -1,3 +1,7 @@
+## 0.5.7 focused reader checkpoint
+
+Swipe/keyboard/bottom controls, integrated page/word search and inline simple AI questions are implemented. All existing books share the reader; scans allow typed questions but do not gain OCR. Pending: live QA, physical touch-device verification, then missing XI resources/reviewed chapter banks and accounts. Keep strict evidence distinct from general teaching.
+
 ## 0.5.6 priority checkpoint
 
 Implemented the owner's requested hosted-book model: direct Read, automatic offline copies, optional export and genuine source cover/title pages. Remaining: missing XI copies/current editions, remaining chapter maps, teacher-reviewed question coverage, current official pairing and dedicated accounts/admin. Keep the no-student-upload flow when adding new books.

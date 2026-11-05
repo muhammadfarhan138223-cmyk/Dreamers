@@ -1,3 +1,7 @@
+## 0.5.7 deployment notes
+
+No new env variables/services/dependencies. Existing AI_PROVIDER, AI_MODEL, AI_API_KEY and Upstash secrets serve inline reader chat through the same protected endpoint/quota. Preview has no AI credentials by design; test input boundaries with fixtures and real responses on production after preview/build checks. Shell21 preserves book Blobs and the versioned PDF engine cache. 87 tests/build passed; release verification pending.
+
 0.5.6 live: fca9778bcb86e4deb8586d4498dc8d8d2a826c75. Preview dpl_HYCF1cD4rBmkZPmjyhbXvUCdVHdZ and production dpl_8ch1wiP68iiMiSYRsMzs9CaQBfhV READY. Stable alias health verified 0.5.6/16 hosted books/AI configured; browser direct PDF read and reload persistence passed.
 
 ## 0.5.6 textbook assets

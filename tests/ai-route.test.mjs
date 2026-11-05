@@ -140,6 +140,46 @@ test("AI route gates source evidence and withholds malformed, invented or trunca
     ).json();
     assert.match(general.answer, /not textbook-verified/);
     assert.equal(sent.response_format, undefined);
+    // A scanned book without a checked chapter map still supports typed general questions.
+    const scanQuestion = {
+      question: "Aain kya hota hai?",
+      language: "Roman Urdu",
+      mode: "Complete Beginner",
+      textbookId: "pakistan-studies-xii-supplied",
+      topic: "book-overview",
+      referenceOnly: false,
+      bookContext: { title: "Pakistan Studies", page: 11, text: "" },
+    };
+    assert.equal((await POST(request(scanQuestion))).status, 200);
+    assert.match(sent.messages[0].content, /Pakistan Studies/);
+    assert.ok(
+      !sent.messages[0].content.includes("Original foundation context:"),
+    );
+    assert.match(sent.messages[0].content, /direct one-sentence meaning/);
+    assert.equal(JSON.parse(sent.messages[1].content).pdfReference.text, "");
+    const beforeStrict = providerCalls;
+    assert.equal(
+      (await POST(request({ ...scanQuestion, referenceOnly: true }))).status,
+      400,
+    );
+    assert.equal(providerCalls, beforeStrict);
+    assert.equal(
+      (
+        await POST(
+          request({
+            ...scanQuestion,
+            textbookId: undefined,
+            contextKind: "pdf",
+            topic: "pdf-page",
+          }),
+        )
+      ).status,
+      200,
+    );
+    assert.match(sent.messages[0].content, /cannot see its image/);
+    assert.ok(
+      !sent.messages[0].content.includes("Original foundation context:"),
+    );
     providerAnswer = JSON.stringify({
       supported: true,
       answer: "Particles spread from higher to lower concentration.",

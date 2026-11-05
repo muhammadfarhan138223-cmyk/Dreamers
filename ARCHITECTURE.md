@@ -1,3 +1,9 @@
+## 0.5.7 reader and inline teacher
+
+PDF rendering stays one page at a time. Pointer gestures reject predominantly vertical/slow/tiny movement, clamp page bounds and preserve vertical scroll/pinch zoom. Keyboard shortcuts skip editable controls. Search uses existing local bookPages and bounded cursor retrieval; preparation resumes existing indexedPages and never claims OCR or scan text support.
+
+`ReaderAssistant` keeps a book-specific conversation in IndexedDB settings (`reader-chat:v1:<book id>`, latest12 messages), retains draft/request while switching reader tools and aborts on reader close. Offline replies are retained; new AI questions require internet. Typed scan questions explicitly send no fabricated source text. `/api/ai` permits book-overview and empty scan excerpts only for explicit general mode, preserves source-only validation, and never replaces an unknown book with a Biology pack. Responses still use owner provider/Redis quotas. Educational prompts define words before examples, and distinguish requested extra background from textbook evidence. No image/OCR capability is implied.
+
 ## 0.5.6 owner-provided textbook delivery
 
 This supersedes the earlier personal-import-only boundary. `hosted-books-data.json` contains vetted source URLs for the exact 16 user-supplied PDFs. `prepare-textbooks.mjs` copies supplied local originals when DREAMERS_BOOK_SOURCE_DIR is specified, otherwise downloads the registered public copies during build. Every byte size and SHA-256 must match the existing catalogue before an atomic rename to ignored public/textbooks. Source drift fails the build; no arbitrary URL API is exposed. Copyright ownership is unchanged and no open licence is inferred.

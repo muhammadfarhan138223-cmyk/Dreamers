@@ -1,3 +1,11 @@
+## 0.5.7 — 2026-11-04
+
+- Add mobile swipe and keyboard page turning, bottom navigation, and reliable page-number entry.
+- Replace technical index controls with local Find page / word, automatic readable-text preparation, progress/stop/resume and honest scan limitations.
+- Add inline book-specific AI questions, language choice, follow-up simplification and saved offline conversation history. Scans accept typed questions without pretending image understanding.
+- Support general questions in unmapped books and personal scans while retaining strict source-only validation, shared quotas and server-only credentials. Simplify beginner/friendly teaching across the app and allow explicitly requested related background.
+- Shell v21; no database migration or new dependency.
+
 ## 0.5.6 — 2026-11-04
 
 - Replaced student PDF import with direct app-hosted reading of the 16 exact supplied books/resources, automatic verified offline copies, transfer progress/cancel/retry and optional PDF downloads.

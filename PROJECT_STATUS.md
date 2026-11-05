@@ -1,3 +1,15 @@
+# Current checkpoint — 0.5.7 (2026-11-04)
+
+Reader improvements: touch swipe between pages, keyboard arrows, bottom page navigation, page-number entry committed on Enter/blur, and integrated Find page / word. A word search prepares readable pages locally with progress/stop/resume; scanned-only books report their limitation and still allow page jumps. The confusing index-ready button has been removed.
+
+Inline Ask Dreamers works in every registered book, including books with no chapter map and scanned pages. Students type their word/line/question; Roman Urdu is the default, with five languages. Readable excerpts remain bounded to 2,000 characters, history to 2,000 characters per request. The AI cannot see scanned images and the UI states that. Answers are general AI explanations, not verified textbook answers. Saved book-specific conversations reopen offline. The main tutor's beginner/friendly prompts now start with a plain meaning and everyday example; specifically requested background is allowed without injecting unrequested syllabus topics. Strict evidence mode continues to reject missing source text.
+
+87 tests and production build pass; tests include swipe direction/bounds/vertical-scroll rejection, English/Urdu/Arabic page numbers, scanned/unmapped context and strict-evidence API rejection. Preview/live browser verification pending for this checkpoint. Previous verified application: 0.5.6 / fca9778bcb86e4deb8586d4498dc8d8d2a826c75; documentation head efc0d6af047f444fbb60f07d6b23162d6d62d0b5.
+
+No new service, secret or dependency. Shell v21; IndexedDB v3 unchanged; existing downloads/progress preserved. AI/Upstash env requirements unchanged. Next: deploy and verify search, page navigation, scanned-book question, follow-up answer and conversation reload; physical Android gesture/airplane-mode checks remain pending.
+
+---
+
 # DREAMERS project status
 
 Updated: 2026-11-04. Current release checkpoint: **0.5.6 — owner-provided textbook library**.

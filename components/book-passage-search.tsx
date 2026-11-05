@@ -50,7 +50,7 @@ export default function BookPassageSearch({
       setHits(found);
       if (!found.length)
         setNotice(
-          "No matching saved passage yet. Open your PDF and choose Index book text to prepare more pages. Image-only scans need OCR, which is not enabled.",
+          "No matching saved passage yet. Open your PDF and use Find page / word to search more pages. Image-only scans need OCR, which is not enabled.",
         );
     } catch {
       if (request === sequence.current)
