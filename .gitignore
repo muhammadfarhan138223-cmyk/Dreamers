@@ -9,3 +9,6 @@ out/
 *.log
 
 public/pdf-worker/
+
+# Reproducible, integrity-checked owner textbook assets
+public/textbooks/

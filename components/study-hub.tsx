@@ -17,6 +17,7 @@ import {
   RefreshCw,
   ChevronRight,
 } from "lucide-react";
+import { bookCover, subjectBook } from "@/lib/hosted-books.mjs";
 import { TEXTBOOKS, textbook } from "@/lib/textbooks.mjs";
 import * as db from "@/lib/db";
 import { STUDY_POLICY } from "@/lib/study-practice.mjs";
@@ -156,7 +157,7 @@ export default function StudyHub({
 }) {
   const [choosing, setChoosing] = useState(!focus),
     [grade, setGrade] = useState<"XI" | "XII">(focus?.grade || "XI"),
-    [mode, setMode] = useState("mcq"),
+    [mode, setMode] = useState("pdf"),
     [sourceKind, setSourceKind] = useState("book"),
     [books, setBooks] = useState<LocalBook[]>([]),
     [sets, setSets] = useState<SavedSet[]>([]),
@@ -245,7 +246,7 @@ export default function StudyHub({
         } else {
           setBookChoice("");
           setChapter("");
-          setMode("mcq");
+          setMode("pdf");
           setLanguage("English");
           setSourceKind("book");
         }
@@ -742,11 +743,20 @@ export default function StudyHub({
                   setBookChoice("");
                   setChapter("");
                   setPage(1);
-                  setMode("mcq");
+                  setMode("pdf");
                   setNotice("");
                 }}
               >
-                <s.icon size={30} />
+                {bookCover(subjectBook(s.id, grade)?.id) ? (
+                  <img
+                    className="subject-book-cover"
+                    src={bookCover(subjectBook(s.id, grade)?.id)!}
+                    alt={`${s.name} textbook cover or title page`}
+                    loading="lazy"
+                  />
+                ) : (
+                  <s.icon size={30} />
+                )}
                 <b>{s.name}</b>
                 <small>{s.hint}</small>
                 <ArrowRight size={18} />
@@ -806,7 +816,7 @@ export default function StudyHub({
               setNotice("");
             }}
           >
-            <option value="book">My textbook PDF</option>
+            <option value="book">Dreamers textbook</option>
             {base && (
               <option value="foundation">
                 Original basics · not syllabus-mapped
@@ -867,15 +877,15 @@ export default function StudyHub({
         <section className="add-study-book">
           <BookOpen size={35} />
           <div>
-            <h2>Read your {subject?.name} book offline</h2>
+            <h2>Your {subject?.name} book is here</h2>
             <p>
-              Your saved copy opens offline.{" "}
+              Read inside Dreamers. We keep the copy for offline use.{" "}
               {catalog
                 ? "Your chapter links are ready."
                 : "A matching supplied textbook file is not registered yet."}
             </p>
             <button className="primary" onClick={readPdf}>
-              Find this book <Download size={17} />
+              Read book <BookOpen size={17} />
             </button>
             {base && (
               <button
@@ -940,11 +950,11 @@ export default function StudyHub({
               <BookOpen size={32} />
               <h2>Textbook exercise MCQs</h2>
               <p>
-                Save the matching book PDF on this device to load readable
-                exercise questions. Chapter practice is available separately.
+                Open the book once to prepare its readable exercise questions.
+                Dreamers keeps the book automatically.
               </p>
               <button className="primary" onClick={readPdf}>
-                Find the textbook
+                Read book
               </button>
             </div>
           )
@@ -1038,7 +1048,7 @@ export default function StudyHub({
               <button className="primary" onClick={readPdf}>
                 {local
                   ? "Read this chapter in PDF"
-                  : "Open book & download options"}{" "}
+                  : "Read this chapter in PDF"}{" "}
                 <BookOpen size={17} />
               </button>
               {local && (
@@ -1414,13 +1424,16 @@ export default function StudyHub({
                 <h3>
                   {local || sourceKind === "foundation"
                     ? "Turn a page into practice."
-                    : "Your practice starts with your book."}
+                    : "Read this chapter first."}
                 </h3>
                 <p>
                   {local || sourceKind === "foundation"
                     ? "Make a small set from a readable page, then practise it offline. Image-only scans need OCR, which is not enabled yet."
-                    : "Add a matching PDF, or choose original basics above. No chapter content is invented."}
+                    : "Reviewed practice for this chapter is still being prepared. Read the original book now, or ask AI online to help with a selected page."}
                 </p>
+                <button className="primary" onClick={readPdf}>
+                  Read chapter <BookOpen size={17} />
+                </button>
               </div>
             )}
             {(local || sourceKind === "foundation") && (

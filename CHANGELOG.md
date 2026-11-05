@@ -1,3 +1,10 @@
+## 0.5.6 — 2026-11-04
+
+- Replaced student PDF import with direct app-hosted reading of the 16 exact supplied books/resources, automatic verified offline copies, transfer progress/cancel/retry and optional PDF downloads.
+- Added 15 original cover/title-page thumbnails to the shelf and matching subject cards. Biology XII explicitly lacks a supplied cover. Kept personal copies/progress intact.
+- Added reproducible build asset preparation from vetted sources, SHA/size verification, failure-closed builds and no public credential/proxy endpoint. Large generated PDFs stay outside Git.
+- Corrected English chapter page links, made new subject visits read-first and improved unavailable-practice guidance. Updated shell to v20.
+
 # 0.5.5 — 2026-11-04
 
 - Add a separate Exercise MCQs tab that reads questions directly from the local textbook PDF, preserves page links and saves attempts. Use checked keys for three Biology XII chapters, with ungraded self-check for other extracted questions. Incomplete and image-only layouts may need the printed PDF.

@@ -1,3 +1,9 @@
+## 0.5.6 owner-provided textbook delivery
+
+This supersedes the earlier personal-import-only boundary. `hosted-books-data.json` contains vetted source URLs for the exact 16 user-supplied PDFs. `prepare-textbooks.mjs` copies supplied local originals when DREAMERS_BOOK_SOURCE_DIR is specified, otherwise downloads the registered public copies during build. Every byte size and SHA-256 must match the existing catalogue before an atomic rename to ignored public/textbooks. Source drift fails the build; no arbitrary URL API is exposed. Copyright ownership is unchanged and no open licence is inferred.
+
+The browser fetches the same-origin versioned static PDF on Read, with progress, cancellation, three-minute network bound and size/SHA validation. Only a complete verified Blob is written to IndexedDB. Reader assets are prepared before the first new book is shown. Interrupted transfers cannot replace saved books. Reopening a saved book uses the existing Blob; service-worker updates preserve books and the separate engine cache. Ordinary use has no file input. Original exercise extraction and page-grounded AI now operate on these same local copies. Covers are original first pages in self-contained SVG wrappers; Biology XII has no invented cover.
+
 # Architecture
 
 Next.js 16 App Router, React 19 and TypeScript; Tailwind 4 with a compact original CSS design system. A catch-all app route rejects unknown API paths and renders one learning workspace, and client history navigation keeps downloaded learning usable without route fetches. API routes remain server-only and are excluded from service-worker caches.

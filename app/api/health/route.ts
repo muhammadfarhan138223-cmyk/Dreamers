@@ -1,9 +1,11 @@
+import { HOSTED_BOOKS } from "@/lib/hosted-books.mjs";
 export function GET() {
   return Response.json(
     {
       status: "ok",
-      version: "0.5.5",
+      version: "0.5.6",
       storage: "device-local",
+      hostedBooks: HOSTED_BOOKS.length,
       aiConfigured: !!(
         process.env.AI_API_KEY &&
         process.env.AI_MODEL &&

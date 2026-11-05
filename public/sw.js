@@ -1,5 +1,5 @@
 /* Only public app assets are cached. AI, auth and account APIs never enter Cache Storage. */
-const VERSION = "dreamers-shell-v19";
+const VERSION = "dreamers-shell-v20";
 const CORE = [
   "/",
   "/manifest.webmanifest",
@@ -64,6 +64,7 @@ self.addEventListener("fetch", (event) => {
   if (
     u.pathname.startsWith("/_next/static/") ||
     u.pathname.startsWith("/brand/") ||
+    u.pathname.startsWith("/book-covers/") ||
     u.pathname.startsWith("/pdf-worker/") ||
     u.pathname === "/manifest.webmanifest" ||
     u.pathname.startsWith("/packs/")

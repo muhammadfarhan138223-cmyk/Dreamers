@@ -1,3 +1,7 @@
+## 0.5.6 priority checkpoint
+
+Implemented the owner's requested hosted-book model: direct Read, automatic offline copies, optional export and genuine source cover/title pages. Remaining: missing XI copies/current editions, remaining chapter maps, teacher-reviewed question coverage, current official pairing and dedicated accounts/admin. Keep the no-student-upload flow when adding new books.
+
 # Incremental roadmap
 
 1. Foundation — Next.js, branding, navigation, themes, dashboard, manifest and app shell: implemented; live desktop browser QA passed.

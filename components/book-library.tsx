@@ -1,33 +1,23 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import LoadingState from "./loading-state";
 import {
+  ArrowRight,
   BookOpen,
   Download,
   ExternalLink,
-  Atom,
-  Code,
-  Dna,
-  FileText,
   Sparkles,
   Trash2,
-  Upload,
-  ArrowRight,
 } from "lucide-react";
 import * as db from "@/lib/db";
-import { TEXTBOOKS, textbook, textbookByHash } from "@/lib/textbooks.mjs";
-import { MAX_PDF_BYTES, validatePdfHeader, bookTitle } from "@/lib/books.mjs";
-import { preparePdfEngine } from "@/lib/pdf-client";
-import {
-  BISE_MODEL_PAPERS,
-  PECTAA_CATALOGUE,
-  PUBLISHER_BIOLOGY_XI,
-  publisherUrl,
-} from "@/lib/publisher-books.mjs";
+import { TEXTBOOKS, textbook } from "@/lib/textbooks.mjs";
+import { bookCover, hostedBookUrl, HOSTED_BOOKS } from "@/lib/hosted-books.mjs";
+import { installBook } from "@/lib/install-book";
+import { PECTAA_CATALOGUE, publisherUrl } from "@/lib/publisher-books.mjs";
+import LoadingState from "./loading-state";
 const PdfReader = dynamic(() => import("./pdf-reader"), {
   ssr: false,
-  loading: () => <LoadingState>Opening PDF reader…</LoadingState>,
+  loading: () => <LoadingState>Opening your book…</LoadingState>,
 });
 export type LocalBook = {
   id: string;
@@ -63,744 +53,458 @@ export default function BookLibrary({
   focus,
 }: {
   onAsk: (context: BookContext, subject: string, catalogId?: string) => void;
-  focus?: { grade: string; subject: string } | null;
   requestedId?: string;
   requestedPage?: number;
   matchQuery?: string;
   onNavigate: (url: string) => void;
   onAskTopic: (bookId: string, topicId: string, extra?: boolean) => void;
+  focus?: { grade: string; subject: string } | null;
 }) {
-  const [showAll, setShowAll] = useState(false);
-  const [shelfFilter, setShelfFilter] = useState("all");
-  const [showImport, setShowImport] = useState(false);
-  const [readerQuery, setReaderQuery] = useState("");
-  const narrow = !!focus && !showAll && !requestedId;
-  const [books, setBooks] = useState<LocalBook[]>([]),
-    [selected, setSelected] = useState<LocalBook | null>(null),
-    [subject, setSubject] = useState(
-      focus?.subject.replaceAll("-", " ") || "biology",
-    ),
-    [grade, setGrade] = useState(focus?.grade || "XII"),
-    [edition, setEdition] = useState(""),
-    [busy, setBusy] = useState(false),
-    [loadingBooks, setLoadingBooks] = useState(true),
-    [error, setError] = useState(""),
-    [targetPage, setTargetPage] = useState(1),
-    [removeId, setRemoveId] = useState(""),
-    [notice, setNotice] = useState("");
-  const [catalogId, setCatalogId] = useState(
-    requestedId && textbook(requestedId) ? requestedId : "",
-  );
-  const input = useRef<HTMLInputElement>(null);
-  const catalogue = [PUBLISHER_BIOLOGY_XI, ...TEXTBOOKS];
-  const visibleCatalog = narrow
-    ? catalogue.filter(
-        (b) => b.subject === focus!.subject && b.classes.includes(focus!.grade),
-      )
-    : catalogue;
-  const visibleBooks = narrow
-    ? books.filter(
-        (b) =>
-          b.subject.replaceAll(" ", "-") === focus!.subject &&
-          (b.class === focus!.grade || b.class === "XI–XII"),
-      )
-    : books;
-  const activeBook = textbook(catalogId);
-  const visibleGallery = visibleCatalog.filter(
-    (book) =>
-      shelfFilter === "all" ||
-      (shelfFilter === "saved"
-        ? visibleBooks.some((local) => local.catalogId === book.id)
-        : book.classes.includes(shelfFilter)),
-  );
-  const personalBooks = visibleBooks.filter(
-    (book) =>
-      !book.catalogId &&
-      (shelfFilter === "all" ||
-        shelfFilter === "saved" ||
-        book.class === shelfFilter),
-  );
-  useEffect(() => {
-    setReaderQuery(matchQuery);
-    const wanted = textbook(requestedId);
-    if (!wanted) {
-      const local = books.find(
-        (b) => b.id === requestedId || encodeURIComponent(b.id) === requestedId,
-      );
-      if (local) {
-        setSelected(local);
-        setTargetPage(
-          Math.max(1, Math.min(local.pageCount || 1500, requestedPage)),
-        );
-      }
-      return;
-    }
-    setCatalogId(wanted.id);
-    const saved = books.find((b) => b.sha256 === wanted.sha256);
-    if (saved) {
-      setSelected(saved);
-      setTargetPage(Math.max(1, Math.min(wanted.pages, requestedPage)));
-    }
-  }, [requestedId, requestedPage, matchQuery, books.length]);
+  const [filter, setFilter] = useState("all");
+  const [books, setBooks] = useState<LocalBook[]>([]);
+  const [selected, setSelected] = useState<LocalBook | null>(null);
+  const [details, setDetails] = useState(requestedId || "");
+  const [page, setPage] = useState(requestedPage);
+  const [loading, setLoading] = useState(true);
+  const [opening, setOpening] = useState("");
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [removeId, setRemoveId] = useState("");
+  const controller = useRef<AbortController | null>(null);
+  const openedRequest = useRef("");
   async function refresh() {
-    setBooks((await db.list<LocalBook>("books")).sort((a, b) => b.at - a.at));
+    setBooks(await db.list<LocalBook>("books"));
   }
   useEffect(() => {
     void refresh()
-      .catch(() => setError("Device book storage is unavailable."))
-      .finally(() => setLoadingBooks(false));
-    if (navigator.onLine) void import("./global-search").catch(() => {});
+      .catch(() => setError("Device storage is unavailable. Please retry."))
+      .finally(() => setLoading(false));
+    return () => controller.current?.abort();
   }, []);
-  async function importFiles(files: File[]) {
-    setBusy(true);
+  const saved = (id: string) =>
+    books.find(
+      (b) =>
+        b.catalogId === id || b.id === id || encodeURIComponent(b.id) === id,
+    );
+  async function read(id: string, target?: number) {
+    if (controller.current) controller.current.abort();
+    const abort = new AbortController();
+    controller.current = abort;
     setError("");
-    let added = 0,
-      duplicates = 0;
-    const failures: string[] = [];
-    const savedBooks: LocalBook[] = [];
-    for (const file of files) {
-      try {
-        validatePdfHeader(
-          new Uint8Array(await file.slice(0, 1024).arrayBuffer()),
-          file.size,
-        );
-        const estimate = await navigator.storage?.estimate?.();
-        if (
-          estimate?.quota &&
-          estimate.usage !== undefined &&
-          estimate.quota - estimate.usage < file.size * 1.2
-        )
-          throw new Error(
-            "Not enough browser storage. Free device space or remove an unused copy.",
-          );
-        const digest = Array.from(
-          new Uint8Array(
-            await crypto.subtle.digest("SHA-256", await file.arrayBuffer()),
-          ),
-          (v) => v.toString(16).padStart(2, "0"),
-        ).join("");
-        const id = "book:" + digest,
-          existing = await db.get<LocalBook>("books", id);
-        if (existing) {
-          const known = textbookByHash(digest);
-          if (known) {
-            const fields = {
-              catalogId: known.id,
-              title: known.title,
-              subject: known.subject,
-              class: known.class,
-              pageCount: known.pages,
-              edition: known.edition,
-            };
-            await db.patch("books", id, fields);
-            Object.assign(existing, fields);
-          }
-          duplicates++;
-          savedBooks.push(existing);
-          continue;
-        }
-        const known = textbookByHash(digest);
-        const book: LocalBook = {
-          id,
-          title: known?.title || bookTitle(file.name),
-          filename: file.name,
-          subject: known?.subject || subject,
-          class: known?.class || grade,
-          edition:
-            known?.edition ||
-            edition.trim().slice(0, 80) ||
-            "Edition not verified",
-          blob: new Blob([file], { type: "application/pdf" }),
-          bytes: file.size,
-          sha256: digest,
-          at: Date.now(),
-          ...(known ? { catalogId: known.id, pageCount: known.pages } : {}),
-        };
-        await db.put("books", book);
-        savedBooks.push(book);
-        added++;
-      } catch (e) {
-        failures.push(
-          `${file.name}: ${e instanceof Error ? e.message : "Could not save this file."}`,
-        );
-      }
-    }
+    setNotice("");
+    setOpening(id);
+    setProgress(0);
     try {
+      const local =
+        saved(id) ||
+        (await installBook(id, abort.signal, (n, total) =>
+          setProgress(Math.floor((n / total) * 100)),
+        ));
+      if (abort.signal.aborted) return;
+      setPage(target || local.lastPage || 1);
+      setSelected(local);
       await refresh();
-      const wanted = textbook(requestedId);
-      const open =
-        savedBooks.find((b) => b.sha256 === wanted?.sha256) ||
-        (files.length === 1 ? savedBooks[0] : null);
-      if (open) {
-        setSelected(open);
-        setTargetPage(wanted ? requestedPage : open.lastPage || 1);
+    } catch (e) {
+      if (!abort.signal.aborted)
+        setError(
+          e instanceof Error
+            ? e.message
+            : "Could not open this book. Please retry.",
+        );
+    } finally {
+      if (controller.current === abort) {
+        setOpening("");
+        controller.current = null;
       }
-      setNotice(
-        `${added} PDF${added === 1 ? "" : "s"} added · ${duplicates} exact duplicate${duplicates === 1 ? "" : "s"} skipped. Files stay on this device.`,
-      );
-      if (savedBooks.length) {
-        try {
-          await Promise.all([
-            preparePdfEngine(),
-            import("./pdf-reader"),
-            import("pdfjs-dist/legacy/build/pdf.mjs"),
-          ]);
-        } catch {
-          failures.push(
-            "Your files are saved. Reconnect and open a book once to finish offline reader setup.",
-          );
-        }
-      }
-      if (navigator.storage?.persist)
-        await navigator.storage.persist().catch(() => false);
-    } catch {
-      failures.push(
-        "Saved files could not be refreshed. Reload the shelf to retry.",
-      );
     }
-    if (failures.length) setError(failures.join(" "));
-    setBusy(false);
-    if (input.current) input.current.value = "";
   }
-  function openBook(book: LocalBook, page = book.lastPage || 1) {
-    setReaderQuery("");
-    setSelected(book);
-    setTargetPage(page);
+  useEffect(() => {
+    const key = `${requestedId}:${requestedPage}:${matchQuery}`;
+    if (!requestedId || loading || openedRequest.current === key) return;
+    openedRequest.current = key;
+    setDetails(requestedId);
+    if (saved(requestedId) || hostedBookUrl(requestedId))
+      void read(requestedId, requestedPage);
+    else
+      setError(
+        "This edition is not hosted yet. You can browse the available books below.",
+      );
+    // The request is handled once; refreshing the shelf must not reopen a closed reader.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requestedId, requestedPage, matchQuery, loading]);
+  const visible = TEXTBOOKS.filter(
+    (b) =>
+      filter === "all" ||
+      (filter === "offline" ? !!saved(b.id) : b.classes.includes(filter)),
+  );
+  const active = textbook(details);
+  function download(book: LocalBook) {
+    const url = URL.createObjectURL(book.blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = book.filename;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
   }
   return (
     <>
       <header className="shelf-hero">
         <div>
-          <span className="eyebrow">YOUR OFFLINE LIBRARY</span>
-          <h1>My books</h1>
+          <span className="eyebrow">DREAMERS TEXTBOOK LIBRARY</span>
+          <h1>Pick a book. Start reading.</h1>
           <p>
-            Open a saved book anywhere. Get new copies from the publisher when
-            you’re online.
+            Books are already here. Open one online; we keep a copy in Dreamers
+            for offline reading.
           </p>
         </div>
         <button className="secondary" onClick={() => onNavigate("/search")}>
-          Search book text <ArrowRight size={17} />
+          Search books <ArrowRight size={17} />
         </button>
       </header>
-      <div className="shelf-setup panel">
-        <div>
-          <b>
-            {activeBook
-              ? `${activeBook.title} · Class ${activeBook.class}`
-              : "Have a downloaded PDF?"}
-          </b>
-          <p>
-            Save it on this device once. Files stay private and open offline.
-          </p>
-        </div>
-        <button
-          className="primary"
-          disabled={busy}
-          onClick={() => input.current?.click()}
-        >
-          <Download size={17} /> {busy ? "Saving…" : "Save from device"}
-        </button>
-        {activeBook && publisherUrl(activeBook.id) && (
-          <a
-            className="secondary"
-            href={publisherUrl(activeBook.id)!}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Publisher PDF <ExternalLink size={15} />
-          </a>
-        )}
-        <button
-          className="text-link"
-          aria-expanded={showImport}
-          onClick={() => setShowImport((v) => !v)}
-        >
-          File options
-        </button>
+      <div className="library-guide">
+        <span>
+          <BookOpen size={19} />
+          <b>1. Choose your book</b>
+        </span>
+        <span>
+          <ArrowRight size={19} />
+          <b>2. Read inside Dreamers</b>
+        </span>
+        <span>
+          <Download size={19} />
+          <b>3. Reopen offline</b>
+        </span>
       </div>
-      {loadingBooks && <LoadingState>Checking saved books…</LoadingState>}
-      {busy && (
-        <LoadingState>Saving your selected PDFs on this device…</LoadingState>
-      )}
+      <p className="fineprint">
+        {HOSTED_BOOKS.length} supplied textbooks and study resources available.
+        Only the book you open is transferred. No uploads, accounts or AI needed
+        to read. Browser storage can be cleared by your device.
+      </p>
+      {loading && <LoadingState>Opening the library…</LoadingState>}
       {error && (
-        <p className="error-banner" role="alert">
+        <div className="error-banner" role="alert">
           {error}
-        </p>
+          <button
+            className="secondary"
+            onClick={() =>
+              requestedId
+                ? void read(requestedId, requestedPage)
+                : void refresh().catch(() =>
+                    setError("Storage is unavailable."),
+                  )
+            }
+          >
+            Retry
+          </button>
+        </div>
       )}
       {notice && (
         <p className="panel notice" role="status">
           {notice}
         </p>
       )}
+      {opening && (
+        <section
+          className="panel library-transfer"
+          role="status"
+          aria-live="polite"
+        >
+          <LoadingState>
+            {progress === 100
+              ? "Preparing the offline reader…"
+              : `Opening ${textbook(opening)?.title || "your book"}… ${progress}%`}
+          </LoadingState>
+          <progress max={100} value={progress} />
+          <p>Keep this page open. Once ready, this copy stays in Dreamers.</p>
+          <button
+            className="secondary"
+            onClick={() => {
+              controller.current?.abort();
+              setOpening("");
+            }}
+          >
+            Cancel
+          </button>
+        </section>
+      )}
       <div className="gallery-toolbar">
         <div className="gallery-filters" aria-label="Filter books">
           {[
             ["all", "All books"],
-            ["saved", `Saved (${visibleBooks.length})`],
             ["XI", "First year"],
             ["XII", "Second year"],
+            ["offline", `On this device (${books.length})`],
           ].map(([id, label]) => (
             <button
               key={id}
-              type="button"
-              aria-pressed={shelfFilter === id}
-              onClick={() => setShelfFilter(id)}
+              aria-pressed={filter === id}
+              onClick={() => setFilter(id)}
             >
               {label}
             </button>
           ))}
         </div>
-        {focus && (
-          <button className="text-link" onClick={() => setShowAll((v) => !v)}>
-            {showAll ? "Only my subject" : "Show every subject"}
-          </button>
-        )}
       </div>
       <div className="reading-gallery">
-        {visibleGallery.map((book) => {
-          const saved = visibleBooks.find(
-            (local) => local.catalogId === book.id,
-          );
-          const source = publisherUrl(book.id);
-          const CoverIcon =
-            book.icon === "dna"
-              ? Dna
-              : book.icon === "atom"
-                ? Atom
-                : book.icon === "code"
-                  ? Code
-                  : BookOpen;
+        {visible.map((book) => {
+          const local = saved(book.id);
+          const cover = bookCover(book.id);
+          const available = hostedBookUrl(book.id);
           return (
-            <article className="panel gallery-card" key={book.id}>
-              <div className={`gallery-cover ${book.color}`}>
-                {saved?.cover ? (
-                  // The preview is a small image rendered locally from the student's PDF.
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={saved.cover} alt="" loading="lazy" />
+            <article
+              className={`panel gallery-card ${focus?.subject === book.subject ? "focused-book" : ""}`}
+              key={book.id}
+            >
+              <button
+                className={`gallery-cover ${book.color}`}
+                disabled={!!opening || (!available && !local)}
+                aria-label={`Read ${book.title}, Class ${book.class}`}
+                onClick={() => void read(book.id)}
+              >
+                {cover ? (
+                  <img
+                    src={cover}
+                    alt={`${book.title} original cover or title page`}
+                    loading="lazy"
+                  />
                 ) : (
-                  <>
-                    <CoverIcon size={42} aria-hidden />
+                  <div className="book-cover-fallback">
+                    <BookOpen size={40} />
+                    <b>{book.title}</b>
                     <span>CLASS {book.class}</span>
-                  </>
+                    <small>Cover not supplied</small>
+                  </div>
                 )}
-              </div>
+              </button>
               <div className="gallery-card-body">
                 <span className="gallery-status">
-                  {saved ? "● Ready offline" : "Class " + book.class}
+                  Class {book.class} ·{" "}
+                  {local
+                    ? "● On this device"
+                    : available
+                      ? `${(book.bytes / 1048576).toFixed(1)} MB`
+                      : "Not hosted yet"}
                 </span>
                 <h2>{book.title}</h2>
-                {saved ? (
-                  <button className="primary" onClick={() => openBook(saved)}>
-                    Read <ArrowRight size={15} />
+                {book.kind !== "textbook" && (
+                  <small className="muted">
+                    {book.kind === "legacy"
+                      ? "Earlier edition · reference"
+                      : book.kind === "grammar"
+                        ? "Grammar support"
+                        : "Study resource"}
+                  </small>
+                )}
+                {available || local ? (
+                  <button
+                    className="primary"
+                    disabled={!!opening}
+                    onClick={() => void read(book.id)}
+                  >
+                    Read book <ArrowRight size={15} />
                   </button>
-                ) : source ? (
+                ) : (
                   <a
                     className="secondary"
-                    href={source}
+                    href={publisherUrl(book.id) || PECTAA_CATALOGUE}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => {
-                      setSubject(book.subject);
-                      if (book.class === "XI" || book.class === "XII")
-                        setGrade(book.class);
-                    }}
+                    rel="noreferrer"
                   >
-                    Publisher PDF <ExternalLink size={14} />
+                    Publisher edition <ExternalLink size={14} />
                   </a>
-                ) : (
-                  <button
-                    className="secondary"
-                    disabled={busy}
-                    onClick={() => input.current?.click()}
-                  >
-                    Save your PDF <Download size={15} />
-                  </button>
                 )}
-                {textbook(book.id) && (
-                  <button
+                <button
+                  className="text-link"
+                  onClick={() => {
+                    setDetails(book.id);
+                    requestAnimationFrame(() =>
+                      document
+                        .getElementById("book-details")
+                        ?.scrollIntoView({ block: "start" }),
+                    );
+                  }}
+                >
+                  Chapters & details
+                </button>
+                {local ? (
+                  <button className="text-link" onClick={() => download(local)}>
+                    Download PDF <Download size={14} />
+                  </button>
+                ) : available ? (
+                  <a
                     className="text-link"
-                    onClick={() => {
-                      setCatalogId(book.id);
-                      requestAnimationFrame(() =>
-                        document
-                          .getElementById("book-details")
-                          ?.scrollIntoView({ block: "start" }),
-                      );
-                    }}
+                    href={available}
+                    download={book.filename}
                   >
-                    Chapters & details
-                  </button>
-                )}
+                    Download PDF <Download size={14} />
+                  </a>
+                ) : null}
               </div>
             </article>
           );
         })}
-        {personalBooks.map((book) => (
-          <article className="panel gallery-card" key={book.id}>
-            <div className="gallery-cover violet">
-              {book.cover ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={book.cover} alt="" loading="lazy" />
-              ) : (
-                <>
-                  <FileText size={42} aria-hidden />
-                  <span>CLASS {book.class}</span>
-                </>
-              )}
-            </div>
-            <div className="gallery-card-body">
-              <span className="gallery-status">● Ready offline</span>
-              <h2>{book.title}</h2>
-              <button className="primary" onClick={() => openBook(book)}>
-                Read <ArrowRight size={15} />
-              </button>
-            </div>
-          </article>
-        ))}
       </div>
-      {!visibleGallery.length && !personalBooks.length && (
-        <div className="panel empty">
-          <BookOpen size={30} />
-          <h2>
-            {shelfFilter === "saved"
-              ? "No saved books here yet"
-              : "No books in this view"}
-          </h2>
+      {!visible.length && (
+        <section className="panel empty">
+          <BookOpen size={32} />
+          <h2>No books saved here yet</h2>
           <p>
-            {shelfFilter === "saved"
-              ? "Save a PDF from your device, then open it from this shelf."
-              : "Try All books or Show every subject."}
+            Choose All books and open a book while online. Dreamers keeps it for
+            your next visit.
           </p>
-        </div>
+          <button className="primary" onClick={() => setFilter("all")}>
+            Browse books
+          </button>
+        </section>
       )}
       <div id="book-details">
-        {activeBook?.appendices?.length ? (
-          <section className="book-appendices">
-            <b>Paper patterns & model papers in this copy</b>
-            <div className="row">
-              {activeBook.appendices.map((a) => (
-                <button
-                  key={a.page}
-                  className="secondary"
-                  onClick={() => {
-                    const saved = books.find(
-                      (b) => b.catalogId === activeBook.id,
-                    );
-                    if (saved) openBook(saved, a.page);
-                    else
-                      setError(
-                        "Add this PDF once to open its paper-pattern pages offline.",
-                      );
-                  }}
-                >
-                  {a.title} · PDF {a.page}
-                  {a.endPage !== a.page ? `–${a.endPage}` : ""}
-                </button>
-              ))}
-            </div>
-            <small>
-              Source pages checked in this supplied file; official board/year
-              confirmation remains pending.
-            </small>
-          </section>
-        ) : null}
-        {activeBook && (
-          <section className={`panel textbook-chapters ${activeBook.color}`}>
-            <div className="between">
-              <div>
-                <span className="eyebrow">
-                  CLASS {activeBook.class} /{" "}
-                  {activeBook.kind === "legacy"
-                    ? "LEGACY REFERENCE"
-                    : activeBook.kind === "grammar"
-                      ? "GRAMMAR SUPPORT"
-                      : "SUPPLIED COPY"}
-                </span>
-                <h2>{activeBook.title}: find your chapter.</h2>
-                <p>{activeBook.edition}</p>
-              </div>
-              <span className="pill">
-                {activeBook.chapters.length} checked chapters
-              </span>
-            </div>
-            <p className="fineprint">
-              {activeBook.chapters.length
-                ? "Headings checked in the supplied file."
-                : "Chapter map pending review; no suggested topics are generated from this file yet."}{" "}
-              Current board exam exclusions are not yet verified.{" "}
-              {activeBook.text !== "selectable"
-                ? "This copy is scanned: image reading works; OCR text search is not available."
-                : ""}
+        {active && (
+          <section className="panel textbook-chapters">
+            <span className="eyebrow">CLASS {active.class}</span>
+            <h2>{active.title}</h2>
+            <p>
+              {active.edition} · {active.pages} PDF pages
             </p>
-            {!activeBook.chapters.length && (
-              <div className="chapter-map-pending">
-                <BookOpen size={28} />
-                <h3>Read your PDF copy</h3>
-                <p>
-                  This file can be saved and read now. Chapter suggestions will
-                  appear after its contents are checked.
-                </p>
-                <button
-                  className="primary"
-                  onClick={() => {
-                    const saved = books.find(
-                      (b) => b.sha256 === activeBook.sha256,
-                    );
-                    if (saved) openBook(saved, 1);
-                    else input.current?.click();
-                  }}
-                >
-                  Open / add PDF <Upload size={16} />
-                </button>
-              </div>
-            )}
+            <button
+              className="primary"
+              disabled={
+                !!opening || (!hostedBookUrl(active.id) && !saved(active.id))
+              }
+              onClick={() => void read(active.id, 1)}
+            >
+              Open full book <BookOpen size={17} />
+            </button>
+            <p className="fineprint">
+              {active.chapters.length
+                ? "Chapter links match this exact supplied PDF."
+                : "Chapter links are being checked; you can read the whole book now."}{" "}
+              Current exam exclusions remain unverified.
+            </p>
             <div className="textbook-chapter-list">
-              {activeBook.chapters.map((t, i) => (
+              {active.chapters.map((t) => (
                 <div className="textbook-chapter" key={t.id}>
-                  <span>{String(i + 1).padStart(2, "0")}</span>
+                  <BookOpen size={19} />
                   <div>
                     <b>{t.title}</b>
-                    <small>
-                      PDF page {t.page}
-                      {t.printedPage ? ` · printed page ${t.printedPage}` : ""}
-                    </small>
+                    <small>PDF page {t.page}</small>
                   </div>
                   <button
                     className="secondary"
-                    onClick={() => {
-                      const saved = books.find(
-                        (b) => b.sha256 === activeBook.sha256,
-                      );
-                      if (saved) openBook(saved, t.page);
-                      else {
-                        setNotice(
-                          `Add your ${activeBook.title} PDF below first. Its file signature will match it to this chapter map.`,
-                        );
-                        input.current?.click();
-                      }
-                    }}
+                    disabled={
+                      !!opening ||
+                      (!hostedBookUrl(active.id) && !saved(active.id))
+                    }
+                    onClick={() => void read(active.id, t.page)}
                   >
                     Read <ArrowRight size={14} />
                   </button>
                   <button
                     className="circle-button"
                     aria-label={`Ask AI about ${t.title}`}
-                    onClick={() => onAskTopic(activeBook.id, t.id)}
+                    onClick={() => onAskTopic(active.id, t.id)}
                   >
                     <Sparkles size={16} />
                   </button>
                 </div>
               ))}
             </div>
+            {!!active.appendices?.length && (
+              <details>
+                <summary>Paper patterns in this copy</summary>
+                {active.appendices.map((a) => (
+                  <button
+                    className="secondary"
+                    key={a.page}
+                    disabled={
+                      !!opening ||
+                      (!hostedBookUrl(active.id) && !saved(active.id))
+                    }
+                    onClick={() => void read(active.id, a.page)}
+                  >
+                    {a.title} · p. {a.page}
+                  </button>
+                ))}
+              </details>
+            )}
           </section>
         )}
       </div>
-      <section className="panel book-import" hidden={!showImport}>
-        <div className="between">
-          <div>
-            <span className="eyebrow">PRIVATE / ON THIS DEVICE</span>
-            <h2>Add your PDF copies</h2>
-          </div>
-          <Upload size={26} />
-        </div>
-        <p className="fineprint">
-          Select several PDFs at once. Matching supplied files are named and
-          classified automatically; identical files are saved only once.
-        </p>
-        <details className="import-details">
-          <summary>Details for other PDF copies (optional)</summary>
-          <p className="fineprint">
-            Recognised catalogue files are classified automatically. These
-            fields apply to other files.
-          </p>
-          <div className="book-fields">
-            <label className="field">
-              Subject
-              <select
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
+      <details className="panel shelf-manage">
+        <summary>Manage copies on this device</summary>
+        <p>Removing a book frees space. Your learning progress stays saved.</p>
+        {books.map((book) => (
+          <div className="between" key={book.id}>
+            <span>
+              {book.title} · {book.class} · {(book.bytes / 1048576).toFixed(1)}{" "}
+              MB
+            </span>
+            <div className="row">
+              <button
+                className="secondary"
+                onClick={() => void read(book.catalogId || book.id)}
               >
-                {[
-                  "biology",
-                  "chemistry",
-                  "physics",
-                  "mathematics",
-                  "computer-science",
-                  "education",
-                  "english",
-                  "urdu",
-                  "islamiat",
-                  "pakistan-studies",
-                  "tarjuma-tul-quran",
-                  "other",
-                ].map((s) => (
-                  <option key={s} value={s}>
-                    {s.replaceAll("-", " ")}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="field">
-              Class
-              <select value={grade} onChange={(e) => setGrade(e.target.value)}>
-                <option>XI</option>
-                <option>XII</option>
-              </select>
-            </label>
-            <label className="field">
-              Edition label (optional)
-              <input
-                value={edition}
-                maxLength={80}
-                onChange={(e) => setEdition(e.target.value)}
-                placeholder="As printed on your book"
-              />
-            </label>
-          </div>
-        </details>
-        <button
-          className="primary"
-          disabled={busy}
-          onClick={() => input.current?.click()}
-        >
-          <Upload size={17} />
-          {busy ? "Saving PDF…" : "Choose PDFs from device"}
-        </button>
-        <p className="fineprint">
-          First use prepares about 5 MB of offline reader resources. Up to{" "}
-          {MAX_PDF_BYTES / 1024 / 1024} MB per file. No automatic textbook
-          downloads. Files stay on this device; JSON progress backups exclude
-          PDF bytes. Keep an original copy or export a book separately.
-        </p>
-      </section>
-      <input
-        className="sr-only"
-        type="file"
-        multiple
-        tabIndex={-1}
-        aria-label="Select local PDF files"
-        accept="application/pdf,.pdf"
-        ref={input}
-        onChange={(e) => {
-          const files = Array.from(e.target.files || []);
-          if (files.length) void importFiles(files);
-        }}
-      />
-      {!!visibleBooks.length && (
-        <details className="panel publisher-links shelf-manage">
-          <summary>Manage saved files</summary>
-          <div className="book-shelf">
-            {visibleBooks.map((b) => (
-              <article className={`panel saved-book ${b.subject}`} key={b.id}>
-                <FileText size={33} />
-                <h3>{b.title}</h3>
-                <p>
-                  {b.subject.replaceAll("-", " ")} · Class {b.class}
-                </p>
-                <p className="tiny">
-                  {b.edition} · {(b.bytes / 1024 / 1024).toFixed(1)} MB
-                </p>
-                <span className="content-badge">
-                  {b.catalogId
-                    ? "Matched supplied PDF · exam scope unverified"
-                    : "Personal copy · edition not verified"}
-                </span>
-                <p className="tiny muted">
-                  {b.indexedPages || 0}/{b.pageCount || "?"} pages indexed ·
-                  resume at PDF page {b.lastPage || 1}
-                </p>
-                <div className="actions">
-                  <button className="primary" onClick={() => openBook(b)}>
-                    Read offline <BookOpen size={16} />
-                  </button>
+                Read
+              </button>
+              {removeId === book.id ? (
+                <>
                   <button
                     className="secondary"
                     onClick={() => {
-                      const url = URL.createObjectURL(b.blob);
-                      const a = document.createElement("a");
-                      a.href = url;
-                      a.download = b.filename;
-                      a.click();
-                      setTimeout(() => URL.revokeObjectURL(url), 1000);
-                    }}
-                    aria-label={`Export ${b.title}, Class ${b.class}`}
-                  >
-                    <Download size={16} />
-                  </button>
-                  <button
-                    className="secondary"
-                    onClick={() => setRemoveId(b.id)}
-                    aria-label={`Remove ${b.title}, Class ${b.class}`}
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-                {removeId === b.id && (
-                  <div className="book-remove">
-                    <p>
-                      Remove this PDF and its local text index? Your learning
-                      progress and notes will stay.
-                    </p>
-                    <button
-                      className="danger"
-                      onClick={async () => {
-                        try {
-                          await db.deleteBook(b.id);
-                          if (selected?.id === b.id) setSelected(null);
+                      void db
+                        .deleteBook(book.id)
+                        .then(refresh)
+                        .then(() => {
                           setRemoveId("");
-                          await refresh();
-                        } catch {
-                          setError("The PDF could not be removed.");
-                        }
-                      }}
-                    >
-                      Remove PDF
-                    </button>
-                    <button
-                      className="secondary"
-                      onClick={() => setRemoveId("")}
-                    >
-                      Keep book
-                    </button>
-                  </div>
-                )}
-              </article>
-            ))}
+                          setNotice(
+                            "Book copy removed. Your learning progress is safe.",
+                          );
+                        })
+                        .catch(() =>
+                          setError("Could not remove the book. Please retry."),
+                        );
+                    }}
+                  >
+                    Confirm remove
+                  </button>
+                  <button className="text-link" onClick={() => setRemoveId("")}>
+                    Keep
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="circle-button"
+                  aria-label={`Remove ${book.title} from this device`}
+                  onClick={() => setRemoveId(book.id)}
+                >
+                  <Trash2 size={16} />
+                </button>
+              )}
+            </div>
           </div>
-        </details>
-      )}
-      <details className="panel publisher-links">
-        <summary>Official sources & copy permissions</summary>
-        <p>
-          Publisher links open the source online. Download there, then use “Save
-          from device” to keep a personal copy in this shelf. A publisher
-          edition can differ from the supplied copy used for chapter links.
-        </p>
-        <div className="actions">
-          <a
-            className="secondary"
-            href={PECTAA_CATALOGUE}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            PECTAA catalogue <ExternalLink size={14} />
-          </a>
-          <a
-            className="secondary"
-            href={BISE_MODEL_PAPERS}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            BISE Lahore model papers <ExternalLink size={14} />
-          </a>
-        </div>
+        ))}
       </details>
+      <section className="panel publisher-links">
+        <h2>Looking for another book?</h2>
+        <p>
+          Our supplied collection is not yet every Punjab textbook. Explore the
+          official catalogue for additional First Year and Second Year editions.
+        </p>
+        <a
+          className="secondary"
+          href={PECTAA_CATALOGUE}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Official PECTAA catalogue <ExternalLink size={15} />
+        </a>
+      </section>
       {selected && (
         <PdfReader
           key={selected.id}
           book={selected}
-          requestedPage={targetPage}
-          matchQuery={readerQuery}
+          requestedPage={page}
+          matchQuery={matchQuery}
           onSaved={refresh}
           onClose={() => setSelected(null)}
           onAsk={(c) => onAsk(c, selected.subject, selected.catalogId)}

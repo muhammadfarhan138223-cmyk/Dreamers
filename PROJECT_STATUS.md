@@ -1,5 +1,41 @@
 # DREAMERS project status
 
+Updated: 2026-11-04. Current release checkpoint: **0.5.6 — owner-provided textbook library**.
+
+## Current implementation
+
+- Students open a book already supplied by Dreamers. No student PDF upload/file chooser is exposed in the library. Read automatically transfers only that book, verifies its exact SHA-256/size, writes the complete Blob to IndexedDB, prepares the offline reader and opens it inside the app. Optional Download PDF exports the original. Previously imported personal books remain preserved and readable under device management.
+- 16 exact owner-supplied resources (259 MB total): 11 catalogued textbooks, two grammar resources, two earlier editions and one reference workbook. This is not every Punjab XI/XII book. The app does not preload the collection or require students to manage files.
+- Build preparation materialises the vetted public-source copies under versioned same-origin /textbooks URLs. All 16 public copies were fetched and checked against the supplied attachments. The registry contains fixed source URLs, not an arbitrary proxy. Build fails on size/digest mismatch; generated PDFs are excluded from Git. Original publisher ownership is unchanged; no open licence is asserted.
+- 15 original cover/title-page thumbnails are present in the shelf and applicable subject cards. Biology XII's supplied chapter collection has no cover; it has an honest labelled fallback rather than an unrelated edition's artwork.
+- First-year/second-year/device-copy filters, progress/cancel/retry during transfer, optional PDF download and storage removal. Read-first subject entry avoids presenting an unavailable question bank as complete. Existing original science practice, exercises, games and AI page explanations remain available.
+- English XII chapter page offsets corrected against rendered headings. Shell v20 caches cover assets as encountered and preserves IndexedDB books/learning progress and the separate PDF engine cache.
+
+## Verification and deployment checkpoint
+
+83 tests and production build passed before final release preparation; rerun after final edits. Coverage includes exact catalogue identities, failed/truncated/changed/oversized transfers, cancellation, worker offline behavior and existing question/progress flows.
+Latest previously verified GitHub commit: 4151310c64b11b59fc397e59a7f3cf681a0cf157 (0.5.5). Current changes await preview and production verification.
+Live: https://dreamers-sooty.vercel.app
+Repository: https://github.com/muhammadfarhan138223-cmyk/Dreamers
+Vercel: dreamers / prj_ol5nVtQ2DprVqMgNY140bM86Lsvu / team_jwuAswY9vD3bNmcKQM2LqjoF. Keep preview protection.
+
+## Outstanding
+
+- Missing First Year textbook copies and additional subjects, reviewed maps for remaining resources, Biology XII original cover. Do not describe the 16 resources as all Punjab textbooks.
+- Full question-bank/subtopic coverage and teacher-reviewed exercise keys in every subject. No guarantee of every possible MCQ. 2027 official pairing remains unverified; older board notices and book appendices retain their labels.
+- Accounts, dedicated Supabase/RLS/cloud synchronization and secured administration remain planned. No migrations applied; IndexedDB v3 unchanged.
+- AI remains online only; production AI and Upstash configuration were verified in 0.5.5 and are unchanged. Required: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN; optional AI_BASE_URL. No secrets committed/retrieved. Guest durable quotas preserved.
+- First book opening requires internet to transfer bytes and reader assets. Browser eviction or device clearing can remove downloaded copies. Physical Android airplane-mode testing is still pending.
+
+## Exact next task
+
+Verify this release's direct book opening and page rendering on preview/production, then expand the missing First Year collection from authorised publisher resources and review its exact editions/chapter maps.
+
+---
+
+## Historical checkpoints (superseded where noted above)
+
+
 Updated: 2026-11-04. Current checkpoint is 0.5.5, textbook exercise extraction and expanded science practice. Read the roadmap, architecture, deployment and changelog before changing code.
 
 ## Current checkpoint

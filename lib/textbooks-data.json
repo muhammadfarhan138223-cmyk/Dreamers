@@ -494,78 +494,90 @@
         "id": "eng12-1",
         "title": "Journey to Taif",
         "page": 5,
-        "printedPage": 1
+        "printedPage": 1,
+        "endPage": 11
       },
       {
         "id": "eng12-2",
         "title": "The Last Lesson",
         "page": 12,
-        "printedPage": 8
+        "printedPage": 8,
+        "endPage": 20
       },
       {
         "id": "eng12-3",
         "title": "On His Blindness",
         "page": 21,
-        "printedPage": 17
+        "printedPage": 17,
+        "endPage": 26
       },
       {
         "id": "eng12-4",
         "title": "The Power of Digital Learning",
-        "page": 26,
-        "printedPage": 22
+        "page": 27,
+        "printedPage": 22,
+        "endPage": 36
       },
       {
         "id": "eng12-5",
         "title": "The Giving Tree",
-        "page": 36,
-        "printedPage": 32
+        "page": 37,
+        "printedPage": 32,
+        "endPage": 42
       },
       {
         "id": "eng12-6",
         "title": "The Fun They Had",
-        "page": 42,
-        "printedPage": 38
+        "page": 43,
+        "printedPage": 38,
+        "endPage": 48
       },
       {
         "id": "eng12-7",
         "title": "Because I Could Not Stop for Death",
-        "page": 48,
-        "printedPage": 44
+        "page": 49,
+        "printedPage": 44,
+        "endPage": 53
       },
       {
         "id": "eng12-8",
         "title": "The Devoted Friend",
-        "page": 53,
-        "printedPage": 49
+        "page": 54,
+        "printedPage": 49,
+        "endPage": 65
       },
       {
         "id": "eng12-9",
         "title": "The Doll’s House",
-        "page": 64,
-        "printedPage": 60
+        "page": 66,
+        "printedPage": 60,
+        "endPage": 76
       },
       {
         "id": "eng12-10",
         "title": "All the World’s a Stage",
-        "page": 75,
-        "printedPage": 71
+        "page": 77,
+        "printedPage": 71,
+        "endPage": 84
       },
       {
         "id": "eng12-11",
         "title": "A Letter to God",
-        "page": 82,
-        "printedPage": 78
+        "page": 85,
+        "printedPage": 78,
+        "endPage": 91
       },
       {
         "id": "eng12-12",
         "title": "A Visit to the Swat Valley",
-        "page": 88,
-        "printedPage": 84
+        "page": 92,
+        "printedPage": 84,
+        "endPage": 100
       },
       {
         "id": "eng12-13",
         "title": "The Pearl",
-        "page": 96,
+        "page": 101,
         "printedPage": 92,
         "endPage": 159
       }
