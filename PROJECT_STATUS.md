@@ -1,4 +1,16 @@
+# 0.5.8 QA refinement — 2026-11-04
+
+Current local checkpoint: 0.5.8, 88 tests/build pass. Readable-text results now stay in a compact scrollable list and disclose their 12-text-result cap. A bare year such as1969 is searched as text when outside the page range; explicit page requests retain bounds. Beginner prompts follow the student's requested analogy setting, use subject-specific meanings and avoid raw markdown.
+
+0.5.7 is live at3301678dd74ee90d418f180be41e250958865767 / production dpl_5t4UdokvLJbndH4JG94D7PznE4nK, preview dpl_EGBQkoogd2GBygkbWAM1wHEy8U1q READY. Health returned AI configured /16 books. Browser verified Pakistan Studies scanned PDF, Urdu numeral jump to11, keyboard turn to12, clear scan-search limitation, and a genuine Roman Urdu typed-question answer. The model used a household analogy when school was requested;0.5.8 tightens that instruction without claiming guaranteed adherence. Biology kidney search prepared252 pages, returned actual source snippets and opened page13. Physical touch/airplane-mode testing remains pending.
+
+Next: deploy/test0.5.8, repeat typed question and follow-up, verify saved conversation after reload, then continue missing books/reviewed curriculum. No new secret/service/dependency or migration; shell22 preserves books/progress.
+
+---
+
 # Current checkpoint — 0.5.7 (2026-11-04)
+
+Literal reader search now also finds common words and numeric years without conversational stop-word filtering.
 
 Reader improvements: touch swipe between pages, keyboard arrows, bottom page navigation, page-number entry committed on Enter/blur, and integrated Find page / word. A word search prepares readable pages locally with progress/stop/resume; scanned-only books report their limitation and still allow page jumps. The confusing index-ready button has been removed.
 

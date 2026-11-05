@@ -30,9 +30,15 @@ test("page lookup accepts English, Urdu and Arabic digits without turning dates 
     "١١",
   ])
     assert.equal(readerPageQuery(query, 88), 11);
-  for (const query of ["1969", "page 0", "999"])
+  for (const query of ["page 1969", "page 0", "page 999"])
     assert.equal(readerPageQuery(query, 88), 0);
-  for (const query of ["kidney", "1969 mein kya hua", "aain kya hota hai"])
+  for (const query of [
+    "kidney",
+    "1969",
+    "999",
+    "1969 mein kya hua",
+    "aain kya hota hai",
+  ])
     assert.equal(readerPageQuery(query, 88), null);
 });
 test("typed questions in scanned or unmapped books never borrow the Biology foundation context", () => {
@@ -73,4 +79,28 @@ test("readable-page question stays bound to its chapter, source excerpt and boun
   assert.equal(input.bookContext.page, 12);
   assert.ok(input.bookContext.text.length <= 2000);
   assert.equal(input.previous.length, 2000);
+});
+
+test("literal reader search finds common words, exact phrases and numeric years inside only the chosen book", async () => {
+  await import("fake-indexeddb/auto");
+  const db = await import("../lib/db.ts");
+  await db.put("bookPages", {
+    id: "reader-qa-a:2",
+    bookId: "reader-qa-a",
+    page: 2,
+    text: "The class has a rule book. This note mentions 1969.",
+  });
+  await db.put("bookPages", {
+    id: "reader-qa-b:1",
+    bookId: "reader-qa-b",
+    page: 1,
+    text: "The other book also mentions 1969.",
+  });
+  for (const word of ["the", "a", "1969", '"rule book"']) {
+    const matches = await db.findBookText(word, "reader-qa-a");
+    assert.equal(matches.length, 1);
+    assert.equal(matches[0].page, 2);
+    assert.equal(matches[0].bookId, "reader-qa-a");
+  }
+  assert.deepEqual(await db.findBookText("missing term", "reader-qa-a"), []);
 });

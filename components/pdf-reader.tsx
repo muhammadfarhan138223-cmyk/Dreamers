@@ -312,7 +312,10 @@ export default function PdfReader({
       if (indexed < Math.min(pdf.numPages, MAX_BOOK_PAGES))
         await prepareSearch();
       if (!alive.current) return;
-      const found = await db.searchPages(search, [book.id], 12);
+      const literal = await db.findBookText(search, book.id, 12);
+      const found = literal.length
+        ? literal
+        : await db.searchPages(search, [book.id], 12);
       const chapters = (catalogue?.chapters || [])
         .filter((c) =>
           c.title.toLowerCase().includes(search.trim().toLowerCase()),
@@ -337,7 +340,7 @@ export default function PdfReader({
         );
       } else
         setSearchNotice(
-          `${results.length} matching pages. Tap one to read it.`,
+          `Showing ${results.length} matches (up to 12 text results). Tap a page to read it.`,
         );
     } catch {
       if (alive.current)
@@ -479,23 +482,25 @@ export default function PdfReader({
                 </>
               )}
               {searchNotice && <p role="status">{searchNotice}</p>}
-              {hits.map((hit) => (
-                <button
-                  className="reader-search-hit"
-                  key={hit.page}
-                  onClick={() => {
-                    setReaderMatch(search);
-                    turnPage(hit.page);
-                  }}
-                >
-                  <b>
-                    PDF page {hit.page} <ArrowRight size={14} />
-                  </b>
-                  <span dir="auto">
-                    <PassageHighlight text={hit.snippet} query={search} />
-                  </span>
-                </button>
-              ))}
+              <div className="reader-search-results">
+                {hits.map((hit) => (
+                  <button
+                    className="reader-search-hit"
+                    key={hit.page}
+                    onClick={() => {
+                      setReaderMatch(search);
+                      turnPage(hit.page);
+                    }}
+                  >
+                    <b>
+                      PDF page {hit.page} <ArrowRight size={14} />
+                    </b>
+                    <span dir="auto">
+                      <PassageHighlight text={hit.snippet} query={search} />
+                    </span>
+                  </button>
+                ))}
+              </div>
             </section>
           )}
           <div hidden={tool !== "ask"}>

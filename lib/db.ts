@@ -1,4 +1,4 @@
-import { searchBookPages } from "./books.mjs";
+import { searchBookPages, literalBookMatch } from "./books.mjs";
 import { packMeta, STARTER_PACK_ID } from "./catalog.mjs";
 import { validatePack } from "./pack-validation.mjs";
 import type { LearningEvent, Pack, RecordValue } from "./types";
@@ -315,4 +315,41 @@ export async function searchPages(
       tx.onabort = () => reject(tx.error);
     },
   );
+}
+
+// A book's Find field must also find short/common words that conversational search omits.
+export async function findBookText(query: string, bookId: string, limit = 12) {
+  if (!query.trim()) return [];
+  limit = Math.max(1, Math.min(100, limit));
+  type Hit = {
+    id: string;
+    bookId: string;
+    page: number;
+    text: string;
+    score: number;
+    snippet: string;
+  };
+  const d = await db();
+  return new Promise<Hit[]>((resolve, reject) => {
+    const tx = d.transaction("bookPages"),
+      results: Hit[] = [];
+    const cursor = tx
+      .objectStore("bookPages")
+      .index("bookId")
+      .openCursor(IDBKeyRange.only(bookId));
+    cursor.onsuccess = () => {
+      const row = cursor.result;
+      if (!row) return;
+      const hit = literalBookMatch(row.value, query.slice(0, 300));
+      if (hit) {
+        results.push(hit);
+        results.sort((a, b) => a.page - b.page);
+        if (results.length > limit) results.pop();
+      }
+      row.continue();
+    };
+    tx.oncomplete = () => resolve(results);
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
 }

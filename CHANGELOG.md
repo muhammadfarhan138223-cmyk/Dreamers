@@ -1,3 +1,10 @@
+## 0.5.8 — 2026-11-04
+
+- Refine subject-specific beginner explanations and following requested everyday examples after live teaching-quality review.
+- Search literal common words without conversational stop-word filtering.
+- Search numeric years as text when they are not valid bare page numbers; retain explicit page bounds.
+- Keep word-search results compact and disclose their result cap. Shell v22; existing downloads remain intact.
+
 ## 0.5.7 — 2026-11-04
 
 - Add mobile swipe and keyboard page turning, bottom navigation, and reliable page-number entry.

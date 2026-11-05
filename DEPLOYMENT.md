@@ -1,3 +1,5 @@
+0.5.7 live verification:3301678dd74ee90d418f180be41e250958865767, preview dpl_EGBQkoogd2GBygkbWAM1wHEy8U1q and production dpl_5t4UdokvLJbndH4JG94D7PznE4nK READY. Health configured=true/16 books; actual scan-question and source-word search passed browser checks.0.5.8 QA refinements await deployment.
+
 ## 0.5.7 deployment notes
 
 No new env variables/services/dependencies. Existing AI_PROVIDER, AI_MODEL, AI_API_KEY and Upstash secrets serve inline reader chat through the same protected endpoint/quota. Preview has no AI credentials by design; test input boundaries with fixtures and real responses on production after preview/build checks. Shell21 preserves book Blobs and the versioned PDF engine cache. 87 tests/build passed; release verification pending.

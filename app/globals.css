@@ -6839,3 +6839,8 @@ hr {
     padding-bottom: 1rem;
   }
 }
+.reader-search-results {
+  max-height: 340px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}

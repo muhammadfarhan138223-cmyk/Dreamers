@@ -156,6 +156,7 @@ test("AI route gates source evidence and withholds malformed, invented or trunca
       !sent.messages[0].content.includes("Original foundation context:"),
     );
     assert.match(sent.messages[0].content, /direct one-sentence meaning/);
+    assert.match(sent.messages[0].content, /requested analogy setting exactly/);
     assert.equal(JSON.parse(sent.messages[1].content).pdfReference.text, "");
     const beforeStrict = providerCalls;
     assert.equal(
