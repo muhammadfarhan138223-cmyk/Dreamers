@@ -380,14 +380,6 @@ export default function PdfReader({
           </button>
         </header>
         <div className="pdf-toolbar">
-          <button
-            className="secondary"
-            disabled={!pdf || page <= 1 || rendering}
-            onClick={() => turnPage(page - 1)}
-          >
-            <ArrowLeft size={16} />
-            Previous
-          </button>
           <label className="pdf-page-label">
             PDF page
             <input
@@ -408,14 +400,6 @@ export default function PdfReader({
             />
             <span>/ {pdf?.numPages || "…"}</span>
           </label>
-          <button
-            className="secondary"
-            disabled={!pdf || page >= pdf.numPages || rendering}
-            onClick={() => turnPage(page + 1)}
-          >
-            Next
-            <ArrowRight size={16} />
-          </button>
         </div>
         <div className="reader-tools" ref={tools}>
           <nav className="reader-tool-tabs" aria-label="Book tools">
@@ -586,9 +570,6 @@ export default function PdfReader({
             onClick={() => turnPage(page + 1)}
           >
             <ArrowRight size={17} />
-          </button>
-          <button className="primary" onClick={() => openTool("ask")}>
-            <Sparkles size={16} /> Ask AI
           </button>
         </div>
         <details className="pdf-text">

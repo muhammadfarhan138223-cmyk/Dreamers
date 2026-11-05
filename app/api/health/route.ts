@@ -1,10 +1,15 @@
+import { publicAiModel } from "@/lib/ai-server.mjs";
 import { HOSTED_BOOKS } from "@/lib/hosted-books.mjs";
 export function GET() {
   return Response.json(
     {
       status: "ok",
-      version: "0.5.8",
+      version: "0.5.9",
       storage: "device-local",
+      ai: {
+        ...publicAiModel(),
+        limits: { daily: 12, perMinute: 3, scope: "shared-network" },
+      },
       hostedBooks: HOSTED_BOOKS.length,
       aiConfigured: !!(
         process.env.AI_API_KEY &&

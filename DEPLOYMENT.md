@@ -1,3 +1,7 @@
+## 0.5.9 source checkpoint
+
+90 tests and production build passed. Shell v23, IndexedDB v3. No new env variables, migrations or dependencies. Preview and production verification pending; retain prior production until protected preview passes. No deployment-protection or credentials changes. Runtime health now returns safe provider/model names to confirm the owner's active configuration.
+
 ## 0.5.8 live verification — 2026-11-05
 
 Application033f4b916cc7e584612accbcb1c7cc6e26800000, tree98e0dad792d7866af264c765b7f81cb15920128d. Preview dpl_AvhwWezEqpk9VdAeD13p4nE466Ju and production dpl_5xx1ejpMYt7BhZsRcnYakwSKQbYV READY. Stable alias health200/0.5.8/16 books/AI configured. Genuine inline question/follow-up, saved conversation reload and fullscreen general/source-only controls passed browser QA. See current PROJECT_STATUS and docs/VERIFICATION. No credentials/services/migrations changed. Historical records follow.

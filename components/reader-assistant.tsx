@@ -1,4 +1,5 @@
 "use client";
+import { aiErrorMessage } from "@/lib/ai-feedback.mjs";
 import { useEffect, useRef, useState } from "react";
 import { Sparkles, Send, RefreshCw } from "lucide-react";
 import { readerQuestion } from "@/lib/reader-tools.mjs";
@@ -120,7 +121,7 @@ export default function ReaderAssistant({
       const value = await response.json();
       if (!response.ok)
         throw new Error(
-          value.error || "The teacher could not answer. Please retry.",
+          aiErrorMessage(value, "The teacher could not answer. Please retry."),
         );
       if (abort.signal.aborted) return;
       const updated: Message[] = [

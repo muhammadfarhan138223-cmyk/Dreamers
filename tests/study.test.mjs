@@ -105,7 +105,7 @@ test("practice API enforces origin, source bounds, shared durable quota, checked
     const body = JSON.parse(options.body);
     if (String(url) === "https://quota.test") {
       const [cmd, key, value] = body;
-      if (cmd === "EVAL") assert.match(body.at(-2), /^dreamers:quota:day:/);
+      if (cmd === "EVAL") assert.match(body[3], /^dreamers:quota:day:/);
       return Response.json({
         result:
           cmd === "EVAL"

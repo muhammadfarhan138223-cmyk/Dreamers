@@ -1,4 +1,5 @@
 "use client";
+import { aiErrorMessage } from "@/lib/ai-feedback.mjs";
 import { useEffect, useState } from "react";
 import {
   ArrowLeft,
@@ -558,7 +559,7 @@ export default function StudyHub({
     });
     const data = await response.json();
     if (!response.ok)
-      throw new Error(data.error || "Practice could not be made.");
+      throw new Error(aiErrorMessage(data, "Practice could not be made."));
     if (!data.questions.length) return false;
     const id = `study-set:${scopeBook}:${scopeChapter}:${mode}:${source.page}:${language}`;
     const revision = Array.from(
@@ -672,7 +673,8 @@ export default function StudyHub({
         }),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "AI could not respond.");
+      if (!response.ok)
+        throw new Error(aiErrorMessage(data, "AI could not respond."));
       setReply(data.answer);
       await db.put("notes", {
         id: crypto.randomUUID(),
@@ -898,31 +900,29 @@ export default function StudyHub({
           </div>
         </section>
       )}
-      <nav className="study-tabs" aria-label="Chapter learning mode">
-        {[
-          ["pdf", "Read"],
-          ["mcq", "1 · MCQs"],
-          ["exercise", "Exercise MCQs"],
-          ["short", "2 · Short answers"],
-          ["long", "3 · Long answers"],
-          ["test", "Test"],
-          ["play", "Play"],
-          ["ai", "Ask AI"],
-        ].map(([id, label]) => (
-          <button
-            key={id}
+      <div className="study-activity">
+        <label className="field">
+          <span>What would you like to do?</span>
+          <select
+            aria-label="Chapter learning mode"
+            value={mode}
             disabled={busy}
-            aria-pressed={mode === id}
-            className={mode === id ? "active" : ""}
-            onClick={() => {
-              setMode(id);
+            onChange={(event) => {
+              setMode(event.target.value);
               setNotice("");
             }}
           >
-            {label}
-          </button>
-        ))}
-      </nav>
+            <option value="pdf">Read the chapter</option>
+            <option value="mcq">Practise concept MCQs</option>
+            <option value="exercise">Textbook exercise MCQs</option>
+            <option value="short">Short answers</option>
+            <option value="long">Long answers</option>
+            <option value="test">Take a test</option>
+            <option value="play">Play & remember</option>
+            <option value="ai">Ask the AI teacher · Online</option>
+          </select>
+        </label>
+      </div>
       {!!legacySets.length && (
         <p className="study-notice">
           Earlier AI practice is still saved, but is withheld here until you

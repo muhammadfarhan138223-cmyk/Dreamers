@@ -9,6 +9,8 @@ import {
 } from "@/lib/global-search.mjs";
 import { chapterAtPage } from "@/lib/book-retrieval.mjs";
 import PassageHighlight from "./passage-highlight";
+import LoadingState from "./loading-state";
+import { aiErrorMessage } from "@/lib/ai-feedback.mjs";
 import { searchTopics } from "@/lib/ai-search.mjs";
 import { TEXTBOOKS, textbook } from "@/lib/textbooks.mjs";
 import type { BookPage, LocalBook } from "./book-library";
@@ -64,8 +66,10 @@ export default function GlobalSearch({
     [pageLimit, setPageLimit] = useState(12);
   const active = useRef<AbortController | null>(null),
     serial = useRef(0);
+  const results = useRef<HTMLDivElement>(null);
+  const [completed, setCompleted] = useState(0);
   const search = useCallback(
-    async (value: string, withAi = true) => {
+    async (value: string, withAi = false) => {
       active.current?.abort();
       const controller = new AbortController();
       active.current = controller;
@@ -105,7 +109,10 @@ export default function GlobalSearch({
             "The saved book index could not be read. Checked chapter results are still available.",
           );
       } finally {
-        if (id === serial.current) setLocalBusy(false);
+        if (id === serial.current) {
+          setLocalBusy(false);
+          setCompleted(id);
+        }
       }
       if (id !== serial.current || controller.signal.aborted || !withAi) return;
       if (!online) {
@@ -152,7 +159,7 @@ export default function GlobalSearch({
         });
         const data = await response.json();
         if (!response.ok)
-          throw new Error(data.error || "AI search is unavailable.");
+          throw new Error(aiErrorMessage(data, "AI search is unavailable."));
         if (id !== serial.current || controller.signal.aborted) return;
         const ids = new Set<string>(data.topicIds),
           terms: string[] = data.keywords;
@@ -180,14 +187,32 @@ export default function GlobalSearch({
     },
     [online, aiConfigured],
   );
+  // A health/configuration refresh must never submit another AI request.
+  const searchRef = useRef(search);
+  useEffect(() => {
+    searchRef.current = search;
+  }, [search]);
   useEffect(() => {
     setDraft(request.query);
-    void search(request.query);
+    void searchRef.current(request.query, false);
     return () => {
       active.current?.abort();
       serial.current++;
     };
-  }, [request, search]);
+  }, [request.id, request.query]);
+  useEffect(() => {
+    if (!completed) return;
+    const frame = requestAnimationFrame(() => {
+      results.current?.focus({ preventScroll: true });
+      results.current?.scrollIntoView({
+        block: "start",
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [completed]);
   useEffect(() => {
     let cancelled = false;
     const pdfKind = filters.kind === "all" || filters.kind === "pdf";
@@ -282,22 +307,22 @@ export default function GlobalSearch({
         <h3>{t.title}</h3>
       </div>
       <button
-        className="circle-button"
+        className="secondary result-open"
         aria-label={`Read ${t.title}`}
         onClick={() => navigate(`/books/${t.bookId}/${t.page}`)}
       >
-        <ArrowRight size={19} />
+        Read <ArrowRight size={17} />
       </button>
     </article>
   );
   return (
     <>
       <div className="page-heading">
-        <span className="eyebrow">SEARCH ACROSS YOUR LEARNING LIBRARY</span>
-        <h1>One question. Every book in reach.</h1>
+        <span className="eyebrow">YOUR BOOKS, ONE SIMPLE SEARCH</span>
+        <h1>What do you want to find?</h1>
         <p>
-          Find checked chapters, indexed PDF passages and downloaded foundation
-          lessons across subjects and classes.
+          Find a chapter, word or saved book passage. Use AI Search when you
+          need help finding a topic by meaning.
         </p>
       </div>
       <form
@@ -316,130 +341,150 @@ export default function GlobalSearch({
           maxLength={600}
           onChange={(e) => setDraft(e.target.value)}
         />
-        <button className="primary" type="submit" disabled={!draft.trim()}>
+        <button
+          className="primary"
+          type="submit"
+          disabled={!draft.trim() || busy || localBusy}
+        >
           Search <ArrowRight size={17} />
         </button>
+        <button
+          className="secondary ai-search-action"
+          type="button"
+          disabled={!draft.trim() || !online || busy || localBusy}
+          onClick={() => {
+            onQuery(draft);
+            void search(draft, true);
+          }}
+        >
+          <Sparkles size={17} /> AI Search
+        </button>
       </form>
-      <div
-        className="panel global-search-filters"
-        aria-label="Filter search results"
-      >
-        <label className="field">
-          Subject
-          <select
-            value={filters.subject}
-            onChange={(e) => changeFilter("subject", e.target.value)}
-          >
-            <option value="all">All subjects</option>
-            {Array.from(
-              new Set([
-                ...TEXTBOOKS.map((b) => b.subject),
-                ...books.map((b) => b.subject),
-              ]),
-            )
-              .sort()
-              .map((subject) => (
-                <option key={subject} value={subject}>
-                  {subject.split("-").join(" ")}
-                </option>
-              ))}
-          </select>
-        </label>
-        <label className="field">
-          Class
-          <select
-            value={filters.grade}
-            onChange={(e) => changeFilter("grade", e.target.value)}
-          >
-            <option value="all">All classes</option>
-            <option>XI</option>
-            <option>XII</option>
-            <option value="Unconfirmed">Class unconfirmed</option>
-            <option value="foundation">Unmapped foundations</option>
-          </select>
-        </label>
-        <label className="field">
-          Book
-          <select
-            value={filters.book}
-            onChange={(e) => changeFilter("book", e.target.value)}
-          >
-            <option value="all">All books</option>
-            {TEXTBOOKS.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.title} · {b.class}
-              </option>
-            ))}
-            {books
-              .filter((b) => !b.catalogId)
-              .map((b) => (
+      <p className="search-help">
+        Book search works without AI allowance. AI Search shares the teacher’s
+        allowance.
+      </p>
+      <details className="panel search-filter-disclosure">
+        <summary>
+          Filters {hasFilters ? "· Active" : "· Subject, class or book"}
+        </summary>
+        <div
+          className="global-search-filters"
+          aria-label="Filter search results"
+        >
+          <label className="field">
+            Subject
+            <select
+              value={filters.subject}
+              onChange={(e) => changeFilter("subject", e.target.value)}
+            >
+              <option value="all">All subjects</option>
+              {Array.from(
+                new Set([
+                  ...TEXTBOOKS.map((b) => b.subject),
+                  ...books.map((b) => b.subject),
+                ]),
+              )
+                .sort()
+                .map((subject) => (
+                  <option key={subject} value={subject}>
+                    {subject.split("-").join(" ")}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <label className="field">
+            Class
+            <select
+              value={filters.grade}
+              onChange={(e) => changeFilter("grade", e.target.value)}
+            >
+              <option value="all">All classes</option>
+              <option>XI</option>
+              <option>XII</option>
+              <option value="Unconfirmed">Class unconfirmed</option>
+              <option value="foundation">Unmapped foundations</option>
+            </select>
+          </label>
+          <label className="field">
+            Book
+            <select
+              value={filters.book}
+              onChange={(e) => changeFilter("book", e.target.value)}
+            >
+              <option value="all">All books</option>
+              {TEXTBOOKS.map((b) => (
                 <option key={b.id} value={b.id}>
-                  {b.title} · local copy
+                  {b.title} · {b.class}
                 </option>
               ))}
-          </select>
-        </label>
-        <label className="field">
-          Result type
-          <select
-            value={filters.kind}
-            onChange={(e) => changeFilter("kind", e.target.value)}
-          >
-            <option value="all">All results</option>
-            <option value="chapter">Chapters & AI topic matches</option>
-            <option value="pdf">PDF passages</option>
-            <option value="foundation">Foundation lessons</option>
-          </select>
-        </label>
-        {hasFilters && (
-          <button className="text-link" type="button" onClick={resetFilters}>
-            Clear filters
-          </button>
-        )}
-      </div>
-      <div className="search-scope panel">
-        <Sparkles size={22} />
-        <div>
-          <b>
-            {online
-              ? "Online: local search + AI topic discovery"
-              : "Offline: local search"}
-          </b>
-          <p>
-            Online searches send only your query to the configured AI provider.
-            Your PDFs and notes stay on this device. AI searches share the tutor
-            allowance.
-          </p>
-          <small>
-            {TEXTBOOKS.length} registered resources · {searchTopics.length}{" "}
-            checked headings. Full PDF text must be indexed first. Scans need
-            OCR, which is not enabled; a full syllabus is not implied.
-          </small>
+              {books
+                .filter((b) => !b.catalogId)
+                .map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.title} · local copy
+                  </option>
+                ))}
+            </select>
+          </label>
+          <label className="field">
+            Result type
+            <select
+              value={filters.kind}
+              onChange={(e) => changeFilter("kind", e.target.value)}
+            >
+              <option value="all">All results</option>
+              <option value="chapter">Chapters & AI topic matches</option>
+              <option value="pdf">PDF passages</option>
+              <option value="foundation">Foundation lessons</option>
+            </select>
+          </label>
+          {hasFilters && (
+            <button className="text-link" type="button" onClick={resetFilters}>
+              Clear filters
+            </button>
+          )}
         </div>
+      </details>
+      <div
+        ref={results}
+        tabIndex={-1}
+        className="search-outcome"
+        aria-label="Search results"
+        aria-busy={busy || localBusy}
+      >
+        {(busy || localBusy) && (
+          <LoadingState>
+            {localBusy
+              ? "Looking through your saved books…"
+              : "AI is finding related topics…"}
+          </LoadingState>
+        )}
+        {!!submitted && !localBusy && (
+          <div className="search-result-summary" role="status">
+            <Search size={23} aria-hidden />
+            <div>
+              <h2>Results for “{submitted}”</h2>
+              <p>
+                {shownChapters.length + shownSuggested.length} chapters ·{" "}
+                {shownPages.length} book passages · {shownFoundation.length}{" "}
+                lessons
+              </p>
+            </div>
+          </div>
+        )}
+        {error && (
+          <p role="alert" className="error-banner">
+            {error}
+          </p>
+        )}
+        {aiStatus && (
+          <p role="status" className="notice">
+            {aiStatus}
+          </p>
+        )}
+        {filterBusy && <LoadingState>Filtering saved book pages…</LoadingState>}
       </div>
-      {error && (
-        <p role="alert" className="error-banner">
-          {error}
-        </p>
-      )}
-      {aiStatus && (
-        <p role="status" className="notice">
-          {aiStatus}
-        </p>
-      )}
-      {(busy || localBusy) && (
-        <p role="status">
-          {localBusy ? "Searching saved text…" : "Finding topics by meaning…"}
-        </p>
-      )}
-      {filterBusy && <p role="status">Filtering saved PDF pages…</p>}
-      {!!submitted && (
-        <p className="fineprint">
-          {shownChapters.length + shownSuggested.length} chapter matches ·{" "}
-          {shownPages.length} PDF passages · {shownFoundation.length} foundation
-          lessons. PDF results are ranked; show more below.
-        </p>
-      )}
       {!!keywords.length && (
         <p className="fineprint">AI search terms: {keywords.join(" · ")}</p>
       )}
@@ -491,7 +536,7 @@ export default function GlobalSearch({
                     </p>
                   </div>
                   <button
-                    className="circle-button"
+                    className="secondary result-open"
                     aria-label={`Read ${book.title} page ${t.page}`}
                     onClick={() =>
                       navigate(
@@ -499,7 +544,7 @@ export default function GlobalSearch({
                       )
                     }
                   >
-                    <ArrowRight size={19} />
+                    Read <ArrowRight size={17} />
                   </button>
                 </article>
               );
@@ -530,11 +575,11 @@ export default function GlobalSearch({
                   <p>{t.snippet}</p>
                 </div>
                 <button
-                  className="circle-button"
+                  className="secondary result-open"
                   aria-label={`Open foundation ${t.title}`}
                   onClick={() => navigate(t.url)}
                 >
-                  <ArrowRight size={19} />
+                  Read <ArrowRight size={17} />
                 </button>
               </article>
             ))}
@@ -550,8 +595,10 @@ export default function GlobalSearch({
               : "No matching source found yet."}
           </h3>
           <p>
-            Try a shorter keyword, or import and index the relevant book. A
-            missing result does not mean the topic is outside your syllabus.
+            Try a shorter keyword. Open a book in Dreamers to prepare its
+            readable text for offline search. Scanned page pictures cannot be
+            searched by word yet. A missing result does not mean a topic is
+            outside your syllabus.
           </p>
           {hasFilters && (
             <button className="secondary" onClick={resetFilters}>
@@ -570,7 +617,7 @@ export default function GlobalSearch({
         </div>
       )}
       <button className="secondary" onClick={() => navigate("/books")}>
-        Manage books & text indexing <BookOpen size={17} />
+        Open book library <BookOpen size={17} />
       </button>
     </>
   );

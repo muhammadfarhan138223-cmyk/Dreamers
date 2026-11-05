@@ -1,3 +1,13 @@
+# 0.5.9 checkpoint — 2026-11-05
+
+Current milestone: usability and AI quota feedback hardening. Application checks: 90 tests and production build (including TypeScript) passed. Preview/production deployment and browser QA pending at this source checkpoint; prior verified production remains 0.5.8 / 033f4b916cc7e584612accbcb1c7cc6e26800000.
+
+Completed: normal book search runs locally without AI quota; explicit AI Search; configuration refresh cannot resubmit searches; visible result summary/focus; collapsible filters; shared animated loading feedback with reduced-motion support; clearer dark/light action colors; book options and advanced tutor settings collapsed; single chapter activity selector; duplicate reader page controls removed. Shared durable limits remain 12 new AI requests/day and 3 requests/minute per network. Cached responses skip new daily generation consumption while retaining burst protection. Errors distinguish minute/day reset windows; health exposes safe provider/model identifiers, never credentials.
+
+Partially implemented: responsive styling awaits actual browser QA; comprehensive device/accessibility coverage pending. Known limits: no OCR, account/cloud sync, full current official pairing scheme or complete reviewed question bank. Scans remain readable but not searchable as text. Existing 16 resources remain 11 catalogued textbooks + 5 support/reference resources, not all Punjab textbooks.
+
+Storage/migrations: IndexedDB v3 unchanged; shell v23 preserves PDF caches and saved learning. No cloud migrations. Env unchanged: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN; optional AI_BASE_URL. No secrets pulled or changed. Next task: protected preview checks, production deployment, verify actual provider/model and search/filter/theme/reader/study flows in browser, then record exact commits/deployments. Historical records follow.
+
 # DREAMERS project status
 
 Updated: 2026-11-05. Current release: **0.5.8 — book reader, search and simple AI teacher**.

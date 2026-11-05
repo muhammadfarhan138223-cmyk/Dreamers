@@ -1,4 +1,5 @@
 "use client";
+import { aiErrorMessage } from "@/lib/ai-feedback.mjs";
 import dynamic from "next/dynamic";
 import LoadingState from "./loading-state";
 import StudyHub, { type StudyFocus } from "./study-hub";
@@ -326,6 +327,7 @@ export default function DreamersApp() {
     >([]),
     [aiBusy, setAiBusy] = useState(false),
     [aiConfigured, setAiConfigured] = useState(false),
+    [aiModel, setAiModel] = useState(""),
     [noteText, setNoteText] = useState(""),
     [flipped, setFlipped] = useState(false),
     [flashIndex, setFlashIndex] = useState(0),
@@ -541,7 +543,14 @@ export default function DreamersApp() {
         signal: AbortSignal.timeout(8000),
       })
         .then((r) => (r.ok ? r.json() : Promise.reject()))
-        .then((v) => setAiConfigured(v.aiConfigured === true))
+        .then((v) => {
+          setAiConfigured(v.aiConfigured === true);
+          setAiModel(
+            v.ai?.provider && v.ai?.model
+              ? `${v.ai.provider} · ${v.ai.model}`
+              : "",
+          );
+        })
         .catch(() => {});
     };
     checkAi();
@@ -752,7 +761,9 @@ export default function DreamersApp() {
       });
       const value = await r.json();
       if (!r.ok)
-        throw new Error(value.error || "The AI teacher is unavailable.");
+        throw new Error(
+          aiErrorMessage(value, "The AI teacher is unavailable."),
+        );
       setChat((c) => [
         ...c,
         { role: "assistant", text: value.answer, enriched: allowEnrichment },
@@ -1826,193 +1837,203 @@ export default function DreamersApp() {
                 ))}
               </select>
             </label>
-            <span className="eyebrow">YOUR LEARNING SOURCE</span>
-            <label className="field">
-              Source type
-              <select
-                disabled={aiBusy}
-                value={aiContextKind}
-                onChange={(e) => {
-                  setAiContextKind(e.target.value);
-                  setReferenceOnly(e.target.value === "foundation");
-                  setBookContext(null);
-                  setChat([]);
-                }}
-              >
-                <option value="textbook">Textbook topic</option>
-                {aiContextKind === "pdf" && (
-                  <option value="pdf">Selected PDF passage</option>
-                )}
-                <option value="foundation">
-                  Original foundation practice (unmapped)
-                </option>
-              </select>
-            </label>
-            {aiContextKind === "textbook" ? (
-              <>
-                <label className="field">
-                  Textbook
-                  <select
-                    disabled={aiBusy}
-                    value={aiTextbook}
-                    onChange={(e) => {
-                      const id = e.target.value;
-                      setAiTextbook(id);
-                      setReferenceOnly(false);
-                      setChat([]);
-                      setAiChapter(
-                        textbook(id)!.chapters[0]?.id || "book-overview",
-                      );
-                      setBookContext(null);
-                    }}
-                  >
-                    {TEXTBOOKS.map((b) => (
-                      <option key={b.id} value={b.id}>
-                        {b.title} · {b.class}
-                        {b.kind !== "textbook" ? ` · ${b.kind}` : ""}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="field">
-                  Chapter
-                  <select
-                    disabled={aiBusy}
-                    value={aiChapter}
-                    onChange={(e) => {
-                      setAiChapter(e.target.value);
-                      setBookContext(null);
-                      setChat([]);
-                    }}
-                  >
-                    {!textbook(aiTextbook)!.chapters.length && (
-                      <option value="book-overview">
-                        Ask about a word or idea
-                      </option>
-                    )}
-                    {textbook(aiTextbook)!.chapters.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.title}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+            <details className="simple-options">
+              <summary>Book & answer options</summary>
+              {aiModel && (
                 <p className="fineprint">
-                  Suggestions use checked textbook headings. Files with pending
-                  maps contribute no suggested topics. Official current exam
-                  exclusions remain unverified.{" "}
-                  {textbook(aiTextbook)!.chapters.length
-                    ? "Book evidence mode needs a readable PDF passage. A chapter title is not evidence for an answer."
-                    : "This book has no checked chapter map yet. You can still ask general questions about a word or idea. AI cannot see scanned page images; type the line you want explained."}
+                  AI: {aiModel} · Shared network limit: 12 new requests/day,
+                  3/minute.
                 </p>
-              </>
-            ) : (
-              <>
-                <label className="field">
-                  Subject pack
-                  <select
-                    disabled={aiBusy}
-                    value={aiPack}
-                    onChange={(e) => {
-                      setAiPack(e.target.value);
-                      setAiTopic(packMeta(e.target.value)!.lessonIds[0]);
-                    }}
-                  >
-                    {PACKS.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.subject}: {p.title}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="field">
-                  Topic
-                  <select
-                    disabled={aiBusy}
-                    value={aiTopic}
-                    onChange={(e) => setAiTopic(e.target.value)}
-                  >
-                    {(
-                      installedPacks.find((p) => p.id === aiPack)?.lessons ||
-                      packMeta(aiPack)!.lessonIds.map((id) => ({
-                        id,
-                        subtitle: id,
-                      }))
-                    ).map((l) => (
-                      <option key={l.id} value={l.id}>
-                        {l.subtitle}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </>
-            )}
-            <label
-              className={`enrichment-control ${referenceOnly ? "enabled" : ""}`}
-            >
-              <input
-                type="checkbox"
-                disabled={aiBusy}
-                checked={referenceOnly}
-                onChange={(e) => {
-                  setReferenceOnly(e.target.checked);
-                  setChat([]);
-                }}
-              />
-              <span>
-                <b>Answer from provided text only</b>
-                <small>
-                  Require a readable passage and a matching quotation. With this
-                  off, the teacher gives a general explanation.
-                </small>
-              </span>
-            </label>
-            <p className="fineprint">
-              A matching quotation checks the reference, not every claim. AI
-              explanations can still be wrong. No whole-book retrieval or
-              teacher verification is implied.
-            </p>
-            <label
-              className={`enrichment-control ${allowEnrichment ? "enabled" : ""}`}
-            >
-              <input
-                type="checkbox"
-                disabled={aiBusy}
-                checked={allowEnrichment}
-                onChange={(e) => setAllowEnrichment(e.target.checked)}
-              />
-              <span>
-                <b>Stories & extra context</b>
-                <small>
-                  Optional history, related ideas and memorable stories. Clearly
-                  labelled outside textbook scope.
-                </small>
-              </span>
-            </label>
-            <p className="scope-note">
-              {allowEnrichment
-                ? "Extra context enabled by you. It does not become exam syllabus."
-                : "Textbook focus is on. Extra topics stay off until you choose them."}
-            </p>
-            <hr />
-            <h4>Offline alternatives</h4>
-            <p>
-              Search downloaded lessons or revisit your saved AI explanations.
-            </p>
-            {link(
-              "/search",
-              <>
-                Search learning pack <Search size={15} />
-              </>,
-              "text-link",
-            )}
-            {link(
-              "/notes",
-              <>
-                Saved explanations <Bookmark size={15} />
-              </>,
-              "text-link",
-            )}
+              )}
+              <span className="eyebrow">YOUR LEARNING SOURCE</span>
+              <label className="field">
+                Source type
+                <select
+                  disabled={aiBusy}
+                  value={aiContextKind}
+                  onChange={(e) => {
+                    setAiContextKind(e.target.value);
+                    setReferenceOnly(e.target.value === "foundation");
+                    setBookContext(null);
+                    setChat([]);
+                  }}
+                >
+                  <option value="textbook">Textbook topic</option>
+                  {aiContextKind === "pdf" && (
+                    <option value="pdf">Selected PDF passage</option>
+                  )}
+                  <option value="foundation">
+                    Original foundation practice (unmapped)
+                  </option>
+                </select>
+              </label>
+              {aiContextKind === "textbook" ? (
+                <>
+                  <label className="field">
+                    Textbook
+                    <select
+                      disabled={aiBusy}
+                      value={aiTextbook}
+                      onChange={(e) => {
+                        const id = e.target.value;
+                        setAiTextbook(id);
+                        setReferenceOnly(false);
+                        setChat([]);
+                        setAiChapter(
+                          textbook(id)!.chapters[0]?.id || "book-overview",
+                        );
+                        setBookContext(null);
+                      }}
+                    >
+                      {TEXTBOOKS.map((b) => (
+                        <option key={b.id} value={b.id}>
+                          {b.title} · {b.class}
+                          {b.kind !== "textbook" ? ` · ${b.kind}` : ""}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="field">
+                    Chapter
+                    <select
+                      disabled={aiBusy}
+                      value={aiChapter}
+                      onChange={(e) => {
+                        setAiChapter(e.target.value);
+                        setBookContext(null);
+                        setChat([]);
+                      }}
+                    >
+                      {!textbook(aiTextbook)!.chapters.length && (
+                        <option value="book-overview">
+                          Ask about a word or idea
+                        </option>
+                      )}
+                      {textbook(aiTextbook)!.chapters.map((t) => (
+                        <option key={t.id} value={t.id}>
+                          {t.title}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <p className="fineprint">
+                    Suggestions use checked textbook headings. Files with
+                    pending maps contribute no suggested topics. Official
+                    current exam exclusions remain unverified.{" "}
+                    {textbook(aiTextbook)!.chapters.length
+                      ? "Book evidence mode needs a readable PDF passage. A chapter title is not evidence for an answer."
+                      : "This book has no checked chapter map yet. You can still ask general questions about a word or idea. AI cannot see scanned page images; type the line you want explained."}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <label className="field">
+                    Subject pack
+                    <select
+                      disabled={aiBusy}
+                      value={aiPack}
+                      onChange={(e) => {
+                        setAiPack(e.target.value);
+                        setAiTopic(packMeta(e.target.value)!.lessonIds[0]);
+                      }}
+                    >
+                      {PACKS.map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {p.subject}: {p.title}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="field">
+                    Topic
+                    <select
+                      disabled={aiBusy}
+                      value={aiTopic}
+                      onChange={(e) => setAiTopic(e.target.value)}
+                    >
+                      {(
+                        installedPacks.find((p) => p.id === aiPack)?.lessons ||
+                        packMeta(aiPack)!.lessonIds.map((id) => ({
+                          id,
+                          subtitle: id,
+                        }))
+                      ).map((l) => (
+                        <option key={l.id} value={l.id}>
+                          {l.subtitle}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </>
+              )}
+              <label
+                className={`enrichment-control ${referenceOnly ? "enabled" : ""}`}
+              >
+                <input
+                  type="checkbox"
+                  disabled={aiBusy}
+                  checked={referenceOnly}
+                  onChange={(e) => {
+                    setReferenceOnly(e.target.checked);
+                    setChat([]);
+                  }}
+                />
+                <span>
+                  <b>Answer from provided text only</b>
+                  <small>
+                    Require a readable passage and a matching quotation. With
+                    this off, the teacher gives a general explanation.
+                  </small>
+                </span>
+              </label>
+              <p className="fineprint">
+                A matching quotation checks the reference, not every claim. AI
+                explanations can still be wrong. No whole-book retrieval or
+                teacher verification is implied.
+              </p>
+              <label
+                className={`enrichment-control ${allowEnrichment ? "enabled" : ""}`}
+              >
+                <input
+                  type="checkbox"
+                  disabled={aiBusy}
+                  checked={allowEnrichment}
+                  onChange={(e) => setAllowEnrichment(e.target.checked)}
+                />
+                <span>
+                  <b>Stories & extra context</b>
+                  <small>
+                    Optional history, related ideas and memorable stories.
+                    Clearly labelled outside textbook scope.
+                  </small>
+                </span>
+              </label>
+              <p className="scope-note">
+                {allowEnrichment
+                  ? "Extra context enabled by you. It does not become exam syllabus."
+                  : "Textbook focus is on. Extra topics stay off until you choose them."}
+              </p>
+            </details>
+            <details className="simple-options">
+              <summary>Offline learning</summary>
+              <p>
+                Search downloaded lessons or revisit your saved AI explanations.
+              </p>
+              {link(
+                "/search",
+                <>
+                  Search learning pack <Search size={15} />
+                </>,
+                "text-link",
+              )}
+              {link(
+                "/notes",
+                <>
+                  Saved explanations <Bookmark size={15} />
+                </>,
+                "text-link",
+              )}
+            </details>
           </aside>
         </div>
       </>
@@ -3084,7 +3105,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.5.8 · One subject at a time</span>
+              <span>v0.5.9 · One subject at a time</span>
             </div>
           </footer>
         </main>

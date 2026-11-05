@@ -1,3 +1,7 @@
+## 0.5.9 priority checkpoint
+
+Implemented search/local-AI separation, clear results/loading, simplified book/reader/chapter/tutor controls and quota reset feedback. Next: protected preview → production browser verification → physical Android touch/install/offline checks. Missing authorized First Year resources, teacher-reviewed chapter coverage and later account/admin milestones remain pending. Preserve direct reading and existing offline data.
+
 ## 0.5.8 verified checkpoint — 2026-11-05
 
 Reader search, typed scan questions, genuine simpler follow-up, conversation reload and fullscreen unmapped-book controls verified live. Physical Android swipe/install/airplane-mode checks remain the next verification task. Missing First Year resources, reviewed question coverage and later account/admin milestones remain pending; read PROJECT_STATUS for exact boundaries. Historical implementation notes follow.

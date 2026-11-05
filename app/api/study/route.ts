@@ -6,6 +6,7 @@ import {
   redis,
   quotaIdentity,
   consumeQuota,
+  quotaFailure,
 } from "@/lib/ai-server.mjs";
 import { completionOptions } from "@/lib/ai-quality.mjs";
 import {
@@ -82,15 +83,14 @@ export async function POST(request: Request) {
       )
       .digest("hex");
   try {
-    if ((await consumeQuota(daily, burst)) !== 1)
-      return json(
-        {
-          error:
-            "Your network's shared AI allowance is used up (12/day, 3/minute). Saved practice still works offline.",
-        },
-        429,
-      );
     const cached = await redis(["GET", cacheKey]);
+    const allowed = await consumeQuota(
+      daily,
+      burst,
+      typeof cached === "string",
+    );
+    if (allowed !== 1) return quotaFailure(allowed);
+
     if (typeof cached === "string")
       return json({
         questions: checkStudyQuestions(

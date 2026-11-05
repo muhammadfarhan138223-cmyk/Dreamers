@@ -6,9 +6,14 @@ export default function LoadingState({
   children: React.ReactNode;
 }) {
   return (
-    <p className="dreamers-loading" role="status">
+    <div className="dreamers-loading" role="status" aria-live="polite">
       <LoaderCircle aria-hidden size={19} />
-      {children}
-    </p>
+      <span>{children}</span>
+      <span className="loading-dots" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </span>
+    </div>
   );
 }

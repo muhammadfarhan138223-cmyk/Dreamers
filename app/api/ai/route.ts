@@ -14,6 +14,7 @@ import {
   redis,
   quotaIdentity,
   consumeQuota,
+  quotaFailure,
 } from "@/lib/ai-server.mjs";
 import biology from "@/public/packs/cells-v1.json";
 import chemistry from "@/public/packs/atoms-v1.json";
@@ -187,16 +188,14 @@ export async function POST(request: Request) {
       )
       .digest("hex");
   try {
-    const allowed = await consumeQuota(daily, burst);
-    if (allowed !== 1)
-      return json(
-        {
-          error:
-            "This network has reached its AI allowance (12 questions per day, 3 per minute). Your offline learning remains available.",
-        },
-        429,
-      );
     const cached = await redis(["GET", cacheKey]);
+    const allowed = await consumeQuota(
+      daily,
+      burst,
+      typeof cached === "string",
+    );
+    if (allowed !== 1) return quotaFailure(allowed);
+
     if (typeof cached === "string")
       return json({ answer: cached, generated: true, cached: true });
     const lesson =

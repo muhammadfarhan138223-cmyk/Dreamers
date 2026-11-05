@@ -314,32 +314,38 @@ export default function BookLibrary({
                     Publisher edition <ExternalLink size={14} />
                   </a>
                 )}
-                <button
-                  className="text-link"
-                  onClick={() => {
-                    setDetails(book.id);
-                    requestAnimationFrame(() =>
-                      document
-                        .getElementById("book-details")
-                        ?.scrollIntoView({ block: "start" }),
-                    );
-                  }}
-                >
-                  Chapters & details
-                </button>
-                {local ? (
-                  <button className="text-link" onClick={() => download(local)}>
-                    Download PDF <Download size={14} />
-                  </button>
-                ) : available ? (
-                  <a
+                <details className="simple-options book-card-options">
+                  <summary>Book options</summary>
+                  <button
                     className="text-link"
-                    href={available}
-                    download={book.filename}
+                    onClick={() => {
+                      setDetails(book.id);
+                      requestAnimationFrame(() =>
+                        document
+                          .getElementById("book-details")
+                          ?.scrollIntoView({ block: "start" }),
+                      );
+                    }}
                   >
-                    Download PDF <Download size={14} />
-                  </a>
-                ) : null}
+                    Chapters & details
+                  </button>
+                  {local ? (
+                    <button
+                      className="text-link"
+                      onClick={() => download(local)}
+                    >
+                      Download PDF <Download size={14} />
+                    </button>
+                  ) : available ? (
+                    <a
+                      className="text-link"
+                      href={available}
+                      download={book.filename}
+                    >
+                      Download PDF <Download size={14} />
+                    </a>
+                  ) : null}
+                </details>
               </div>
             </article>
           );

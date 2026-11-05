@@ -1,3 +1,12 @@
+## 0.5.9 — 2026-11-05
+
+- Separate free local book search from explicitly requested AI topic discovery; prevent health refresh from resubmitting searches.
+- Make result completion obvious with focused result summary, counts, stronger Read actions and collapsible filters.
+- Simplify book cards, chapter activity selection, reader navigation and advanced tutor controls.
+- Improve shared loading animations, reduced-motion behavior and dark/light button visibility.
+- Preserve shared durable AI budgets, distinguish minute/day retries and avoid charging cached answers as new daily generations. Expose safe runtime provider/model identifiers without secret values.
+- 90 automated tests and production build passed; deployment verification recorded separately.
+
 ## 0.5.8 verification completed — 2026-11-05
 
 - Verified live typed question and simpler follow-up in the scanned Pakistan Studies reader; both answers persisted through reload.

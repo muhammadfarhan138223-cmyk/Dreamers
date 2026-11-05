@@ -74,7 +74,7 @@ function worker() {
 test("worker precaches root and referenced application JavaScript and CSS", async () => {
   const w = worker();
   await w.run("install");
-  const cache = await w.caches.open("dreamers-shell-v22");
+  const cache = await w.caches.open("dreamers-shell-v23");
   assert.ok(await cache.match("/_next/static/app.js"));
   assert.ok(await cache.match("/_next/static/app.css"));
 });

@@ -45,13 +45,17 @@ test("search endpoint validates source IDs, rejects unsafe requests and shares t
     finish = "stop",
     quota = 1,
     sent;
+  const cacheFlags = [];
   const identities = [],
     cache = new Map();
   t.mock.method(globalThis, "fetch", async (url, options) => {
     const body = JSON.parse(options.body);
     if (String(url) === "https://quota.test") {
       const [cmd, key, value] = body;
-      if (cmd === "EVAL") identities.push(body.slice(-2));
+      if (cmd === "EVAL") {
+        identities.push(body.slice(3, 5));
+        cacheFlags.push(body[5]);
+      }
       return Response.json({
         result:
           cmd === "EVAL"
@@ -85,6 +89,14 @@ test("search endpoint validates source IDs, rejects unsafe requests and shares t
       query: "how do kidneys clean blood",
     });
     assert.ok(!JSON.stringify(sent).includes("private PDF excerpt"));
+    assert.equal(cacheFlags.at(-1), "0");
+    const repeat = await POST(request({ query: "how do kidneys clean blood" }));
+    assert.equal((await repeat.json()).cached, true);
+    assert.equal(
+      cacheFlags.at(-1),
+      "1",
+      "cached answers must not consume a new daily generation",
+    );
     cache.clear();
     reply = { topicIds: ["fake-topic"], keywords: [] };
     assert.equal((await POST(request({ query: "kidney" }))).status, 502);
@@ -93,8 +105,16 @@ test("search endpoint validates source IDs, rejects unsafe requests and shares t
     finish = "length";
     assert.equal((await POST(request({ query: "kidney" }))).status, 502);
     finish = "stop";
-    quota = 0;
-    assert.equal((await POST(request({ query: "kidney" }))).status, 429);
+    quota = -2;
+    const minute = await POST(request({ query: "kidney" }));
+    assert.equal(minute.status, 429);
+    const minuteBody = await minute.json();
+    assert.equal(minuteBody.limitType, "minute");
+    assert.ok(Number(minute.headers.get("Retry-After")) <= 60);
+    quota = -1;
+    const daily = await POST(request({ query: "kidney" }));
+    assert.equal(daily.status, 429);
+    assert.equal((await daily.json()).limitType, "daily");
     await tutor.POST(
       request({
         question: "Explain diffusion",

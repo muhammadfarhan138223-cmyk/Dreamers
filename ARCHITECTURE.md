@@ -1,3 +1,7 @@
+## 0.5.9 interaction and quota boundary
+
+Normal global search queries IndexedDB/catalogue only; AI Search is an explicit action using the same protected server endpoint. Request effects depend on query/id rather than changing health status. Result completion is announced and focused once per submission. Quota keys/budgets stay shared across tutor/search/practice. Cache lookup precedes atomic quota consumption; cached answers still count toward burst protection, but do not increment the daily new-generation counter. Minute/day errors include Retry-After, resetAt and limitType. Public health reveals only validated provider/model identifiers alongside existing configuration booleans; no base URL or credentials. No storage schema or service changes.
+
 ## 0.5.8 search boundary
 
 Literal reader search uses the existing bookPages bookId index and bounded results, including common words/numeric years. Conversational global search retains its separate token/ranking behavior. Explicit page requests validate bounds; bare out-of-range numbers remain searchable text. Fullscreen and inline tutors both preserve the chosen unmapped book in general mode; neither silently substitutes a foundation pack. Strict source-only authorization/validation remains separate.
