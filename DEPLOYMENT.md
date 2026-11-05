@@ -1,3 +1,5 @@
+0.5.6 live: fca9778bcb86e4deb8586d4498dc8d8d2a826c75. Preview dpl_HYCF1cD4rBmkZPmjyhbXvUCdVHdZ and production dpl_8ch1wiP68iiMiSYRsMzs9CaQBfhV READY. Stable alias health verified 0.5.6/16 hosted books/AI configured; browser direct PDF read and reload persistence passed.
+
 ## 0.5.6 textbook assets
 
 `npm run build` now prepares 16 textbook resources (259 MB) in ignored `public/textbooks/`, after other assets. Vercel serves them as static same-origin files. No new storage service or secret is required. Source URLs are fixed and SHA/size checked against the owner's supplied originals; changed or unavailable sources fail the new deployment, retaining the prior production deployment. For local offline builds set `DREAMERS_BOOK_SOURCE_DIR` to the directory of original attachment filenames. Do not commit the generated PDF folder. To add a future owner-provided book, register its exact metadata/digest/source in the catalogues and add its genuine cover/title preview, then test the build and reader. Never ask each student to upload it.

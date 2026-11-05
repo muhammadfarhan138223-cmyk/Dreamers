@@ -13,8 +13,8 @@ Updated: 2026-11-04. Current release checkpoint: **0.5.6 — owner-provided text
 
 ## Verification and deployment checkpoint
 
-83 tests and production build passed before final release preparation; rerun after final edits. Coverage includes exact catalogue identities, failed/truncated/changed/oversized transfers, cancellation, worker offline behavior and existing question/progress flows.
-Latest previously verified GitHub commit: 4151310c64b11b59fc397e59a7f3cf681a0cf157 (0.5.5). Current changes await preview and production verification.
+83 tests, TypeScript and the final production build passed. Coverage includes exact catalogue identities, failed/truncated/changed/oversized transfers, cancellation, worker offline behavior and existing question/progress flows.
+Latest verified application commit: fca9778bcb86e4deb8586d4498dc8d8d2a826c75 (0.5.6), exact tree 11784428279fff96a353d3b11eb163fc6918bb77. Preview dpl_HYCF1cD4rBmkZPmjyhbXvUCdVHdZ and production dpl_8ch1wiP68iiMiSYRsMzs9CaQBfhV READY. Stable alias health returned version 0.5.6, hostedBooks 16, aiConfigured true. Browser on a fresh shelf opened the hosted English XII PDF with no file input, rendered page 85 (A Letter to God), then reloaded/reopened the retained copy at page 85. Dashboard English XII entered Read mode with corrected chapter links. Screenshot: docs/screenshots/textbook-library-0.5.6.png. Full network-disconnected physical-device testing remains pending.
 Live: https://dreamers-sooty.vercel.app
 Repository: https://github.com/muhammadfarhan138223-cmyk/Dreamers
 Vercel: dreamers / prj_ol5nVtQ2DprVqMgNY140bM86Lsvu / team_jwuAswY9vD3bNmcKQM2LqjoF. Keep preview protection.
@@ -29,7 +29,7 @@ Vercel: dreamers / prj_ol5nVtQ2DprVqMgNY140bM86Lsvu / team_jwuAswY9vD3bNmcKQM2Lq
 
 ## Exact next task
 
-Verify this release's direct book opening and page rendering on preview/production, then expand the missing First Year collection from authorised publisher resources and review its exact editions/chapter maps.
+Expand the missing First Year collection from authorised publisher resources and review its exact editions/chapter maps. Test installation/airplane mode on physical Android, then continue question-bank coverage and accounts. The no-student-upload book flow is verified live.
 
 ---
 
