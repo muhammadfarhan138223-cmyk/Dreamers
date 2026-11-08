@@ -1,3 +1,7 @@
+## 0.5.12 live verified — 2026-11-08
+
+Source71c2b0f1b2280332c361b6763673d682979da676, tree842237a3a2d96fa8fe8bf5ffe9be6904fa5b080d. Preview dpl_Dsx2JdWmx2c5QogAQ39SgmomrG6o and production dpl_8wujub6zpTwdXk1F2CCeRnQ9Pg1R READY. Stable alias health200/0.5.12/16 resources/AI configured, primary120B+alternate20B and60/day6/min/device. Browser verified prepared replies, source-page links, saved game reload/PWA update and dark contrast. Routing outage paths are isolated fixtures; no production throttle was deliberately induced. No secret/env/migration/paid-plan changes. Physical Android checks remain pending.
+
 ## 0.5.12 source checkpoint
 
 101 tests and production build passed. No new credentials or env vars; prepared replies are model-free and available in previews/offline. Shell26 preserves existing local PDFs, prepared text indexes, chats and game rounds. Live model/routing/quota health was confirmed on0.5.11. Final prepared-answer and persistence browser evidence follows in verification notes.

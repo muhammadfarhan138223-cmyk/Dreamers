@@ -1,3 +1,15 @@
+# 0.5.12 live verification — 2026-11-08
+
+Live API smoke: prepared response200/generated=false with source pages9/6/7/8, cross-origin403 and injected system-role400.
+
+Source71c2b0f1b2280332c361b6763673d682979da676 (tree842237a3a2d96fa8fe8bf5ffe9be6904fa5b080d), preview dpl_Dsx2JdWmx2c5QogAQ39SgmomrG6o and production dpl_8wujub6zpTwdXk1F2CCeRnQ9Pg1R READY.101 tests and builds passed. Health confirmed120B primary/20B alternate, signed anonymous cookie issuance,60/day6/min/device plus network/service caps. Router429/5xx/auth-failure cases use isolated fixtures; no live fallback invocation claim.
+
+Actual browser: English PDF2 question resolved Journey to Taif's source pages; a follow-up returned8 short questions on PDF9/printed5. Source navigation opened PDF9. General Giving Tree summary followed the newly named chapter. A later first-chapter request overrode it, but some generated Roman Urdu attribution/phrasing was wrong, motivating the authored key. Final prepared response returned8 original source-based comprehension answers in Roman Urdu with generated=false labels; a separate count/page follow-up returned the checked locations instantly. These remain educator-review-pending, not official board keys.
+
+Chapter game: English XII/Journey to Taif produced8 mapped concept questions. Choosing B on question1 showed corrective explanation, survived reload and PWA update, and Next advanced to question2. Selecting The Last Lesson withheld the unrelated game and offered reading/exercise. Dark reader chat computed text245/249/255 on bubble17/40/76. Saved PDF reopened after update. Screenshots are genuine browser bytes under docs/screenshots.
+
+Physical Android/mobile viewport/network-emulation APIs were unavailable; no airplane-mode/device claim. Offline worker, local persistence, prepared-content and quota/routing tests are automated. Other scanned books still lack prepared OCR; all-subject curriculum/game/question coverage, latest pairing, teacher factual review, accounts/cloud sync/admin remain incomplete. Historical evidence follows.
+
 # Release verification
 
 Date: 30 October 2026. Test learning activities were created in the agent's browser session only; new student devices start at 0 XP.

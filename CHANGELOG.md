@@ -1,3 +1,7 @@
+## 0.5.12 verification checkpoint — 2026-11-08
+
+Recorded actual production health and browser evidence for prepared exercise answers, chapter-game feedback/persistence/isolation, PWA update preservation and dark reader contrast.101 tests/build passed. Generic AI errors remain documented; no new complete-curriculum claim.
+
 ## 0.5.12 — 2026-11-08
 
 - Add clearly labelled, original source-based answers for the8 Journey to Taif comprehension questions in English/Roman Urdu, including counts and page lookup. They use no model or quota and remain available offline.

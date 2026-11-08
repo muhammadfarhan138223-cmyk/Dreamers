@@ -1,3 +1,7 @@
+## Current next step — 2026-11-08
+
+Latest source71c2b0f is live/verified. Next extend educator-reviewed keys and source text one chapter at a time, then verify offline touch/install on physical Android. Existing games are now scoped; authored English1 replies avoid model inference, while other generated explanations require checking. Do not replace working modules or re-expose unrelated starter demos in the main textbook path.
+
 ## 0.5.12 quality checkpoint
 
 Use source-based authored exercise keys where available rather than treating successful model retrieval as factual verification. Finish real-browser game persistence and prepared English exercise checks. Expand reviewed keys/OCR one chapter at a time; generic AI remains fallible. Keep the per-device budgets and scoped game navigation.

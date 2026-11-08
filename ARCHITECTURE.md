@@ -1,3 +1,7 @@
+## Verified prepared-key identity boundary
+
+English comprehension keys use separate short:comprehension IDs so earlier concept-question review records cannot mark different questions complete. The same authored source-based key is shared by offline Short answers, inline reader and server tutor. Model-free responses are labelled prepared/generated=false; strict evidence mode and input authorization still run before any server reply. No schema change.
+
 ## 0.5.12 prepared answer boundary
 
 The reader checks a narrowly scoped authored answer module before network use. Supported book/chapter/request/language combinations return prepared=true/generated=false and source pages; everything else continues to normal AI availability and source retrieval. The server uses the same module after request validation and source-mode checks, before quota/provider access. Strict reference-only mode is not bypassed. These are original source-based answers awaiting educator review, not model outputs or official board keys. Offline short-answer practice shares the English key. General follow-ups remain AI-backed unless an authored match exists.
