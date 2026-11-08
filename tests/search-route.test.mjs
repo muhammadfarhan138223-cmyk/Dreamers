@@ -54,7 +54,7 @@ test("search endpoint validates source IDs, rejects unsafe requests and shares t
       const [cmd, key, value] = body;
       if (cmd === "EVAL") {
         identities.push(body.slice(3, 5));
-        cacheFlags.push(body[5]);
+        cacheFlags.push(body.at(-1));
       }
       return Response.json({
         result:

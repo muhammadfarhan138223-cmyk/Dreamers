@@ -1,14 +1,21 @@
-import { publicAiModel } from "@/lib/ai-server.mjs";
+import { AI_LIMITS } from "@/lib/ai-limits.mjs";
+import { routedModels } from "@/lib/ai-routing.mjs";
+import { publicAiModel, guestQuotaCookie } from "@/lib/ai-server.mjs";
 import { HOSTED_BOOKS } from "@/lib/hosted-books.mjs";
-export function GET() {
+export function GET(request: Request) {
+  const cookie = guestQuotaCookie(request, process.env.AI_API_KEY);
   return Response.json(
     {
       status: "ok",
-      version: "0.5.10",
+      version: "0.5.11",
       storage: "device-local",
       ai: {
         ...publicAiModel(),
-        limits: { daily: 12, perMinute: 3, scope: "shared-network" },
+        limits: AI_LIMITS,
+        models: routedModels(
+          process.env.AI_PROVIDER || "groq",
+          process.env.AI_MODEL || "",
+        ),
       },
       hostedBooks: HOSTED_BOOKS.length,
       aiConfigured: !!(
@@ -22,6 +29,11 @@ export function GET() {
       ),
       accountsConfigured: false,
     },
-    { headers: { "Cache-Control": "no-store" } },
+    {
+      headers: {
+        "Cache-Control": "no-store",
+        ...(cookie ? { "Set-Cookie": cookie } : {}),
+      },
+    },
   );
 }

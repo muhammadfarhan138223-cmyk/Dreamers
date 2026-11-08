@@ -1,3 +1,7 @@
+## 0.5.11 priority checkpoint
+
+Finish live verification of per-device quotas, bounded model routing, chapter-specific recall game and simple tutor follow-ups. Then extend reviewed question/game banks and prepared OCR to missing chapters/books. Keep old foundation demos away from the default textbook-focused path; never substitute a different chapter's game. Free providers remain finite; future multi-user scaling requires provider capacity planning, not unlimited-usage promises.
+
 ## 0.5.10 priority checkpoint
 
 Repair chapter-aware tutoring/follow-ups, verify English exercise questions/count/page answers live, then extend prepared source text/OCR to other authorized scanned books with source-image QA. Preserve the simpler controls, local-first search, bounded owner-paid/free-tier AI quota and honest source coverage. Teacher-reviewed answer banks and physical Android installation/offline tests remain pending.

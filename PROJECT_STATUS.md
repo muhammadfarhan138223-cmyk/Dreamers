@@ -1,3 +1,13 @@
+# 0.5.11 checkpoint — 2026-11-08
+
+Current milestone: useful chapter games, per-device AI budgets and bounded provider routing. 100 automated tests and production build passed before final documentation/UI loading polish; final checks, preview and live QA follow. Prior production2074fe231efa1cf1ee18a9f233d64f9c5be16408 / tree62607daa3ba2a3ca17a75e8fcb42d682c9ed47c1 is READY. Its live reader returned actual Journey to Taif exercise Q&A from page2, then correctly answered a short follow-up:8 short questions on PDF9/printed5. No claim all AI wording was correct; final polish shortens answers and avoids dramatic/garbled wording.
+
+Completed in this checkpoint: secure signed HttpOnly anonymous-device quota identity;60 new requests/day and6/minute/device, plus network240/day18/minute and service800/day24/minute protections. Cache hits skip daily new-generation counts, retain burst protection. Existing Groq120B remains primary; one20B alternate on429/5xx/timeouts, no auth/validation retry and no billing/secret changes. The same routing is used by search, tutor, practice and source audit, with bounded deadlines. Optional AI_FALLBACK_MODELS allows only the supported GPT-OSS IDs; default needs no env change.
+
+Games: one-question-at-a-time chapter recall for available mapped MCQ banks, with source links, explanations and saved offline rounds; no invented XP. Eight original Journey to Taif concept MCQs/short questions plus a summary/long answer added from the supplied chapter. Other English chapters are NOT claimed complete. Kidney adventure now appears only in Human Urinary System, not every Biology chapter. My study tools links to chapter games/notes/bookmarks/progress, removing unrelated demo shortcuts. Missing chapter banks get honest read/exercise alternatives. Reader user-message contrast repaired in both themes.
+
+Pending: verify new quota health metadata and genuine AI reply, game progress persistence, selected chapter isolation and final browser screenshots; record exact deploy/commit. Physical Android, other scanned-book OCR, full current official pairing/complete question banks and accounts/admin remain pending. Storage IndexedDBv3 unchanged, shell25. No DB migration or credentials retrieved. Required env unchanged; latest confirmed primary Groq openai/gpt-oss-120b. Historical records follow.
+
 # 0.5.10 checkpoint — 2026-11-08
 
 Current milestone: source-aware reader tutoring and follow-up repair. 95 automated tests passed; final production build and deployment/browser verification follow this source checkpoint. Prior verified production: a8d2d1a4ddcabfbc9738ea21ac14fe66b56b9fdf (0.5.9; tree 0ccb4d01af589855fdb9275798e94d801ab633b6).

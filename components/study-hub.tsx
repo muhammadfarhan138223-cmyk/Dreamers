@@ -35,6 +35,7 @@ import {
 import ExercisePractice from "./exercise-practice";
 import BookPassageSearch from "./book-passage-search";
 import SubjectTests from "./subject-tests";
+import ChapterGame from "./chapter-game";
 import UrinaryAdventure from "./urinary-adventure";
 import {
   URINARY_CHAPTER,
@@ -149,12 +150,14 @@ export default function StudyHub({
   navigate,
   packs,
   online,
+  initialMode,
 }: {
   focus: StudyFocus | null;
   onFocus: (value: StudyFocus) => void;
   navigate: (url: string) => void;
   packs: Pack[];
   online: boolean;
+  initialMode?: string;
 }) {
   const [choosing, setChoosing] = useState(!focus),
     [grade, setGrade] = useState<"XI" | "XII">(focus?.grade || "XI"),
@@ -369,6 +372,9 @@ export default function StudyHub({
     id: "urinary:" + item.id,
     answer: item.options[item.correct],
   }));
+  useEffect(() => {
+    if (initialMode && loadedView) setMode(initialMode);
+  }, [initialMode, loadedView]);
   const selectedNumber = selectedChapter?.number ?? chapterIndex + 1;
   const builtIn: Card[] =
     sourceKind === "book"
@@ -1016,30 +1022,45 @@ export default function StudyHub({
             </div>
           )
         ) : mode === "play" ? (
-          urinaryBook ? (
+          urinaryChapter ? (
             <UrinaryAdventure />
           ) : (
-            <div className="study-empty">
-              <Target size={38} />
-              <h2>Play and remember</h2>
-              {baseMeta ? (
-                <>
-                  <p>Try the offline foundations challenge for this subject.</p>
-                  <button
-                    className="primary"
-                    onClick={() =>
-                      navigate(
-                        `/challenge/${baseMeta.subject}/${baseMeta.chapterSlug}`,
-                      )
-                    }
-                  >
-                    Play foundations challenge
-                  </button>
-                </>
+            (() => {
+              const gameCards =
+                sourceKind === "book"
+                  ? chapterPracticeCards(catalog?.id, selectedNumber, "mcq")
+                  : [];
+              return gameCards.length ? (
+                <ChapterGame
+                  key={`${catalog?.id}:${selectedChapter?.id}`}
+                  id={`chapter-game:v1:${catalog?.id}:${selectedChapter?.id}`}
+                  title={selectedChapter?.title || "Selected chapter"}
+                  cards={gameCards}
+                  onRead={(target) =>
+                    catalog && navigate(`/books/${catalog.id}/${target}`)
+                  }
+                />
               ) : (
-                <p>There’s no saved game for this subject yet.</p>
-              )}
-            </div>
+                <div className="study-empty">
+                  <Target size={38} />
+                  <h2>Play your selected chapter</h2>
+                  <p>
+                    A source-matched game is not available for this chapter yet.
+                    You can read this chapter or practise its textbook exercise.
+                    We won’t substitute a different chapter.
+                  </p>
+                  <button className="primary" onClick={readPdf}>
+                    Read this chapter
+                  </button>
+                  <button
+                    className="secondary"
+                    onClick={() => setMode("exercise")}
+                  >
+                    Textbook exercise
+                  </button>
+                </div>
+              );
+            })()
           )
         ) : mode === "pdf" ? (
           <div className="chapter-reading">

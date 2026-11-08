@@ -1,3 +1,10 @@
+## 0.5.11 — 2026-11-08
+
+- Replace12/day shared-network AI allowance with signed per-device60/day6/minute budgets and higher network/global safety caps. Preserve atomic Redis accounting and cache burst protection.
+- Route transient Groq failures to one supported GPT-OSS20B fallback; keep120B primary, bounded deadlines and unchanged source validation. No automatic paid upgrade, new provider or student API setup.
+- Focus games on the chosen book/chapter; correct the Biology kidney-game scope. Add durable offline chapter recall and8 source-mapped English Journey to Taif concept questions.
+- Simplify the tools menu, repair dark reader-message contrast and tighten concise, respectful tutor wording. All previous science banks preserved; English coverage remains partial.
+
 ## 0.5.10 — 2026-11-08
 
 - Fix reader chat treating every question as a question about the open contents page. Resolve named/numbered chapters, send bounded structured chat, and prioritize the latest request.

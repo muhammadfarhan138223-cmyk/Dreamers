@@ -118,11 +118,7 @@
           "Functional groups",
           "Which group characterizes a carboxylic acid?",
           "−COOH",
-          [
-            "−OH on an alkyl group",
-            "−CHO",
-            "−NH₂"
-          ],
+          ["−OH on an alkyl group", "−CHO", "−NH₂"],
           "A functional group is an atom or group of atoms that gives an organic molecule characteristic reactions. The −COOH group identifies a carboxylic acid.",
           "What is a functional group?"
         ],
@@ -178,11 +174,7 @@
           "Side-chain oxidation",
           "What is the usual product when the side chain of methylbenzene is strongly oxidized?",
           "Benzoic acid",
-          [
-            "Phenol",
-            "Cyclohexane",
-            "Benzene without a side chain"
-          ],
+          ["Phenol", "Cyclohexane", "Benzene without a side chain"],
           "The methyl group is oxidized to a carboxyl group. The aromatic ring remains, giving benzoic acid.",
           "Explain what happens to the side chain when methylbenzene is strongly oxidized."
         ]
@@ -199,11 +191,7 @@
           "Substitution",
           "Which product forms when bromide in bromoethane is replaced by hydroxide?",
           "Ethanol",
-          [
-            "Ethene",
-            "Ethanal",
-            "Ethanoic acid"
-          ],
+          ["Ethene", "Ethanal", "Ethanoic acid"],
           "Hydroxide attacks the carbon bonded to bromine and replaces bromide. The organic product is ethanol.",
           "Explain nucleophilic substitution of bromoethane by hydroxide."
         ],
@@ -212,11 +200,7 @@
           "Elimination",
           "Which organic product forms by eliminating HBr from bromoethane?",
           "Ethene",
-          [
-            "Ethane",
-            "Ethanol",
-            "Ethyne"
-          ],
+          ["Ethane", "Ethanol", "Ethyne"],
           "A base removes a hydrogen from the neighbouring carbon as the halide leaves. A double bond forms between the two carbon atoms.",
           "Explain how elimination gives an alkene from a halogenoalkane."
         ]
@@ -246,11 +230,7 @@
           "Alcohol oxidation",
           "Which product forms on oxidizing propan-2-ol?",
           "Propanone",
-          [
-            "Propanal",
-            "Propene",
-            "Propan-1-ol"
-          ],
+          ["Propanal", "Propene", "Propan-1-ol"],
           "Primary alcohols can form aldehydes and then carboxylic acids. Secondary alcohols commonly form ketones, such as propanone from propan-2-ol.",
           "Compare common oxidation products of primary and secondary alcohols."
         ]
@@ -293,11 +273,7 @@
           "Carboxylic acids",
           "What product class forms when a carboxylic acid reacts with an alcohol under acid catalysis?",
           "Ester",
-          [
-            "Amine",
-            "Alkene",
-            "Halogenoalkane"
-          ],
+          ["Amine", "Alkene", "Halogenoalkane"],
           "A carboxylic acid reacts with an alcohol to form an ester and water. The reaction is reversible and is usually catalysed by acid.",
           "State the products of esterification."
         ]
@@ -429,11 +405,7 @@
           "Proteins",
           "What type of bond links amino acids in a protein chain?",
           "Peptide bond",
-          [
-            "Glycosidic bond",
-            "Phosphodiester bond",
-            "Ionic lattice bond"
-          ],
+          ["Glycosidic bond", "Phosphodiester bond", "Ionic lattice bond"],
           "A peptide bond is an amide link formed between the carboxyl group of one amino acid and the amino group of another.",
           "Describe a peptide bond."
         ],
@@ -442,11 +414,7 @@
           "Enzyme inhibitors",
           "What does a competitive inhibitor compete with the substrate for?",
           "The active site",
-          [
-            "The product’s boiling point",
-            "The cell wall",
-            "The DNA backbone"
-          ],
+          ["The product’s boiling point", "The cell wall", "The DNA backbone"],
           "It binds at the active site and competes with substrate. Fewer enzyme–substrate complexes form at a given substrate concentration.",
           "Explain how a competitive inhibitor affects an enzyme reaction."
         ],
@@ -476,11 +444,7 @@
           "Paper chromatography",
           "A spot travels 3 cm while the solvent front travels 6 cm. What is its Rf?",
           "0.50",
-          [
-            "2.0",
-            "3.0",
-            "9.0"
-          ],
+          ["2.0", "3.0", "9.0"],
           "Rf is distance travelled by the spot divided by distance travelled by the solvent front, both from the baseline. Here Rf = 3 ÷ 6 = 0.50.",
           "Define and calculate Rf for distances of 3 cm and 6 cm."
         ],
@@ -523,11 +487,7 @@
           "Unsaturation",
           "What is the index of hydrogen deficiency of C₆H₆?",
           "4",
-          [
-            "1",
-            "3",
-            "6"
-          ],
+          ["1", "3", "6"],
           "For C₆H₆, use (2C + 2 − H) ÷ 2 = (12 + 2 − 6) ÷ 2 = 4. The ring contributes one unit and three double bonds contribute three.",
           "Calculate the index of hydrogen deficiency of benzene from its formula."
         ],
@@ -570,11 +530,7 @@
           "Chemical shift",
           "Which reference is commonly assigned 0 ppm in proton NMR?",
           "Tetramethylsilane",
-          [
-            "Water",
-            "Sodium chloride",
-            "Silica gel"
-          ],
+          ["Water", "Sodium chloride", "Silica gel"],
           "Tetramethylsilane gives a reference signal defined as 0 ppm. Other chemical shifts are measured relative to it.",
           "State the role of tetramethylsilane in NMR."
         ],
@@ -583,11 +539,7 @@
           "Splitting",
           "Under the simple n + 1 rule, what does a signal become with three equivalent neighbouring protons?",
           "Quartet",
-          [
-            "Doublet",
-            "Triplet",
-            "Singlet"
-          ],
+          ["Doublet", "Triplet", "Singlet"],
           "For simple first-order coupling, n equivalent neighbouring protons split a signal into n + 1 lines. Three give a quartet.",
           "Explain the n + 1 rule using three neighbours."
         ]
@@ -708,11 +660,7 @@
           "Kinetic energy",
           "Two ideal gases at the same absolute temperature have the same average what per molecule?",
           "Translational kinetic energy",
-          [
-            "Mass",
-            "Speed",
-            "Momentum magnitude"
-          ],
+          ["Mass", "Speed", "Momentum magnitude"],
           "The average translational kinetic energy per molecule is 3kT/2. At the same Kelvin temperature the averages are equal, even when the molecules have different masses.",
           "Explain how temperature relates to average translational kinetic energy."
         ],
@@ -721,11 +669,7 @@
           "RMS speed",
           "If the Kelvin temperature of an ideal gas becomes four times larger, what happens to its RMS speed?",
           "It doubles",
-          [
-            "It quadruples",
-            "It halves",
-            "It stays the same"
-          ],
+          ["It quadruples", "It halves", "It stays the same"],
           "RMS speed is proportional to the square root of the Kelvin temperature. Multiplying the temperature by four multiplies speed by two.",
           "Relate RMS speed to temperature for molecules of a fixed mass."
         ]
@@ -789,11 +733,7 @@
           "Diffraction grating",
           "What is the grating equation for a principal maximum?",
           "d sin θ = nλ",
-          [
-            "d cos θ = nλ",
-            "λ sin θ = nd",
-            "dλ = n sin θ"
-          ],
+          ["d cos θ = nλ", "λ sin θ = nd", "dλ = n sin θ"],
           "d sin θ = nλ, with d the slit spacing, θ the angle from the central direction, n the order and λ the wavelength.",
           "State the grating equation and identify its terms."
         ]
@@ -823,11 +763,7 @@
           "Capacitance combinations",
           "What is the equivalent capacitance of two identical 6 μF capacitors connected in series?",
           "3 μF",
-          [
-            "6 μF",
-            "12 μF",
-            "36 μF"
-          ],
+          ["6 μF", "12 μF", "36 μF"],
           "For series capacitors, 1/C = 1/6 + 1/6 in reciprocal microfarads. The result is C = 3 μF.",
           "Calculate the series equivalent of two 6 μF capacitors."
         ]
@@ -891,11 +827,7 @@
           "Compton scattering",
           "At a nonzero scattering angle, how does a scattered X-ray photon’s wavelength change in the Compton effect?",
           "It increases",
-          [
-            "It always halves",
-            "It decreases",
-            "It becomes zero"
-          ],
+          ["It always halves", "It decreases", "It becomes zero"],
           "The photon transfers energy and momentum to an electron. Its remaining energy is lower, so its wavelength is longer.",
           "Explain why the scattered photon has a longer wavelength."
         ]
@@ -925,11 +857,7 @@
           "Half-life",
           "What fraction of undecayed nuclei remains after three half-lives on average?",
           "1/8",
-          [
-            "1/3",
-            "1/6",
-            "1/4"
-          ],
+          ["1/3", "1/6", "1/4"],
           "The remaining fraction halves each time: 1 × 1/2 × 1/2 × 1/2 = 1/8.",
           "Calculate the fraction remaining after three half-lives."
         ]
@@ -980,11 +908,7 @@
           "Luminosity and flux",
           "If distance from the same star doubles, what happens to its observed flux when absorption is negligible?",
           "It becomes one quarter",
-          [
-            "It halves",
-            "It doubles",
-            "It stays unchanged"
-          ],
+          ["It halves", "It doubles", "It stays unchanged"],
           "Luminosity is total emitted power. Observed flux is power received per unit area and is proportional to 1/d².",
           "Distinguish luminosity from observed flux."
         ],
@@ -1016,11 +940,7 @@
           "Modern periodic table",
           "Which quantity orders elements in the modern periodic table?",
           "Atomic number",
-          [
-            "Relative atomic mass alone",
-            "Number of neutrons",
-            "Density"
-          ],
+          ["Relative atomic mass alone", "Number of neutrons", "Density"],
           "Elements are arranged in increasing atomic number, which is the number of protons in the nucleus.",
           "What determines the order of elements in the modern periodic table?"
         ],
@@ -1050,11 +970,7 @@
           "Isotopes",
           "Which quantity is the same for all isotopes of an element?",
           "Number of protons",
-          [
-            "Number of neutrons",
-            "Mass number",
-            "Relative isotopic mass"
-          ],
+          ["Number of neutrons", "Mass number", "Relative isotopic mass"],
           "Isotopes of an element have the same proton number and different neutron numbers, so their mass numbers differ.",
           "Distinguish isotopes by their proton and neutron counts."
         ],
@@ -1063,11 +979,7 @@
           "Quantum numbers",
           "Which quantum number identifies the main energy level?",
           "Principal quantum number",
-          [
-            "Spin quantum number",
-            "Magnetic quantum number",
-            "Atomic number"
-          ],
+          ["Spin quantum number", "Magnetic quantum number", "Atomic number"],
           "It labels the main electron shell. Larger values generally correspond to orbitals extending farther from the nucleus.",
           "What does the principal quantum number tell us?"
         ]
@@ -1118,11 +1030,7 @@
           "Moles",
           "How many moles are in 36 g of water if its molar mass is 18 g mol⁻¹?",
           "2 mol",
-          [
-            "0.5 mol",
-            "18 mol",
-            "648 mol"
-          ],
+          ["0.5 mol", "18 mol", "648 mol"],
           "Use n = mass ÷ molar mass. For water, 36 ÷ 18 = 2 mol.",
           "Calculate the amount in 36 g of water."
         ],
@@ -1152,11 +1060,7 @@
           "Ideal-gas equation",
           "If volume and amount are fixed, what happens to ideal gas pressure when Kelvin temperature doubles?",
           "It doubles",
-          [
-            "It halves",
-            "It stays constant",
-            "It quadruples"
-          ],
+          ["It halves", "It stays constant", "It quadruples"],
           "PV = nRT. At constant V and n, P/T is constant, so doubling Kelvin temperature doubles the pressure.",
           "Relate pressure and absolute temperature at constant volume."
         ],
@@ -1186,11 +1090,7 @@
           "Enthalpy",
           "What sign does ΔH have for an exothermic reaction?",
           "Negative",
-          [
-            "Positive",
-            "Zero for every exothermic reaction",
-            "It has no sign"
-          ],
+          ["Positive", "Zero for every exothermic reaction", "It has no sign"],
           "Heat released at constant pressure gives negative ΔH. Heat absorbed gives positive ΔH.",
           "Compare the signs of ΔH for exothermic and endothermic changes."
         ],
@@ -1301,11 +1201,7 @@
           "pH",
           "What is the pH of a dilute solution with [H₃O⁺] = 10⁻³ mol dm⁻³?",
           "3",
-          [
-            "−3",
-            "7",
-            "11"
-          ],
+          ["−3", "7", "11"],
           "For a dilute solution, pH is approximately −log₁₀[H₃O⁺]. The stated concentration gives pH 3.",
           "Calculate pH from a hydronium concentration of 10⁻³ mol dm⁻³."
         ]
@@ -1322,11 +1218,7 @@
           "Redox",
           "Which process occurs when a species gains electrons?",
           "Reduction",
-          [
-            "Oxidation",
-            "Condensation only",
-            "Neutralization only"
-          ],
+          ["Oxidation", "Condensation only", "Neutralization only"],
           "Oxidation is loss of electrons. Reduction is gain of electrons. The two occur together in a redox reaction.",
           "Distinguish oxidation from reduction in terms of electrons."
         ],
@@ -1356,11 +1248,7 @@
           "Hydrocarbon classes",
           "Which compound is an alkene?",
           "Ethene",
-          [
-            "Ethane",
-            "Methane",
-            "Propane"
-          ],
+          ["Ethane", "Methane", "Propane"],
           "An alkene contains a carbon–carbon double bond. An alkane is saturated and has only single bonds between carbons.",
           "Distinguish an alkene from an alkane by bonding."
         ],
@@ -1403,11 +1291,7 @@
           "Ammonia",
           "Which ion forms when ammonia accepts a proton?",
           "NH₄⁺",
-          [
-            "NO₃⁻",
-            "NH₂⁻",
-            "N₂⁺"
-          ],
+          ["NO₃⁻", "NH₂⁻", "N₂⁺"],
           "Nitrogen has a lone pair that can form a bond with H⁺. The product of protonation is the ammonium ion.",
           "Explain why ammonia can act as a base."
         ]
@@ -1424,11 +1308,7 @@
           "Volatility",
           "Which of chlorine, bromine and iodine is most volatile under comparable conditions?",
           "Chlorine",
-          [
-            "Bromine",
-            "Iodine",
-            "All have the same volatility"
-          ],
+          ["Bromine", "Iodine", "All have the same volatility"],
           "Larger molecules have more polarizable electron clouds and stronger London forces. More energy is needed to separate them into vapour.",
           "Explain why volatility decreases down this part of Group 17."
         ],
@@ -1458,11 +1338,7 @@
           "Atmospheric layers",
           "In which layer does most everyday weather occur?",
           "Troposphere",
-          [
-            "Stratosphere",
-            "Mesosphere",
-            "Thermosphere"
-          ],
+          ["Stratosphere", "Mesosphere", "Thermosphere"],
           "The troposphere is the lowest main layer. It contains most of the atmosphere’s water vapour, and most weather occurs there.",
           "Name the lowest main atmospheric layer and state one feature."
         ],
@@ -1471,11 +1347,7 @@
           "Air pollutants",
           "Which pollutant from incomplete combustion binds strongly to haemoglobin?",
           "Carbon monoxide",
-          [
-            "Nitrogen gas",
-            "Water vapour",
-            "Argon"
-          ],
+          ["Nitrogen gas", "Water vapour", "Argon"],
           "It binds strongly to haemoglobin, reducing the blood’s ability to carry oxygen. Incomplete combustion can produce it.",
           "Explain why carbon monoxide is harmful."
         ]
@@ -1492,11 +1364,7 @@
           "Filtration",
           "Which method separates insoluble sand from water directly?",
           "Filtration",
-          [
-            "Fractional distillation",
-            "Paper chromatography",
-            "Sublimation"
-          ],
+          ["Fractional distillation", "Paper chromatography", "Sublimation"],
           "A porous barrier retains suspended solids while the liquid passes through as filtrate.",
           "What is the principle of filtration?"
         ],
@@ -1505,11 +1373,7 @@
           "Distillation",
           "Which step recovers the vapour as a liquid during distillation?",
           "Condensation",
-          [
-            "Filtration",
-            "Crystallization",
-            "Centrifugation"
-          ],
+          ["Filtration", "Crystallization", "Centrifugation"],
           "Heat vaporizes the more volatile solvent, leaving most dissolved solid behind. Cooling the vapour condenses it as the distillate.",
           "Explain how distillation separates a solvent from a dissolved solid."
         ]
@@ -1539,14 +1403,116 @@
           "Titration",
           "Which apparatus accurately delivers variable measured volumes of titrant?",
           "Burette",
-          [
-            "Beaker",
-            "Test tube",
-            "Evaporating dish"
-          ],
+          ["Beaker", "Test tube", "Evaporating dish"],
           "A burette delivers a measured variable volume. A volumetric pipette transfers a specified fixed volume.",
           "Distinguish the purpose of a burette and a volumetric pipette."
         ]
+      ]
+    }
+  },
+  "english-xii-supplied": {
+    "1": {
+      "topics": [
+        [
+          6,
+          "Purpose of the journey",
+          "Why did Hazrat Muhammad (PBUH) travel to Taif?",
+          "To share the message of Islam",
+          [
+            "To buy an orchard",
+            "To collect grapes for trade",
+            "To visit an army"
+          ],
+          "He went to teach people about Islam. Yani logon ko Islam ka paigham dene gaye.",
+          "Why did he travel to Taif?"
+        ],
+        [
+          6,
+          "Companion on the journey",
+          "Who accompanied him on this journey?",
+          "Hazrat Zayd bin Haritha",
+          ["Addaas", "Otba", "Shayba"],
+          "Hazrat Zayd bin Haritha travelled with him and helped him.",
+          "Who was his companion on this journey?"
+        ],
+        [
+          6,
+          "Response of the chiefs",
+          "How did the chiefs respond to his message?",
+          "They mocked and rejected it",
+          [
+            "They all accepted it",
+            "They offered to teach it",
+            "They asked him to lead their army"
+          ],
+          "The chiefs refused his message and spoke harshly. Yani unhon ne baat nahi maani aur bura rawayya rakha.",
+          "How did the chiefs respond?"
+        ],
+        [
+          6,
+          "Treatment by the crowd",
+          "How did the crowd hurt him while he was preaching?",
+          "They threw stones at him",
+          [
+            "They took away his boat",
+            "They burned his house in Taif",
+            "They stopped him from farming"
+          ],
+          "The crowd threw stones, causing serious injuries. Seedhi baat: logon ne pathar maare aur aap zakhmi ho gaye.",
+          "How did the people treat him?"
+        ],
+        [
+          6,
+          "An act of kindness",
+          "Who sent grapes through their servant Addaas?",
+          "Otba and Shayba",
+          ["The three chiefs", "The people of Naynawa", "A group of soldiers"],
+          "Otba and Shayba saw his condition and sent grapes through Addaas.",
+          "Who sent the grapes?"
+        ],
+        [
+          7,
+          "Addaas and respect",
+          "What did Addaas do after their conversation?",
+          "He showed respect by kissing his head, hands and feet",
+          [
+            "He called the soldiers",
+            "He threw away the grapes",
+            "He ordered him to leave Taif"
+          ],
+          "Addaas was surprised by what he heard about Hazrat Yunus and showed deep respect. Yani baat sun kar unki izzat ki.",
+          "How did Addaas respond to the conversation?"
+        ],
+        [
+          7,
+          "Help after injury",
+          "How did Hazrat Zayd help when he fell unconscious?",
+          "He carried him out and sprinkled water on his face",
+          [
+            "He left him alone",
+            "He sent him back by boat",
+            "He called the chiefs for a feast"
+          ],
+          "He carried him out of the city and sprinkled water until he regained consciousness. Yani paani ke chheentay diye taa-ke hosh aa jaye.",
+          "How did Hazrat Zayd help him?"
+        ],
+        [
+          8,
+          "Mercy and hope",
+          "Why did he refuse the offer to destroy the people of Taif?",
+          "He hoped their descendants would worship Allah alone",
+          [
+            "He wanted their orchards",
+            "He was waiting for money",
+            "He wanted to return as a chief"
+          ],
+          "He chose forgiveness and hoped for good in the future. Yani badla lene ke bajaye maaf kiya aur umeed rakhi.",
+          "What does his decision show about mercy and hope?"
+        ]
+      ],
+      "long": [
+        "Summarise the main events and message of Journey to Taif.",
+        "Hazrat Muhammad (PBUH) travelled with Hazrat Zayd bin Haritha to share the message of Islam. The chiefs rejected his message, and people threw stones at him. Otba and Shayba sent grapes through Addaas, who later showed respect after their conversation. Hazrat Zayd helped him when he was seriously injured. Despite the suffering, he remained faithful to Allah. He chose forgiveness and hoped that future generations would worship Allah alone."
       ]
     }
   }

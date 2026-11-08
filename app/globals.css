@@ -7136,3 +7136,65 @@ section[aria-label="AI topic matches"] .search-result {
   min-height: 44px;
   margin: 0.3rem 0.4rem 0.3rem 0;
 }
+/* Reader chat uses theme colors, including the text inside each user bubble. */
+.reader-message.user {
+  background: var(--card2);
+  color: var(--text);
+  border-color: var(--action-border);
+}
+.reader-message.user p,
+.reader-message.user small,
+.reader-message.user b {
+  color: var(--text);
+}
+.chapter-game > progress {
+  width: 100%;
+  height: 9px;
+  accent-color: #36b79b;
+  margin: 0.6rem 0 1rem;
+}
+.chapter-game > .eyebrow,
+.game-feedback > b {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.game-choices {
+  display: grid;
+  gap: 0.7rem;
+}
+.game-choices button {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: left;
+  min-height: 60px;
+  white-space: normal;
+}
+.game-choices button b {
+  background: var(--card);
+  padding: 0.4rem 0.7rem;
+  border-radius: 10px;
+}
+.game-choices .game-chosen {
+  outline: 2px solid var(--focus-ring);
+}
+.game-choices .game-correct {
+  border-color: var(--feedback-accent);
+  color: var(--text);
+  opacity: 1;
+}
+.game-feedback,
+.game-finish {
+  padding: 1.2rem;
+  border: 1px solid var(--feedback-accent);
+  border-radius: 16px;
+  background: var(--feedback-bg);
+  margin: 1rem 0;
+}
+.game-feedback .text-link {
+  display: block;
+  min-height: 44px;
+  margin-top: 0.5rem;
+}

@@ -14,9 +14,15 @@ import {
   reviewedExerciseAnswer,
 } from "../lib/exercise-mcqs.mjs";
 
-test("all added book chapters have offline concept MCQs, short answers and a long answer", () => {
+test("complete science concept banks retain MCQs, short answers and a long answer in every chapter", () => {
   const ids = new Set();
-  for (const id of mappedPracticeBooks) {
+  for (const id of [
+    "biology-xii-supplied",
+    "chemistry-xii-supplied",
+    "chemistry-xi-supplied",
+    "physics-xii-supplied",
+  ]) {
+    assert.ok(mappedPracticeBooks.includes(id));
     const book = textbook(id);
     for (const [i, chapter] of book.chapters.entries()) {
       const number = chapter.number ?? i + 1;
@@ -117,4 +123,11 @@ test("an unnumbered textbook stem can follow a complete option block", () => {
     items[1].question,
     "A capacitor is connected to a DC supply. What is stored?",
   );
+});
+
+test("English Journey to Taif has source-page concept questions without leaking into other chapters", () => {
+  const cards = chapterPracticeCards("english-xii-supplied", 1, "mcq");
+  assert.equal(cards.length, 8);
+  assert.ok(cards.every((q) => q.sourcePage >= 6 && q.sourcePage <= 8));
+  assert.deepEqual(chapterPracticeCards("english-xii-supplied", 2, "mcq"), []);
 });

@@ -1,3 +1,7 @@
+## 0.5.11 source checkpoint
+
+No required env changes, paid plan changes, migrations or secrets retrieved. Production defaults to Groq openai/gpt-oss-120b with openai/gpt-oss-20b transient-error fallback. Optional AI_FALLBACK_MODELS is a comma-separated allowlisted list of these IDs; empty disables fallback. It does not grant higher organization quotas. Health reports model candidates and app budget metadata only. Signed anonymous cookies require HTTPS and are issued on normal health checks. Shell25 preserves stored PDFs/learning. Run100 tests/build, preview checks, then production AI/game/browser verification. Official model/rate-limit docs checked2026-11-08: https://console.groq.com/docs/models and https://console.groq.com/docs/rate-limits .
+
 ## 0.5.10 source checkpoint — 2026-11-08
 
 Next.js build and95 tests run locally; preview/production verification recorded after deploy. No env/secrets/services or database migration changes. Commit source-extracted public/book-text/english-xii-v1.json, never generated PDF binaries. The pack includes the exact source SHA; the original PDF is unchanged. Local generation uses installed PyMuPDF/Tesseract, deployment only serves the committed JSON. Shell24 adds lazy caching of /book-text/. Existing production model remains Groq openai/gpt-oss-120b pending fresh verification.

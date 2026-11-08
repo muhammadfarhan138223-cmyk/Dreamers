@@ -1,4 +1,5 @@
 "use client";
+import { AI_LIMITS } from "@/lib/ai-limits.mjs";
 import { boundedConversation } from "@/lib/reader-retrieval.mjs";
 import { aiErrorMessage } from "@/lib/ai-feedback.mjs";
 import dynamic from "next/dynamic";
@@ -847,7 +848,17 @@ export default function DreamersApp() {
         <LoadingState>Opening your study space…</LoadingState>
       </div>
     );
-  else if (["/dashboard", "/", "/learn", "/subjects", "/study"].includes(path))
+  else if (
+    [
+      "/dashboard",
+      "/",
+      "/learn",
+      "/subjects",
+      "/study",
+      "/games",
+      "/dreamverse",
+    ].includes(path)
+  )
     content = (
       <StudyHub
         focus={studyFocus}
@@ -855,6 +866,9 @@ export default function DreamersApp() {
         navigate={navigate}
         packs={installedPacks}
         online={online}
+        initialMode={
+          path === "/games" || path === "/dreamverse" ? "play" : undefined
+        }
       />
     );
   else if (routeMeta && routeMeta.subject !== "biology")
@@ -1842,8 +1856,9 @@ export default function DreamersApp() {
               <summary>Book & answer options</summary>
               {aiModel && (
                 <p className="fineprint">
-                  AI: {aiModel} · Shared network limit: 12 new requests/day,
-                  3/minute.
+                  AI: {aiModel} · This device: {AI_LIMITS.daily} new
+                  requests/day,
+                  {AI_LIMITS.perMinute}/minute.
                 </p>
               )}
               <span className="eyebrow">YOUR LEARNING SOURCE</span>
@@ -2903,22 +2918,16 @@ export default function DreamersApp() {
           })}
         </nav>
         <details className="more-study-tools">
-          <summary>More tools</summary>
+          <summary>My study tools</summary>
           <nav>
-            {nav
-              .filter(
-                ([url]) => !["/dashboard", "/learn", "/books"].includes(url),
-              )
-              .map(([url, title, Icon]) =>
-                link(
-                  url,
-                  <>
-                    <Icon size={18} />
-                    <span>{title}</span>
-                  </>,
-                  "nav-item",
-                ),
-              )}
+            {link(
+              "/games",
+              <>
+                <Target size={18} />
+                <span>My chapter games</span>
+              </>,
+              "nav-item",
+            )}
             {link(
               "/notes",
               <>
@@ -3106,7 +3115,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.5.10 · One subject at a time</span>
+              <span>v0.5.11 · One subject at a time</span>
             </div>
           </footer>
         </main>
