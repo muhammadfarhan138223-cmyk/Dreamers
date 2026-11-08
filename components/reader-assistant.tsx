@@ -7,17 +7,31 @@ import { textbook } from "@/lib/textbooks.mjs";
 import * as db from "@/lib/db";
 import LoadingState from "./loading-state";
 import type { LocalBook } from "./book-library";
-type Message = { role: "user" | "assistant"; text: string; page: number };
+type Source = { page: number; text: string; method?: string };
+type Message = {
+  role: "user" | "assistant";
+  text: string;
+  page: number;
+  sourcePages?: number[];
+};
 export default function ReaderAssistant({
   book,
   page,
   pageText,
   selection,
+  resolveSources,
+  onRead,
 }: {
   book: LocalBook;
   page: number;
   pageText: string;
   selection: string;
+  resolveSources: (
+    question: string,
+    conversation: Message[],
+    signal: AbortSignal,
+  ) => Promise<Source[]>;
+  onRead: (page: number) => void;
 }) {
   const [question, setQuestion] = useState(""),
     [language, setLanguage] = useState("Roman Urdu"),
@@ -102,6 +116,12 @@ export default function ReaderAssistant({
     setMessages(next);
     setQuestion("");
     try {
+      const sources = await resolveSources(
+        input.trim(),
+        messages,
+        abort.signal,
+      );
+      if (abort.signal.aborted) return;
       const response = await fetch("/api/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -115,6 +135,8 @@ export default function ReaderAssistant({
             question: input.trim(),
             language,
             previous,
+            conversation: messages,
+            sources,
           }),
         ),
       });
@@ -126,7 +148,21 @@ export default function ReaderAssistant({
       if (abort.signal.aborted) return;
       const updated: Message[] = [
         ...next,
-        { role: "assistant", text: String(value.answer), page },
+        {
+          role: "assistant",
+          text: String(value.answer),
+          page,
+          sourcePages: Array.isArray(value.sourcePages)
+            ? value.sourcePages
+                .filter(
+                  (n: unknown) =>
+                    Number.isInteger(n) &&
+                    Number(n) > 0 &&
+                    Number(n) <= (book.pageCount || 1500),
+                )
+                .slice(0, 6)
+            : [],
+        },
       ];
       setMessages(updated);
       try {
@@ -181,13 +217,13 @@ export default function ReaderAssistant({
         </select>
       </div>
       <p>
-        Ask what a word means, explain a line, or ask a follow-up. We’ll start
-        from the basics.
+        Ask about this page or name any chapter in this book. We’ll find the
+        relevant text and explain it simply.
       </p>
       {!pageText.trim() && (
         <small>
-          This page is a picture. Type the word or line you want explained; AI
-          cannot see this scanned page.
+          This page has no readable text yet. Ask by chapter name; if its pages
+          are also scans without prepared text, AI will say what it cannot read.
         </small>
       )}
       {!!messages.length && (
@@ -205,6 +241,20 @@ export default function ReaderAssistant({
                 <small>· PDF p. {m.page}</small>
               </b>
               <p dir="auto">{m.text}</p>
+              {!!m.sourcePages?.length && (
+                <details className="answer-sources">
+                  <summary>Book pages used</summary>
+                  {m.sourcePages.map((n) => (
+                    <button
+                      key={n}
+                      className="secondary"
+                      onClick={() => onRead(n)}
+                    >
+                      Read PDF page {n}
+                    </button>
+                  ))}
+                </details>
+              )}
             </article>
           ))}
         </div>
@@ -223,7 +273,7 @@ export default function ReaderAssistant({
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           maxLength={1500}
-          placeholder="Aain kya hota hai? Is line ka matlab simple words mein samjhao…"
+          placeholder="Journey to Taif ke exercise questions ke simple answers batao…"
           rows={2}
           disabled={busy}
         />
@@ -270,7 +320,9 @@ export default function ReaderAssistant({
       </div>
       {busy && (
         <>
-          <LoadingState>Making this easier to understand…</LoadingState>
+          <LoadingState>
+            Finding the chapter and preparing a simple answer…
+          </LoadingState>
           <button
             className="text-link"
             onClick={() => {
@@ -298,8 +350,9 @@ export default function ReaderAssistant({
       )}
       <small>
         AI explanations can be mistaken. They are not checked textbook answers.
-        Only your question and a short relevant passage are sent; saved answers
-        stay on this device.
+        Only your question, recent chat and up to six relevant page excerpts are
+        sent. OCR text can contain mistakes; check the linked PDF pages. Saved
+        answers stay on this device.
       </small>
     </section>
   );

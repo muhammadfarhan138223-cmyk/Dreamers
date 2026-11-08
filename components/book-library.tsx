@@ -6,7 +6,6 @@ import {
   BookOpen,
   Download,
   ExternalLink,
-  Sparkles,
   Trash2,
 } from "lucide-react";
 import * as db from "@/lib/db";
@@ -49,7 +48,6 @@ export default function BookLibrary({
   requestedPage = 1,
   matchQuery = "",
   onNavigate,
-  onAskTopic,
   focus,
 }: {
   onAsk: (context: BookContext, subject: string, catalogId?: string) => void;
@@ -57,7 +55,6 @@ export default function BookLibrary({
   requestedPage?: number;
   matchQuery?: string;
   onNavigate: (url: string) => void;
-  onAskTopic: (bookId: string, topicId: string, extra?: boolean) => void;
   focus?: { grade: string; subject: string } | null;
 }) {
   const [filter, setFilter] = useState("all");
@@ -404,13 +401,6 @@ export default function BookLibrary({
                     onClick={() => void read(active.id, t.page)}
                   >
                     Read <ArrowRight size={14} />
-                  </button>
-                  <button
-                    className="circle-button"
-                    aria-label={`Ask AI about ${t.title}`}
-                    onClick={() => onAskTopic(active.id, t.id)}
-                  >
-                    <Sparkles size={16} />
                   </button>
                 </div>
               ))}

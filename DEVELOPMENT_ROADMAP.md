@@ -1,3 +1,7 @@
+## 0.5.10 priority checkpoint
+
+Repair chapter-aware tutoring/follow-ups, verify English exercise questions/count/page answers live, then extend prepared source text/OCR to other authorized scanned books with source-image QA. Preserve the simpler controls, local-first search, bounded owner-paid/free-tier AI quota and honest source coverage. Teacher-reviewed answer banks and physical Android installation/offline tests remain pending.
+
 ## 0.5.9 priority checkpoint
 
 Implemented search/local-AI separation, clear results/loading, simplified book/reader/chapter/tutor controls and quota reset feedback. Next: protected preview → production browser verification → physical Android touch/install/offline checks. Missing authorized First Year resources, teacher-reviewed chapter coverage and later account/admin milestones remain pending. Preserve direct reading and existing offline data.

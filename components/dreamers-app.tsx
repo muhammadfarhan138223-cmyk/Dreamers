@@ -1,4 +1,5 @@
 "use client";
+import { boundedConversation } from "@/lib/reader-retrieval.mjs";
 import { aiErrorMessage } from "@/lib/ai-feedback.mjs";
 import dynamic from "next/dynamic";
 import LoadingState from "./loading-state";
@@ -736,6 +737,7 @@ export default function DreamersApp() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           question: input,
+          conversation: boundedConversation(chat),
           language,
           mode: selectedMode,
           bookContext: bookContext || undefined,
@@ -1607,7 +1609,6 @@ export default function DreamersApp() {
           new URLSearchParams(locationSearch).get("match")?.slice(0, 300) || ""
         }
         onNavigate={navigate}
-        onAskTopic={askTextbook}
         onAsk={(context, subject, catalogId) => {
           if (catalogId && textbook(catalogId)) {
             setAiContextKind("textbook");
@@ -3105,7 +3106,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.5.9 · One subject at a time</span>
+              <span>v0.5.10 · One subject at a time</span>
             </div>
           </footer>
         </main>

@@ -4,7 +4,7 @@ export function GET() {
   return Response.json(
     {
       status: "ok",
-      version: "0.5.9",
+      version: "0.5.10",
       storage: "device-local",
       ai: {
         ...publicAiModel(),

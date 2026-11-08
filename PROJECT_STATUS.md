@@ -1,3 +1,13 @@
+# 0.5.10 checkpoint — 2026-11-08
+
+Current milestone: source-aware reader tutoring and follow-up repair. 95 automated tests passed; final production build and deployment/browser verification follow this source checkpoint. Prior verified production: a8d2d1a4ddcabfbc9738ea21ac14fe66b56b9fdf (0.5.9; tree 0ccb4d01af589855fdb9275798e94d801ab633b6).
+
+Completed: resolve named/numbered chapters before prior chat; bounded structured recent conversation; retrieve relevant readable chapter pages in any mapped local book (up to 40 pages inspected, 6 excerpts sent); source-page links in answers; English XII exact-source text pack (165 pages, 8 pages recovered with local English OCR); reusable offline text index and offline pack cache; simple latest-question/language instructions and clean plain text; keep strict quotation checking and durable quotas. Fixed unrelated keyword expansion in AI Search and removed duplicate chapter-list AI buttons. Reader now follows changed page-link props.
+
+Limits: prepared OCR is English XII only. Other image-only books still need authorized prepared OCR/text and are not claimed readable by AI. OCR is fallible, source-page images are authoritative. English Journey to Taif section A count/page (8, PDF9/printed5) and section B count/page (8, PDF10/printed6) were checked visually; these are not counts of every unit activity and no question-answer accuracy guarantee is implied. No full official current pairing scheme or all-Punjab-book coverage. Account/cloud sync/admin remain pending.
+
+Storage: IndexedDB v3; shell v24, existing PDFs/progress retained. No migrations, credentials or external service changes. Required env unchanged: AI_PROVIDER, AI_MODEL, AI_API_KEY, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN; optional AI_BASE_URL. Last confirmed production model: Groq openai/gpt-oss-120b. Next: deploy protected preview, verify production with Farhan's exact chapter/follow-up questions and source-page navigation, then record evidence. Historical records follow.
+
 # 0.5.9 checkpoint — 2026-11-05
 
 Current milestone: usability and AI quota feedback hardening. Application checks: 90 tests and production build (including TypeScript) passed. Preview/production deployment and browser QA pending at this source checkpoint; prior verified production remains 0.5.8 / 033f4b916cc7e584612accbcb1c7cc6e26800000.

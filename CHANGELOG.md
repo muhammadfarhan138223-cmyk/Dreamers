@@ -1,3 +1,11 @@
+## 0.5.10 — 2026-11-08
+
+- Fix reader chat treating every question as a question about the open contents page. Resolve named/numbered chapters, send bounded structured chat, and prioritize the latest request.
+- Add exact-source English XII text pack, with eight locally OCR-read scan pages and page provenance. Prepare its offline search index automatically when reading; no student uploads.
+- Retrieve relevant chapter excerpts, offer source-page navigation, keep the requested answer language, simplify responses and strip raw formatting artifacts.
+- Preserve strict source-quote checks, server-only secrets, durable quotas and bounded requests. No new service or package dependency.
+- Tighten AI Search phrase matches and remove redundant per-chapter AI icons. Shell24 preserves existing learning/PDF data.
+
 ## 0.5.9 — 2026-11-05
 
 - Separate free local book search from explicitly requested AI topic discovery; prevent health refresh from resubmitting searches.

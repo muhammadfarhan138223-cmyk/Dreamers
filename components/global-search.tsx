@@ -170,7 +170,7 @@ export default function GlobalSearch({
         const hits = await db.searchPages(expanded);
         if (id !== serial.current || controller.signal.aborted) return;
         setPages(hits);
-        setFoundation(findFoundation(packs, expanded));
+        setFoundation(findFoundation(packs, q));
         setAiStatus(
           "AI-assisted discovery finished. Topic relevance is generated; the chapter titles and page links come from the catalogue.",
         );
@@ -478,8 +478,8 @@ export default function GlobalSearch({
             {error}
           </p>
         )}
-        {aiStatus && (
-          <p role="status" className="notice">
+        {aiStatus && !busy && (
+          <p role="status" className="search-ai-feedback">
             {aiStatus}
           </p>
         )}

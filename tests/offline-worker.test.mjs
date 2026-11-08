@@ -74,7 +74,7 @@ function worker() {
 test("worker precaches root and referenced application JavaScript and CSS", async () => {
   const w = worker();
   await w.run("install");
-  const cache = await w.caches.open("dreamers-shell-v23");
+  const cache = await w.caches.open("dreamers-shell-v24");
   assert.ok(await cache.match("/_next/static/app.js"));
   assert.ok(await cache.match("/_next/static/app.css"));
 });
@@ -121,7 +121,10 @@ test("cache upgrades preserve unrelated application caches", async () => {
 test("prepared PDF engine resources survive shell upgrades and serve without a network", async () => {
   const w = worker();
   const engine = await w.caches.open("dreamers-pdf-engine-6.4.299");
-  await engine.put("/pdf-worker/6.4.299/pdf.worker.min.mjs", new Response("saved worker"));
+  await engine.put(
+    "/pdf-worker/6.4.299/pdf.worker.min.mjs",
+    new Response("saved worker"),
+  );
   await w.run("install");
   await w.run("activate");
   w.offline();
@@ -129,4 +132,13 @@ test("prepared PDF engine resources survive shell upgrades and serve without a n
   assert.equal(await response.text(), "saved worker");
   const shell = await w.fetch("/books", "navigate");
   assert.equal(shell.status, 200);
+});
+test("prepared source text is cached for later offline book lookup", async () => {
+  const w = worker();
+  const path = "/book-text/english-xii-v1.json";
+  const first = await w.fetch(path);
+  assert.equal(first.status, 200);
+  w.offline();
+  assert.equal((await w.fetch(path)).status, 200);
+  assert.equal(await (await w.fetch(path)).text(), await first.text());
 });

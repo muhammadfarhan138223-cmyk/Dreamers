@@ -18,6 +18,12 @@ import { excerptForQuestion } from "@/lib/book-retrieval.mjs";
 import LoadingState from "./loading-state";
 import PassageHighlight from "./passage-highlight";
 import ReaderAssistant from "./reader-assistant";
+import { preparedBookPages } from "@/lib/prepared-book-text";
+import {
+  retrieveReaderSources,
+  readerChapter,
+  chapterPageRange,
+} from "@/lib/reader-retrieval.mjs";
 import { swipePage, readerPageQuery } from "@/lib/reader-tools.mjs";
 import { textbook } from "@/lib/textbooks.mjs";
 import * as db from "@/lib/db";
@@ -53,6 +59,17 @@ export default function PdfReader({
     [readerMatch, setReaderMatch] = useState(matchQuery),
     [selection, setSelection] = useState(""),
     [pageDraft, setPageDraft] = useState(String(requestedPage || 1));
+  useEffect(() => {
+    setPage(
+      Math.max(
+        1,
+        Math.min(pdf?.numPages || book.pageCount || 1500, requestedPage || 1),
+      ),
+    );
+  }, [requestedPage, pdf, book.pageCount]);
+  useEffect(() => {
+    setReaderMatch(matchQuery);
+  }, [matchQuery]);
   const pageRef = useRef(page),
     totalRef = useRef(0);
   pageRef.current = page;
@@ -207,7 +224,15 @@ export default function PdfReader({
           }
         }
         const content = await view.getTextContent();
-        const text = meaningfulPdfText(content.items);
+        let text = meaningfulPdfText(content.items);
+        // Prepared text includes OCR for the scanned opening chapter of this exact English copy.
+        try {
+          const prepared = await preparedBookPages(book);
+          const source = prepared?.find((p) => p.page === page);
+          if (source?.text) text = source.text;
+        } catch {
+          /* The PDF remains readable when text preparation is unavailable. */
+        }
         if (cancelled) return;
         setPageText(text);
         await db.put("bookPages", {
@@ -493,6 +518,52 @@ export default function PdfReader({
               page={page}
               pageText={pageText}
               selection={selection}
+              onRead={(target) => {
+                setTool("read");
+                turnPage(target);
+              }}
+              resolveSources={async (input, conversation, signal) => {
+                const catalog = textbook(book.catalogId);
+                const chapter = readerChapter(
+                  catalog,
+                  input,
+                  conversation,
+                  page,
+                );
+                const range = chapterPageRange(catalog, chapter);
+                let pages = await preparedBookPages(book).catch(() => null);
+                if (!pages && pdf) {
+                  const first = range?.first || page,
+                    last = Math.min(range?.last || page, first + 39);
+                  pages = [];
+                  for (let n = first; n <= last; n++) {
+                    if (signal.aborted) return [];
+                    let saved = await db.get<BookPage>(
+                      "bookPages",
+                      `${book.id}:p:${n}`,
+                    );
+                    if (!saved) {
+                      const view = await pdf.getPage(n);
+                      const content = await view.getTextContent();
+                      saved = {
+                        id: `${book.id}:p:${n}`,
+                        bookId: book.id,
+                        page: n,
+                        text: meaningfulPdfText(content.items),
+                      };
+                      await db.put("bookPages", saved);
+                    }
+                    pages.push(saved);
+                  }
+                }
+                return retrieveReaderSources({
+                  catalog,
+                  question: input,
+                  conversation,
+                  page,
+                  pages: pages || [],
+                }).sources;
+              }}
             />
           </div>
         </div>

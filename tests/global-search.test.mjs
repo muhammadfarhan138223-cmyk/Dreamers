@@ -26,6 +26,11 @@ test("global search crosses class/subject boundaries without inventing chapters"
     ),
   );
 });
+test("AI phrases do not create unrelated chapter matches from a generic word", () => {
+  const found = findChapters("kidney", ["urinary system"]);
+  assert.equal(found.length, 1);
+  assert.equal(found[0].id, "bio12-2");
+});
 test("AI discovery validates known IDs, bounded search terms and complete JSON", () => {
   assert.deepEqual(
     validateSearchOutput(

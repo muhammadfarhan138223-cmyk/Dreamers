@@ -1,3 +1,7 @@
+## 0.5.10 source checkpoint — 2026-11-08
+
+Next.js build and95 tests run locally; preview/production verification recorded after deploy. No env/secrets/services or database migration changes. Commit source-extracted public/book-text/english-xii-v1.json, never generated PDF binaries. The pack includes the exact source SHA; the original PDF is unchanged. Local generation uses installed PyMuPDF/Tesseract, deployment only serves the committed JSON. Shell24 adds lazy caching of /book-text/. Existing production model remains Groq openai/gpt-oss-120b pending fresh verification.
+
 ## 0.5.9 source checkpoint
 
 90 tests and production build passed. Shell v23, IndexedDB v3. No new env variables, migrations or dependencies. Preview and production verification pending; retain prior production until protected preview passes. No deployment-protection or credentials changes. Runtime health now returns safe provider/model names to confirm the owner's active configuration.
