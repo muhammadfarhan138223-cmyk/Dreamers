@@ -1,3 +1,9 @@
+## 0.5.12 — 2026-11-08
+
+- Add clearly labelled, original source-based answers for the8 Journey to Taif comprehension questions in English/Roman Urdu, including counts and page lookup. They use no model or quota and remain available offline.
+- Use the same prepared key in the reader, tutor endpoint and offline short-answer practice; preserve generated-vs-prepared distinction.
+- Retain101 automated checks and prior chapter games/routing improvements. Generic AI factual and translation reliability remains a limitation; no universal accuracy guarantee.
+
 ## 0.5.11 — 2026-11-08
 
 - Replace12/day shared-network AI allowance with signed per-device60/day6/minute budgets and higher network/global safety caps. Preserve atomic Redis accounting and cache burst protection.

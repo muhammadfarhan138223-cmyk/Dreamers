@@ -265,22 +265,25 @@ test("AI route gates source evidence and withholds malformed, invented or trunca
         { role: "assistant", text: "I cannot see exercises on page 2." },
       ],
     };
+    const callsBeforePrepared = providerCalls;
     const chapterResult = await POST(request(chapterRequest));
     assert.equal(chapterResult.status, 200);
     const chapterAnswer = await chapterResult.json();
+    assert.equal(chapterAnswer.prepared, true);
+    assert.equal(chapterAnswer.generated, false);
+    assert.equal(providerCalls, callsBeforePrepared);
     assert.ok(chapterAnswer.sourcePages.includes(9));
-    assert.ok(chapterAnswer.sourcePages.includes(10));
-    assert.ok(!chapterAnswer.answer.includes("**"));
-    assert.match(
-      sent.messages[0].content,
-      /section A has 8 comprehension questions/,
-    );
+    assert.match(chapterAnswer.answer, /Addaas/);
+    const ragRequest = {
+      ...chapterRequest,
+      question: "Journey to Taif ki story summary batao",
+    };
+    assert.equal((await POST(request(ragRequest))).status, 200);
     assert.match(sent.messages[0].content, /Stay in that chosen language/);
-    assert.equal(sent.messages[1].role, "user");
     assert.equal(sent.messages[1].content, "The Giving Tree ki story");
     const current = JSON.parse(sent.messages.at(-1).content);
-    assert.equal(current.question, chapterRequest.question);
-    assert.match(current.sourceText, /Why did Hazrat Muhammad/);
+    assert.equal(current.question, ragRequest.question);
+    assert.match(current.sourceText, /Hazrat Muhammad/);
     assert.ok(!current.sourceText.includes("Contents: The Giving Tree"));
     assert.equal(
       (

@@ -1,3 +1,11 @@
+# 0.5.12 checkpoint — 2026-11-08
+
+Current milestone: remove known model factual/paraphrasing errors from the first English exercise.101 tests and production build passed before final wording polish. Production b1e4d956cd53410b625f055063ec3d943c37248c / tree9d269ada27fc9a268664b0e0db6fdc0bb3c9345a is READY. Health confirmed120B primary,20B fallback,60/day6/minute per-device limits and signed anonymous cookie issuance. Browser verified chapter recall answer feedback; reload and final prepared-answer checks pending.
+
+Live quality finding: general AI correctly found chapters, counts and pages, but still changed actors/wording in some exercise answers (e.g. Addaas/Bismillah). Do not call generated answers verified. New lib/english-exercise.mjs contains original source-based English/Roman Urdu answers to the8 Section A questions, with supporting pages6–8 and question page9. These responses are explicitly prepared, generated=false, educator-review-pending. They bypass AI and quota, work locally offline in the reader, and are shared with the fullscreen endpoint and offline Short answers. Other chapters/languages continue through bounded source-aware AI and retain uncertainty; no complete authored-answer claim.
+
+Next: protected preview → production, verify prepared answers on the reported page2 question and the game reload/chapter isolation, capture screenshots and update exact verified commits/deployments. Storage v3, shell26; no env/migration changes. Core milestones, missing OCR/current pairing/account/admin/physical Android limitations remain below.
+
 # 0.5.11 checkpoint — 2026-11-08
 
 Current milestone: useful chapter games, per-device AI budgets and bounded provider routing. 100 automated tests and production build passed before final documentation/UI loading polish; final checks, preview and live QA follow. Prior production2074fe231efa1cf1ee18a9f233d64f9c5be16408 / tree62607daa3ba2a3ca17a75e8fcb42d682c9ed47c1 is READY. Its live reader returned actual Journey to Taif exercise Q&A from page2, then correctly answered a short follow-up:8 short questions on PDF9/printed5. No claim all AI wording was correct; final polish shortens answers and avoids dramatic/garbled wording.

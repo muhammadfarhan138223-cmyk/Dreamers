@@ -1,3 +1,7 @@
+## 0.5.12 prepared answer boundary
+
+The reader checks a narrowly scoped authored answer module before network use. Supported book/chapter/request/language combinations return prepared=true/generated=false and source pages; everything else continues to normal AI availability and source retrieval. The server uses the same module after request validation and source-mode checks, before quota/provider access. Strict reference-only mode is not bypassed. These are original source-based answers awaiting educator review, not model outputs or official board keys. Offline short-answer practice shares the English key. General follow-ups remain AI-backed unless an authored match exists.
+
 ## 0.5.11 AI budgets/routing and games
 
 /api/health issues a signed anonymous-device cookie only on HTTPS when owner credentials exist. Cookie is HttpOnly, Secure, SameSite=Lax,30-day expiry and no profile access; it is a pseudonymous rate-limit identity, not authentication. HMAC actor IDs are separated from HMAC network groups. Invalid/missing cookies fall back to network identity. Six atomic Redis counters bound device, network and total service usage; cached responses increment only burst counters. Caps are60/6 device,240/18 network,800/24 service (daily/minute). No raw IP, cookie or prompt is logged. Daily counters expire90000s, burst120s. Reset timings remain UTC window boundaries, presented in browser local time.

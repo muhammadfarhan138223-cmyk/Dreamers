@@ -90,3 +90,41 @@ test("conversation and answer display stay bounded and do not expose raw formatt
     "Short summary  \n1. A tree.",
   );
 });
+
+test("prepared English exercise answers are source-labelled and usable without AI", async () => {
+  const { preparedExerciseAnswer } =
+    await import("../lib/english-exercise.mjs");
+  const answer = preparedExerciseAnswer(
+    catalog,
+    "1st chaapter ky short question answer batao",
+    [],
+    "Roman Urdu",
+    2,
+  );
+  assert.equal(answer.generated, false);
+  assert.equal(answer.prepared, true);
+  assert.match(answer.answer, /Hazrat Zayd/);
+  assert.match(answer.answer, /paani ke chheentay/);
+  assert.match(answer.answer, /Addaas Naynawa/);
+  assert.ok(!answer.answer.includes("barood"));
+  assert.equal(
+    preparedExerciseAnswer(
+      catalog,
+      "The Giving Tree ki summary",
+      [],
+      "Roman Urdu",
+      2,
+    ),
+    null,
+  );
+  assert.equal(
+    preparedExerciseAnswer(
+      catalog,
+      "chapter 2 ke answers batao",
+      [],
+      "Roman Urdu",
+      2,
+    ),
+    null,
+  );
+});

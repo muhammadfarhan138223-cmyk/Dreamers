@@ -2,6 +2,7 @@
 import { aiErrorMessage } from "@/lib/ai-feedback.mjs";
 import { useEffect, useRef, useState } from "react";
 import { Sparkles, Send, RefreshCw } from "lucide-react";
+import { preparedExerciseAnswer } from "@/lib/english-exercise.mjs";
 import { readerQuestion } from "@/lib/reader-tools.mjs";
 import { textbook } from "@/lib/textbooks.mjs";
 import * as db from "@/lib/db";
@@ -94,7 +95,14 @@ export default function ReaderAssistant({
   }, [selection]);
   async function ask(input = question) {
     if (busy || !input.trim()) return;
-    if (!navigator.onLine) {
+    const preparedAnswer = preparedExerciseAnswer(
+      textbook(book.catalogId),
+      input,
+      messages,
+      language,
+      page,
+    );
+    if (!navigator.onLine && !preparedAnswer) {
       setError(
         "Dreamers AI is offline. Your downloaded lessons and practice activities are still available.",
       );
@@ -116,35 +124,40 @@ export default function ReaderAssistant({
     setMessages(next);
     setQuestion("");
     try {
-      const sources = await resolveSources(
-        input.trim(),
-        messages,
-        abort.signal,
-      );
+      const sources = preparedAnswer
+        ? []
+        : await resolveSources(input.trim(), messages, abort.signal);
       if (abort.signal.aborted) return;
-      const response = await fetch("/api/ai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        signal: AbortSignal.any([abort.signal, AbortSignal.timeout(35000)]),
-        body: JSON.stringify(
-          readerQuestion({
-            book,
-            catalog: textbook(book.catalogId),
-            page,
-            pageText,
-            question: input.trim(),
-            language,
-            previous,
-            conversation: messages,
-            sources,
-          }),
-        ),
-      });
-      const value = await response.json();
-      if (!response.ok)
-        throw new Error(
-          aiErrorMessage(value, "The teacher could not answer. Please retry."),
-        );
+      let value;
+      if (preparedAnswer) value = preparedAnswer;
+      else {
+        const response = await fetch("/api/ai", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          signal: AbortSignal.any([abort.signal, AbortSignal.timeout(35000)]),
+          body: JSON.stringify(
+            readerQuestion({
+              book,
+              catalog: textbook(book.catalogId),
+              page,
+              pageText,
+              question: input.trim(),
+              language,
+              previous,
+              conversation: messages,
+              sources,
+            }),
+          ),
+        });
+        value = await response.json();
+        if (!response.ok)
+          throw new Error(
+            aiErrorMessage(
+              value,
+              "The teacher could not answer. Please retry.",
+            ),
+          );
+      }
       if (abort.signal.aborted) return;
       const updated: Message[] = [
         ...next,
@@ -280,7 +293,7 @@ export default function ReaderAssistant({
         <button
           className="primary"
           type="submit"
-          disabled={busy || !ready || !question.trim() || !online}
+          disabled={busy || !ready || !question.trim()}
         >
           <Send size={17} />
           {busy ? "Thinking…" : "Ask"}

@@ -1,3 +1,7 @@
+## 0.5.12 quality checkpoint
+
+Use source-based authored exercise keys where available rather than treating successful model retrieval as factual verification. Finish real-browser game persistence and prepared English exercise checks. Expand reviewed keys/OCR one chapter at a time; generic AI remains fallible. Keep the per-device budgets and scoped game navigation.
+
 ## 0.5.11 priority checkpoint
 
 Finish live verification of per-device quotas, bounded model routing, chapter-specific recall game and simple tutor follow-ups. Then extend reviewed question/game banks and prepared OCR to missing chapters/books. Keep old foundation demos away from the default textbook-focused path; never substitute a different chapter's game. Free providers remain finite; future multi-user scaling requires provider capacity planning, not unlimited-usage promises.

@@ -1,3 +1,7 @@
+## 0.5.12 source checkpoint
+
+101 tests and production build passed. No new credentials or env vars; prepared replies are model-free and available in previews/offline. Shell26 preserves existing local PDFs, prepared text indexes, chats and game rounds. Live model/routing/quota health was confirmed on0.5.11. Final prepared-answer and persistence browser evidence follows in verification notes.
+
 ## 0.5.11 source checkpoint
 
 No required env changes, paid plan changes, migrations or secrets retrieved. Production defaults to Groq openai/gpt-oss-120b with openai/gpt-oss-20b transient-error fallback. Optional AI_FALLBACK_MODELS is a comma-separated allowlisted list of these IDs; empty disables fallback. It does not grant higher organization quotas. Health reports model candidates and app budget metadata only. Signed anonymous cookies require HTTPS and are issued on normal health checks. Shell25 preserves stored PDFs/learning. Run100 tests/build, preview checks, then production AI/game/browser verification. Official model/rate-limit docs checked2026-11-08: https://console.groq.com/docs/models and https://console.groq.com/docs/rate-limits .

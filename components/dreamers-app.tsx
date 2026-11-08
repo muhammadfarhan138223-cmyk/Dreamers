@@ -3115,7 +3115,7 @@ export default function DreamersApp() {
             <div>
               {link("/about", "About Dreamers")}
               {link("/features", "Release status")}
-              <span>v0.5.11 · One subject at a time</span>
+              <span>v0.5.12 · One subject at a time</span>
             </div>
           </footer>
         </main>

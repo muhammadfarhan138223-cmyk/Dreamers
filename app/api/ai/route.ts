@@ -1,3 +1,4 @@
+import { preparedExerciseAnswer } from "@/lib/english-exercise.mjs";
 import { completeWithRouting } from "@/lib/ai-routing.mjs";
 import preparedEnglish from "@/public/book-text/english-xii-v1.json";
 import {
@@ -200,6 +201,17 @@ export async function POST(request: Request) {
     prepared?.chapter?.id === "eng12-1" && prepared.intent === "exercise"
       ? "Checked against the supplied page images: Journey to Taif, section A has 8 comprehension questions on PDF page 9 (printed page 5); section B has 8 MCQs on PDF page 10 (printed page 6). These are separate sections, not a count of every activity in the unit."
       : "";
+  const preparedAnswer =
+    !referenceOnly && selectedBook
+      ? preparedExerciseAnswer(
+          selectedBook,
+          input.question,
+          conversation,
+          input.language,
+          input.bookContext?.page || selectedChapter?.page || 1,
+        )
+      : null;
+  if (preparedAnswer) return json(preparedAnswer);
   const key = process.env.AI_API_KEY,
     model = process.env.AI_MODEL,
     provider = process.env.AI_PROVIDER || "groq";
